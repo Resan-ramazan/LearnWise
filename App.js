@@ -4,6 +4,8 @@ import { useFonts } from "expo-font";
 import LoginScreen from "./screens/LoginScreen";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { SignedIn, SignedOut } from "@clerk/clerk-expo";
+import { NavigationContainer } from "@react-navigation/native";
+import TabNavigation from "./navigations/TabNavigation";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -27,7 +29,9 @@ export default function App() {
       <StatusBar style="light" />
       <View style={styles.container}>
         <SignedIn>
-          <Text>Signed In</Text>
+          <NavigationContainer>
+            <TabNavigation />
+          </NavigationContainer>
         </SignedIn>
         <SignedOut>
           <LoginScreen />
