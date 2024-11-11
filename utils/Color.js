@@ -1,0 +1,12 @@
+export default{
+    PRIMARTY_COLOR: "#703BEE",
+    SECONDARY_COLOR: "#5D2DFD",
+    ORANGE: "#FFA500",
+    BORDER_COLOR: "#dbdbdb",
+    TEXT_COLOR: "#333333",
+    TEXT_LIGHT: "#777777",
+    TEXT_DARK: "#222222",
+    TEXT_WHITE: "#ffffff",
+    TEXT_BLACK: "#000000",
+    TEXT_RED: "#ff0000",
+}
