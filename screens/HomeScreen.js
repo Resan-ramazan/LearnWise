@@ -1,14 +1,26 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import Header from "../components/HomeScreen/Header";
+import Color from "../utils/Color";
 
 const HomeScreen = () => {
   return (
     <View>
-      <Text>HomeScreen</Text>
+      <View style={styles.header}>
+        <Header />
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: Color.PRIMARTY_COLOR,
+    borderBottomColor: "#f2f2f2",
+    borderBottomWidth: 1,
+    padding: 20,
+    height: 250,
+  },
+});

@@ -21,7 +21,7 @@ const TabNavigation = () => {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color="black" size={size} />
+            <Ionicons name="home" color={color} size={size} />
           ),
         }}
       />
@@ -30,7 +30,7 @@ const TabNavigation = () => {
         component={MyCourse}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" color="black" size={size} />
+            <Ionicons name="book" color={color} size={size} />
           ),
         }}
       />
@@ -39,7 +39,7 @@ const TabNavigation = () => {
         component={LeaderBoard}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="podium" color="black" size={size} />
+            <Ionicons name="podium" color={color} size={size} />
           ),
         }}
       />
@@ -48,7 +48,7 @@ const TabNavigation = () => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color="black" size={size} />
+            <Ionicons name="person" color={color} size={size} />
           ),
         }}
       />
