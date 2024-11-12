@@ -26,7 +26,7 @@ export default function App() {
 
   return (
     <ClerkProvider publishableKey={publishableKey}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={styles.container}>
         <SignedIn>
           <NavigationContainer>

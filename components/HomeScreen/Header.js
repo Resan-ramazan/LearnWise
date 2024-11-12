@@ -17,7 +17,7 @@ const Header = () => {
               <Text style={styles.text}>{user?.fullName}</Text>
             </View>
           </View>
-          <View style={styles.rowStyle}>
+          <View style={[styles.rowStyle, styles.coinContainer]}>
             <Image source={coin} style={styles.coin} />
             <Text style={styles.text}>3450</Text>
           </View>
@@ -77,6 +77,15 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+
     elevation: 5,
+  },
+  coinContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    padding: 8,
+    borderRadius: 20,
   },
 });
