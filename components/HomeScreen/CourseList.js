@@ -2,15 +2,17 @@ import { StyleSheet, Text, View } from "react-native";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import React, { useEffect } from "react";
-import { getCourseList } from "../../services/courses";
+import { getCourseList, getCoursesByLevel } from "../../services/courses";
 
-const CourseList = () => {
+const CourseList = ({ level }) => {
+
+    
   useEffect(() => {
     getCourses();
   }, []);
 
   const getCourses = async () => {
-    getCourseList().then((resp) => {
+    getCoursesByLevel(level).then((resp) => {
       console.log(resp);
     });
   };

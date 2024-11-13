@@ -11,7 +11,7 @@ const HomeScreen = () => {
         <Header />
       </View>
       <View>
-        <CourseList />
+        <CourseList  level={"basic"}/>
       </View>
     </View>
   );
