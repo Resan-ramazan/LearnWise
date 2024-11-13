@@ -2,12 +2,16 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Header from "../components/HomeScreen/Header";
 import Color from "../utils/Color";
+import CourseList from "../components/HomeScreen/CourseList";
 
 const HomeScreen = () => {
   return (
     <View>
       <View style={styles.header}>
         <Header />
+      </View>
+      <View>
+        <CourseList />
       </View>
     </View>
   );
