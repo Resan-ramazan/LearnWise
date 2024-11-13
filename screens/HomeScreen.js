@@ -10,8 +10,11 @@ const HomeScreen = () => {
       <View style={styles.header}>
         <Header />
       </View>
-      <View>
-        <CourseList  level={"basic"}/>
+      <View style={{ padding: 20 }}>
+        <View style={{ marginTop: -90 }}>
+          <CourseList level={"basic"} />
+        </View>
+        <CourseList level={"advance"} />
       </View>
     </View>
   );
