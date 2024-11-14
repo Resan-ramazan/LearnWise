@@ -5,12 +5,14 @@ import Color from "../utils/Color";
 // Custom SubHeading component
 const SubHeading = ({ text, color = Color.TEXT_BLACK }) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text
-        style={{
-          ...styles.headerText,
-          color: color,
-        }}
+        style={[
+          styles.headerText,
+          { color },
+          // Add shadow only for light backgrounds
+          color === Color.TEXT_WHITE && styles.lightTextShadow,
+        ]}
       >
         {text}
       </Text>
@@ -21,8 +23,18 @@ const SubHeading = ({ text, color = Color.TEXT_BLACK }) => {
 export default SubHeading;
 
 const styles = StyleSheet.create({
+  container: {
+    marginVertical: 16,
+    paddingHorizontal: 8,
+  },
   headerText: {
     fontSize: 24,
     fontFamily: "Poppins-Bold",
+    letterSpacing: 0.5,
+  },
+  lightTextShadow: {
+    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
 });
