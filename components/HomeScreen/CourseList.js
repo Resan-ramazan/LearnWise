@@ -63,17 +63,39 @@ const CourseList = ({ level }) => {
 
 export default CourseList;
 
+const COURSE_CONSTANTS = {
+  CARD_WIDTH: 250,
+  IMAGE_HEIGHT: 140,
+  BORDER_RADIUS: 12,
+  SPACING: {
+    SMALL: 8,
+    MEDIUM: 12,
+    LARGE: 16,
+  },
+  SHADOW_OPACITY: 0.1,
+};
+
 const styles = StyleSheet.create({
   courseContainer: {
     padding: 10,
     backgroundColor: Color.TEXT_WHITE,
     marginRight: 15,
-    borderRadius: 12,
+    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    marginRight: COURSE_CONSTANTS.SPACING.LARGE,
+    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: COURSE_CONSTANTS.SHADOW_OPACITY,
+    shadowRadius: 4,
+    elevation: 3,
   },
   courseImage: {
-    width: 210,
-    height: 120,
-    borderRadius: 12,
+    width: COURSE_CONSTANTS.CARD_WIDTH,
+    height: COURSE_CONSTANTS.IMAGE_HEIGHT,
+    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
   },
   courseName: {
     fontFamily: "Poppins-Medium",
