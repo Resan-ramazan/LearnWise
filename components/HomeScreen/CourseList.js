@@ -22,69 +22,23 @@ const CourseList = ({ level }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <View
-        style={{
-          padding: 10,
-          backgroundColor: Color.TEXT_WHITE,
-          marginRight: 15,
-          borderRadius: 12,
-        }}
-      >
-        <Image
-          source={{ uri: item?.banner }}
-          style={{ width: 210, height: 120, borderRadius: 12 }}
-        />
+      <View style={styles.courseContainer}>
+        <Image source={{ uri: item?.banner }} style={styles.courseImage} />
         <View style={{ padding: 7 }}>
-          <Text style={{ fontFamily: "Poppins-Medium", fontSize: 17 }}>
-            {item.name}
-          </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginTop: 5,
-            }}
-          >
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-                marginTop: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-Regular" }}>Chapters</Text>
+          <Text style={styles.courseName}>{item.name}</Text>
+          <View style={styles.detailContaier}>
+            <View style={styles.chapterBox}>
               <Ionicons name="book" size={18} color={Color.ORANGE} />
+              <Text style={styles.text}>Chapters</Text>
             </View>
             <View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 5,
-                  marginTop: 5,
-                }}
-              >
-                <Text style={{ fontFamily: "Poppins-Regular" }}>
-                  {item.time}
-                </Text>
+              <View style={styles.timeBox}>
                 <Ionicons name="time" size={18} color={Color.ORANGE} />
+                <Text style={styles.text}>{item.time}</Text>
               </View>
             </View>
           </View>
-          <Text
-            style={{
-              marginTop: 5,
-              color: Color.PRIMARTY_COLOR,
-              fontFamily: "Poppins-Medium",
-            }}
-          >
-            Free
-          </Text>
+          <Text style={styles.freeText}>Free</Text>
         </View>
       </View>
     );
@@ -109,4 +63,49 @@ const CourseList = ({ level }) => {
 
 export default CourseList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  courseContainer: {
+    padding: 10,
+    backgroundColor: Color.TEXT_WHITE,
+    marginRight: 15,
+    borderRadius: 12,
+  },
+  courseImage: {
+    width: 210,
+    height: 120,
+    borderRadius: 12,
+  },
+  courseName: {
+    fontFamily: "Poppins-Medium",
+    fontSize: 17,
+  },
+  detailContaier: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 5,
+  },
+  chapterBox: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginTop: 5,
+  },
+  timeBox: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginTop: 5,
+  },
+  text: {
+    fontFamily: "Poppins-Regular",
+  },
+  freeText: {
+    fontFamily: "Poppins-Regular",
+    color: Color.PRIMARTY_COLOR,
+    marginTop: 5,
+  },
+});
