@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const CourseList = ({ level }) => {
   const [courseList, setCourseList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getCourses();

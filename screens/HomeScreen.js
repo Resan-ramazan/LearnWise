@@ -1,21 +1,35 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Header from "../components/HomeScreen/Header";
 import Color from "../utils/Color";
 import CourseList from "../components/HomeScreen/CourseList";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const HomeScreen = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
+
   return (
     <View>
       <View style={styles.header}>
         <Header />
       </View>
-      <View style={{ padding: 20 }}>
-        <View style={{ marginTop: -90 }}>
-          <CourseList level={"basic"} />
+      {loading ? (
+        <ActivityIndicator size="large" color={Color.PRIMARTY_COLOR} />
+      ) : (
+        <View style={{ padding: 20 }}>
+          <View style={{ marginTop: -100 }}>
+            <CourseList level={"basic"} />
+          </View>
+          <CourseList level={"advance"} />
         </View>
-        <CourseList level={"advance"} />
-      </View>
+      )}
     </View>
   );
 };
