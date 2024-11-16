@@ -1,13 +1,23 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { getCourseList, getCoursesByLevel } from "../../services/courses";
 import SubHeading from "../SubHeading";
 import Color from "../../utils/Color";
 import CourseItem from "./CourseItem";
+import { useNavigation } from "@react-navigation/native";
 
 const CourseList = ({ level }) => {
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     getCourses();
@@ -28,7 +38,13 @@ const CourseList = ({ level }) => {
       <FlatList
         data={courseList}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CourseItem item={item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("CourseDetail", { item })}
+          >
+            <CourseItem item={item} />
+          </TouchableOpacity>
+        )}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       />
