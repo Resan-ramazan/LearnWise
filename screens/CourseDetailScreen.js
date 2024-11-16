@@ -1,14 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import DetailSection from "../components/CourseDetailScreen/DetailSection";
 
 const CourseDetailScreen = () => {
+  const navigation = useNavigation();
+  const params = useRoute().params;
+
+  useEffect(() => {
+    console.log(params.course);
+  });
+
   return (
-    <View>
-      <Text>CourseDetailScreen</Text>
-    </View>
-  )
-}
+    params.course && (
+      <View style={{ padding: 20 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back-circle-sharp" size={40} color="black" />
+        </TouchableOpacity>
+        <DetailSection course={params.course} />
+      </View>
+    )
+  );
+};
 
-export default CourseDetailScreen
+export default CourseDetailScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

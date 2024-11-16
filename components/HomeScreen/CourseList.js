@@ -40,7 +40,11 @@ const CourseList = ({ level }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate("CourseDetail", { item })}
+            onPress={() =>
+              navigation.navigate("CourseDetail", {
+                course: item,
+              })
+            }
           >
             <CourseItem item={item} />
           </TouchableOpacity>
