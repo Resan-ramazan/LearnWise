@@ -23,6 +23,7 @@ const CourseList = ({ level }) => {
   useEffect(() => {
     getCourses();
   }, []);
+  
   const getCourses = async () => {
     try {
       const coursesWithChapters = await getCoursesByLevel(level);

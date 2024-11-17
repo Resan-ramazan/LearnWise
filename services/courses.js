@@ -49,14 +49,15 @@ export const getCoursesByLevel = async (level) => {
   }
 };
 
-export const getChaptersByCourseId = async (courseId) => {
+
+export const enrollcourse = async (courseId, userId) => {
   try {
-    const chaptersSnapshot = await getDocs(
-      collection(db, "Courses", courseId, "chapters")
-    );
-    return chaptersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    await db.collection("EnrolledCourses").add({
+      courseId,
+      userId,
+    });
   } catch (error) {
-    console.error("Error getting chapters:", error);
+    console.error("Error enrolling course:", error);
     throw error;
   }
-};
+}
