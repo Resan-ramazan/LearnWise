@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -11,17 +11,17 @@ const CourseDetailScreen = () => {
 
   useEffect(() => {
     console.log(params.course);
-  });
+  }, [params.course]);
 
   return (
     params.course && (
-      <View style={{ padding: 20 }}>
+      <ScrollView style={{ padding: 10 }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back-circle-sharp" size={40} color="black" />
         </TouchableOpacity>
         <DetailSection course={params.course} />
-        <ChapterSection />
-      </View>
+        <ChapterSection chapterList={params.course.chapters} />
+      </ScrollView>
     )
   );
 };

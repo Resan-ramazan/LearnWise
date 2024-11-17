@@ -12,7 +12,6 @@ import Info from "./Info";
 import Description from "./Description";
 
 const DetailSection = ({ course }) => {
-
   console.log(course);
 
   return (
@@ -39,7 +38,10 @@ const DetailSection = ({ course }) => {
         </Text>
         <View>
           <View style={styles.rowStyle}>
-            <Info icon="book-outline" value={course.chapters + " Chapter"} />
+            <Info
+              icon="book-outline"
+              value={course.chapters.length + " Chapters"}
+            />
             <Info icon="time-outline" value={course.time} />
           </View>
           <View style={styles.rowStyle}>
@@ -85,4 +87,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
