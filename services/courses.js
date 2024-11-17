@@ -20,7 +20,7 @@ export const getCoursesByLevel = async (level) => {
     try {
       const coursesSnapshot = await getDocs(
         query(
-          collection(db, 'Courses'),
+          collection(db, 'Courses',),
           where('level', '==', level),
         )
       );
@@ -33,3 +33,4 @@ export const getCoursesByLevel = async (level) => {
       throw error;
     }
   };
+  

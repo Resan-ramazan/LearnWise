@@ -27,7 +27,7 @@ const HomeScreen = () => {
           <View style={{ marginTop: -100 }}>
             <CourseList level={"basic"} />
           </View>
-          <CourseList level={"advance"} />
+          <CourseList level={"advance"}  />
         </View>
       )}
     </View>

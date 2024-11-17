@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DetailSection from "../components/CourseDetailScreen/DetailSection";
+import ChapterSection from "../components/CourseDetailScreen/ChapterSection";
 
 const CourseDetailScreen = () => {
   const navigation = useNavigation();
@@ -19,6 +20,7 @@ const CourseDetailScreen = () => {
           <Ionicons name="arrow-back-circle-sharp" size={40} color="black" />
         </TouchableOpacity>
         <DetailSection course={params.course} />
+        <ChapterSection />
       </View>
     )
   );

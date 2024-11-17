@@ -8,5 +8,6 @@ export default{
     TEXT_DARK: "#222222",
     TEXT_WHITE: "#ffffff",
     TEXT_BLACK: "#000000",
+    TEXT_GRAY: "#808080",
     TEXT_RED: "#ff0000",
 }

@@ -6,6 +6,8 @@ import Color from '../../utils/Color'
 
 
 const CourseItem = ({item}) => {
+
+
   return (
     <View style={styles.courseContainer}>
     <Image source={{ uri: item?.banner }} style={styles.courseImage} />
@@ -14,11 +16,11 @@ const CourseItem = ({item}) => {
       <View style={styles.detailContaier}>
         <View style={styles.chapterBox}>
           <Ionicons name="book" size={18} color={Color.ORANGE} />
-          <Text style={styles.text}>Chapters</Text>
+          <Text style={styles.text}>{item.chapters}</Text>
         </View>
         <View>
           <View style={styles.timeBox}>
-            <Ionicons name="time" size={18} color={Color.ORANGE} />
+            <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
             <Text style={styles.text}>{item.time}</Text>
           </View>
         </View>
