@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -22,12 +23,20 @@ const CourseList = ({ level }) => {
   useEffect(() => {
     getCourses();
   }, []);
-
   const getCourses = async () => {
-    getCoursesByLevel(level).then((resp) => {
-      setCourseList(resp);
-    });
+    try {
+      const coursesWithChapters = await getCoursesByLevel(level);
+      setCourseList(coursesWithChapters);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
 
   return (
     <View>
