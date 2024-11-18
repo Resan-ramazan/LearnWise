@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ProgressBar from "./ProgressBar";
 
@@ -6,7 +6,29 @@ const Content = ({ chaptersLength, content }) => {
   return (
     <View style={{ padding: 20 }}>
       <ProgressBar chaptersLength={chaptersLength.length} contentIndex={1} />
-      <Text>Content</Text>
+      <FlatList
+        data={chaptersLength}
+        horizontal={true}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item, index }) => (
+          <View
+            style={{
+              width: Dimensions.get("screen").width * 0.92,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Poppins-Medium",
+                fontSize: 22,
+                marginTop: 15,
+              }}
+            >
+              {item.heading}
+            </Text>
+          </View>
+        )}
+      />
     </View>
   );
 };
