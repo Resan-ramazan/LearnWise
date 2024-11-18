@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Color from "../../utils/Color";
+import { useNavigation } from "@react-navigation/native";
 
-const ChapterSection = ({ chapterList }) => {
+const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
+  const navigation = useNavigation();
+
   return (
     chapterList && (
       <View
@@ -24,20 +27,26 @@ const ChapterSection = ({ chapterList }) => {
           Chapters
         </Text>
         {chapterList.map((chapter, index) => (
-          <View
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ChapterContent")}
             key={index}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: 15,
-              borderWidth: 1,
-              borderRadius: 10,
-              marginTop: 10,
-              borderBottomColor: "lightgray",
-              borderBlockColor: Color.TEXT_DARK,
-            }}
+            style={[
+              {
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 15,
+                borderWidth: 1,
+                borderRadius: 10,
+                marginTop: 10,
+                borderBottomColor: "lightgray",
+                borderBlockColor: Color.TEXT_DARK,
+              },
+              userEnrolledCourses.length == 0
+                ? { borderColor: "lightgray" }
+                : { borderColor: Color.PRIMARTY_COLOR },
+            ]}
           >
             <View
               style={{
@@ -68,8 +77,12 @@ const ChapterSection = ({ chapterList }) => {
                 {chapter.heading}
               </Text>
             </View>
-            <Ionicons name="lock-closed" size={25} color={Color.TEXT_GRAY} />
-          </View>
+            {userEnrolledCourses.length == 0 ? (
+              <Ionicons name="lock-closed" size={25} color={Color.TEXT_GRAY} />
+            ) : (
+              <Ionicons name="play" size={25} color={Color.TEXT_GRAY} />
+            )}
+          </TouchableOpacity>
         ))}
       </View>
     )

@@ -77,7 +77,10 @@ const CourseDetailScreen = () => {
           course={params.course}
           userEnrolledCourses={userEnrolledCourses}
         />
-        <ChapterSection  chapterList={params.course.chapters} />
+        <ChapterSection
+          userEnrolledCourses={userEnrolledCourses}
+          chapterList={params.course.chapters}
+        />
       </ScrollView>
     )
   );
