@@ -23,7 +23,7 @@ const CourseList = ({ level }) => {
   useEffect(() => {
     getCourses();
   }, []);
-  
+
   const getCourses = async () => {
     try {
       const coursesWithChapters = await getCoursesByLevel(level);
@@ -34,10 +34,6 @@ const CourseList = ({ level }) => {
       setLoading(false);
     }
   };
-
-  if (loading) {
-    return <ActivityIndicator size="large" />;
-  }
 
   return (
     <View>

@@ -1,6 +1,7 @@
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { query, where, orderBy } from "firebase/firestore";
+import { add } from "firebase/firestore";
 
 export const getAllCourseList = async () => {
   try {
@@ -34,10 +35,10 @@ export const getCoursesByLevel = async (level) => {
         return {
           id: courseDoc.id,
           ...courseDoc.data(),
-          chapters: chaptersSnapshot.docs.map(chapterDoc => ({
+          chapters: chaptersSnapshot.docs.map((chapterDoc) => ({
             id: chapterDoc.id,
-            ...chapterDoc.data()
-          }))
+            ...chapterDoc.data(),
+          })),
         };
       })
     );
@@ -49,15 +50,62 @@ export const getCoursesByLevel = async (level) => {
   }
 };
 
+// export const enrollcourse = async (course, user) => {
+//   try {
+//     const db = getFirestore();
+//     const userCourseRef = collection(db, "UserEnrolledCourse");
 
-export const enrollcourse = async (courseId, userId) => {
+//     const q = query(
+//       userCourseRef,
+//       where("courseId", "==", course.id),
+//     );
+
+//     const querySnapshot = await getDocs(q);
+
+//     if (!querySnapshot.empty) {
+//       throw new Error("User already enrolled in this course");
+//     }
+
+//     await addDoc(userCourseRef, {
+//       courseId: course.id,
+//       userEmail: user.email,
+//       completedChapters: [],
+//       progress: 0,
+//     });
+//     console.log("Course enrolled successfully");
+//   } catch (error) {
+//     console.error("Error enrolling course:", error);
+//     throw error;
+//   }
+// };
+
+export const enrollcourse = async (courseId, userEmail) => {
   try {
-    await db.collection("EnrolledCourses").add({
-      courseId,
-      userId,
+    const email = userEmail.emailAddress;
+    const userCourseRef = collection(db, "UserEnrolledCourse");
+
+    const q = query(
+      userCourseRef,
+      where("courseId", "==", courseId),
+      where("userEmail", "==", email)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      throw new Error("User already enrolled in this course");
+    }
+
+    const docRef = await addDoc(userCourseRef, {
+      courseId: courseId,
+      userEmail: email,
+      completedChapters: [],
+      progress: 0,
     });
+    return docRef.id;
+
   } catch (error) {
     console.error("Error enrolling course:", error);
     throw error;
   }
-}
+};

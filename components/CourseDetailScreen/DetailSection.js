@@ -11,9 +11,7 @@ import Color from "../../utils/Color";
 import Info from "./Info";
 import Description from "./Description";
 
-const DetailSection = ({ course }) => {
-  console.log(course);
-
+const DetailSection = ({ course,enrollCourse }) => {
   return (
     <View
       style={{
@@ -53,6 +51,7 @@ const DetailSection = ({ course }) => {
         <Description course={course} />
         <View>
           <TouchableOpacity
+          onPress={() => enrollCourse()}
             style={{
               padding: 15,
               backgroundColor: Color.PRIMARTY_COLOR,
