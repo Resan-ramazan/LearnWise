@@ -11,7 +11,7 @@ import Color from "../../utils/Color";
 import Info from "./Info";
 import Description from "./Description";
 
-const DetailSection = ({ course,enrollCourse }) => {
+const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
   return (
     <View
       style={{
@@ -50,26 +50,48 @@ const DetailSection = ({ course,enrollCourse }) => {
 
         <Description course={course} />
         <View>
-          <TouchableOpacity
-          onPress={() => enrollCourse()}
-            style={{
-              padding: 15,
-              backgroundColor: Color.PRIMARTY_COLOR,
-              borderRadius: 15,
-              marginTop: 10,
-            }}
-          >
-            <Text
+          {userEnrolledCourses == 0 ? (
+            <TouchableOpacity
+              onPress={() => enrollCourse()}
               style={{
-                textAlign: "center",
-                fontFamily: "Poppins-Medium",
-                color: Color.TEXT_WHITE,
-                fontSize: 16,
+                padding: 15,
+                backgroundColor: Color.PRIMARTY_COLOR,
+                borderRadius: 15,
+                marginTop: 10,
               }}
             >
-              Enroll For Free
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "Poppins-Medium",
+                  color: Color.TEXT_WHITE,
+                  fontSize: 16,
+                }}
+              >
+                Enroll For Free
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View
+              style={{
+                padding: 15,
+                backgroundColor: Color.ORANGE,
+                borderRadius: 15,
+                marginTop: 10,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "Poppins-Medium",
+                  color: Color.TEXT_WHITE,
+                  fontSize: 16,
+                }}
+              >
+                Continue Learning
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </View>
