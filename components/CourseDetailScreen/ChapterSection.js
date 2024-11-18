@@ -1,11 +1,36 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Color from "../../utils/Color";
 import { useNavigation } from "@react-navigation/native";
 
 const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
+  //console.log("Chapter List:", chapterList); // Debug log
   const navigation = useNavigation();
+
+  const onChapterPress = (content) => {
+    return () => {
+      if (userEnrolledCourses.length == 0) {
+        ToastAndroid.show(
+          "Please enroll in the course to view chapters",
+          ToastAndroid.SHORT
+        );
+      } else {
+        console.log("Content being passed:", content); // Debug log
+        console.log("Chapter List:", chapterList); // Debug log
+        navigation.navigate("ChapterContent", {
+          content: content,
+          chaptersLength: chapterList,
+        });
+      }
+    };
+  };
 
   return (
     chapterList && (
@@ -26,9 +51,9 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
         >
           Chapters
         </Text>
-        {chapterList.map((chapter, index) => (
+        {chapterList.map((item, index) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate("ChapterContent")}
+            onPress={onChapterPress(item)}
             key={index}
             style={[
               {
@@ -74,7 +99,7 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
                   color: Color.TEXT_GRAY,
                 }}
               >
-                {chapter.heading}
+                {item.heading}
               </Text>
             </View>
             {userEnrolledCourses.length == 0 ? (
