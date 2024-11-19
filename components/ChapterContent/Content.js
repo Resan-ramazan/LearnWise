@@ -1,6 +1,7 @@
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ProgressBar from "./ProgressBar";
+import ContenItem from "./ContenItem";
 
 const Content = ({ chaptersLength, content }) => {
   return (
@@ -26,6 +27,7 @@ const Content = ({ chaptersLength, content }) => {
             >
               {item.heading}
             </Text>
+            <ContenItem description={item.description} />
           </View>
         )}
       />
