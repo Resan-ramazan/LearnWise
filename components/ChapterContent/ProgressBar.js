@@ -25,7 +25,7 @@ const ProgressBar = ({ chaptersLength, contentIndex }) => {
             width: width + "%",
             height: 5,
             backgroundColor: `${
-              index <= contentIndex ? Color.PRIMARTY_COLOR : "lightgray"
+              index <= contentIndex ? Color.GREEN : "lightgray"
             }`,
             borderRadius: 10,
             height: 10,
