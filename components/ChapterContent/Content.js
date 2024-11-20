@@ -19,6 +19,12 @@ const Content = ({ chaptersLength, content }) => {
     }
   };
 
+  const onFlatListScroll = (event) => {
+    const contentOffset = event.nativeEvent.contentOffset.x;
+    const index = Math.round(contentOffset / Dimensions.get("screen").width);
+    setActiveIndex(index);
+  };
+
   const renderContentItem = ({ item, index }) => {
     return (
       <View
@@ -64,7 +70,10 @@ const Content = ({ chaptersLength, content }) => {
 
   return (
     <View style={{ padding: 0, height: "100%" }}>
-      <ProgressBar chaptersLength={chaptersLength.length} contentIndex={activeIndex} />
+      <ProgressBar
+        chaptersLength={chaptersLength.length}
+        contentIndex={activeIndex}
+      />
       <FlatList
         data={chaptersLength}
         horizontal={true}
@@ -75,6 +84,7 @@ const Content = ({ chaptersLength, content }) => {
           flatListRef = ref;
         }}
         keyExtractor={(item) => item.id}
+        onScroll={onFlatListScroll}
       />
     </View>
   );
