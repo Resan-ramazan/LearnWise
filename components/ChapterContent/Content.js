@@ -21,7 +21,7 @@ const Content = ({ chaptersLength, content }) => {
         >
           {item.heading}
         </Text>
-        <ContenItem description={item.description} />
+        <ContenItem description={item.description} output={item.output} />
       </View>
     );
   };
