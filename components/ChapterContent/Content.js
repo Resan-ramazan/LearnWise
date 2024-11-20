@@ -4,6 +4,27 @@ import ProgressBar from "./ProgressBar";
 import ContenItem from "./ContenItem";
 
 const Content = ({ chaptersLength, content }) => {
+  const renderContentItem = ({ item, index }) => {
+    return (
+      <View
+        style={{
+          width: Dimensions.get("screen").width * 0.91,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "Poppins-Medium",
+            fontSize: 22,
+            marginTop: 15,
+          }}
+        >
+          {item.heading}
+        </Text>
+        <ContenItem description={item.description} />
+      </View>
+    );
+  };
+
   return (
     <View style={{ padding: 20 }}>
       <ProgressBar chaptersLength={chaptersLength.length} contentIndex={1} />
@@ -12,24 +33,7 @@ const Content = ({ chaptersLength, content }) => {
         horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <View
-            style={{
-              width: Dimensions.get("screen").width * 0.92,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 22,
-                marginTop: 15,
-              }}
-            >
-              {item.heading}
-            </Text>
-            <ContenItem description={item.description} />
-          </View>
-        )}
+        renderItem={renderContentItem}
       />
     </View>
   );
