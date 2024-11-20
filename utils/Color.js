@@ -2,6 +2,8 @@ export default{
     PRIMARTY_COLOR: "#703BEE",
     SECONDARY_COLOR: "#5D2DFD",
     ORANGE: "#FFA500",
+    LIGHT_GREEN: "#00FF00",
+    GREEN: "#008000",
     BORDER_COLOR: "#dbdbdb",
     TEXT_COLOR: "#333333",
     TEXT_LIGHT: "#777777",

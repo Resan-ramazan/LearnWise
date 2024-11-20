@@ -1,6 +1,14 @@
-import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  getFirestore,
+  doc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "./firebaseConfig";
-import { query, where, orderBy } from "firebase/firestore";
+import { query, orderBy } from "firebase/firestore";
 import { add } from "firebase/firestore";
 
 export const getAllCourseList = async () => {
@@ -103,10 +111,47 @@ export const enrollcourse = async (courseId, userEmail) => {
       progress: 0,
     });
     return docRef.id;
-
   } catch (error) {
     console.error("Error enrolling course:", error);
     throw error;
   }
 };
 
+export const updateUserEnrolledCourse = async (
+  courseId,
+  userEmail,
+  chapterId
+) => {
+  try {
+    // First, get the document reference
+    const userCourseRef = collection(db, "UserEnrolledCourse");
+    const q = query(
+      userCourseRef,
+      where("courseId", "==", courseId),
+      where("userEmail", "==", userEmail)
+    );
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docRef = doc(db, "UserEnrolledCourse", querySnapshot.docs[0].id);
+
+      // Get current completed chapters
+      const currentData = querySnapshot.docs[0].data();
+      const completedChapters = currentData.completedChapters || [];
+
+      // Add new chapter if not already completed
+      if (!completedChapters.includes(chapterId)) {
+        completedChapters.push(chapterId);
+      }
+
+      // Update the document
+      await updateDoc(docRef, {
+        completedChapters: completedChapters,
+        progress: (completedChapters.length / 6) * 100, // Assuming 6 chapters total
+      });
+    }
+  } catch (error) {
+    console.error("Error updating course progress:", error);
+    throw error;
+  }
+};

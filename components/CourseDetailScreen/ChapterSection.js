@@ -5,13 +5,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Color from "../../utils/Color";
 import { useNavigation } from "@react-navigation/native";
 
-const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
-  //console.log("Chapter List:", chapterList); // Debug log
+const ChapterSection = ({
+  chapterList,
+  userEnrolledCourses,
+  courseId,
+  userEmail,
+}) => {
   const navigation = useNavigation();
 
   const onChapterPress = (content) => {
@@ -22,14 +26,32 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
           ToastAndroid.SHORT
         );
       } else {
-        console.log("Content being passed:", content); // Debug log
-        console.log("Chapter List:", chapterList); // Debug log
+        const enrolledCourse = userEnrolledCourses[0];
+
+        if (!enrolledCourse?.courseId || !enrolledCourse?.userEmail) {
+          ToastAndroid.show(
+            "Error: Missing course enrollment data",
+            ToastAndroid.SHORT
+          );
+          return;
+        }
+
         navigation.navigate("ChapterContent", {
           content: content,
           chaptersLength: chapterList,
+          courseId: enrolledCourse.courseId,
+          userEmail: enrolledCourse.userEmail,
         });
       }
     };
+  };
+
+  useEffect(() => {    
+    console.log("userEnrolledCourses", userEnrolledCourses[0]?.completedChapters);
+  }, [userEnrolledCourses]);
+
+  const checkIsChapterCompleted = (chapter) => {
+    return userEnrolledCourses[0]?.completedChapters.includes(chapter.id);
   };
 
   return (
@@ -40,6 +62,7 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
           padding: 10,
           borderRadius: 10,
           backgroundColor: Color.TEXT_WHITE,
+
           borderRadius: 15,
         }}
       >
@@ -55,23 +78,11 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
           <TouchableOpacity
             onPress={onChapterPress(item)}
             key={index}
-            style={[
-              {
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: 15,
-                borderWidth: 1,
-                borderRadius: 10,
-                marginTop: 10,
-                borderBottomColor: "lightgray",
-                borderBlockColor: Color.TEXT_DARK,
-              },
-              userEnrolledCourses.length == 0
-                ? { borderColor: "lightgray" }
-                : { borderColor: Color.PRIMARTY_COLOR },
-            ]}
+            style={
+              checkIsChapterCompleted(item)
+                ? styles.completeChapter
+                : styles.inCompleteChapter
+            }
           >
             <View
               style={{
@@ -86,7 +97,9 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
                 style={{
                   fontSize: 25,
                   fontFamily: "Poppins-Medium",
-                  color: Color.TEXT_GRAY,
+                  color: checkIsChapterCompleted(item)
+                    ? Color.GREEN
+                    : Color.TEXT_GRAY,
                 }}
               >
                 {index + 1}
@@ -96,7 +109,9 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
                   fontSize: 21,
                   marginLeft: 10,
                   fontFamily: "Poppins-Regular",
-                  color: Color.TEXT_GRAY,
+                  color: checkIsChapterCompleted(item)
+                    ? Color.GREEN
+                    : Color.TEXT_GRAY,
                 }}
               >
                 {item.heading}
@@ -105,7 +120,15 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
             {userEnrolledCourses.length == 0 ? (
               <Ionicons name="lock-closed" size={25} color={Color.TEXT_GRAY} />
             ) : (
-              <Ionicons name="play" size={25} color={Color.TEXT_GRAY} />
+              <Ionicons
+                name={
+                  checkIsChapterCompleted(item) ? "checkmark-circle" : "play"
+                }
+                size={25}
+                color={
+                  checkIsChapterCompleted(item) ? Color.GREEN : Color.TEXT_GRAY
+                }
+              />
             )}
           </TouchableOpacity>
         ))}
@@ -116,4 +139,30 @@ const ChapterSection = ({ chapterList, userEnrolledCourses }) => {
 
 export default ChapterSection;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  inCompleteChapter: {
+    display: "flex",
+
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 15,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: 10,
+    borderBottomColor: Color.BORDER_COLOR,
+    borderBlockColor: Color.TEXT_DARK,
+  },
+  completeChapter: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: Color.LIGHT_GREEN,
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 15,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginTop: 10,
+    borderColor: Color.GREEN,
+  },
+});

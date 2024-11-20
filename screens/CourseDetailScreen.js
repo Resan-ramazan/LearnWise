@@ -20,6 +20,15 @@ const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const params = useRoute().params;
   const { user } = useUser();
+
+  useEffect(() => {
+    console.log("CourseDetailScreen user data:", {
+      email: user?.primaryEmailAddress?.emailAddress,
+      courseId: params?.course?.id,
+      user: user,
+    });
+  }, [user, params]);
+
   const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);
 
   useEffect(() => {
@@ -66,6 +75,11 @@ const CourseDetailScreen = () => {
     }
   };
 
+  console.log("Course Detail params:", {
+    courseId: params?.course?.id,
+    userEmail: user?.primaryEmailAddress?.emailAddress,
+  });
+
   return (
     params.course && (
       <ScrollView style={{ padding: 10 }}>
@@ -80,6 +94,8 @@ const CourseDetailScreen = () => {
         <ChapterSection
           userEnrolledCourses={userEnrolledCourses}
           chapterList={params.course.chapters}
+          courseId={params.course?.id || ""}
+          userEmail={user?.primaryEmailAddress?.emailAddress || ""}
         />
       </ScrollView>
     )

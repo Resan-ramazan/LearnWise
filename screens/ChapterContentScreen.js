@@ -1,15 +1,27 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ToastAndroid } from "react-native";
 import React from "react";
 import Content from "../components/ChapterContent/Content";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import { updateUserEnrolledCourse } from "../services/courses";
 
 const ChapterContentScreen = () => {
   const param = useRoute().params;
+  const navigation = useNavigation();
 
-  //console.log("Content:", param.content); // This should now show the full item with heading, description, etc.
-  //console.log("Chapters Length:", param.chaptersLength);
-  // console.log(chaptersLength, "chaptersLength");
-  // console.log(content);
+  const onChapterComplete = () => {
+    if (!param?.courseId || !param?.userEmail || !param?.content?.id) {
+      return;
+    }
+
+    updateUserEnrolledCourse(param.courseId, param.userEmail, param.content.id)
+      .then(() => {
+        ToastAndroid.show("Course completed", ToastAndroid.SHORT);
+        navigation.goBack();
+      })
+      .catch((err) => {
+        console.error("Error completing chapter:", err);
+      });
+  };
 
   return (
     param.content && (
@@ -17,6 +29,7 @@ const ChapterContentScreen = () => {
         <Content
           chaptersLength={param.chaptersLength}
           content={param.content}
+          onChapterComplete={() => onChapterComplete()}
         />
       </View>
     )

@@ -5,9 +5,8 @@ import ContenItem from "./ContenItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
-const Content = ({ chaptersLength, content }) => {
+const Content = ({ chaptersLength, content, onChapterComplete }) => {
   let flatListRef;
-  const navigation = useNavigation();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const onNextBtnPress = (index) => {
@@ -15,7 +14,8 @@ const Content = ({ chaptersLength, content }) => {
       setActiveIndex(index + 1);
       flatListRef.scrollToIndex({ index: index + 1, animted: true });
     } else {
-      navigation.goBack();
+      //navigation.goBack();
+      onChapterComplete();
     }
   };
 
