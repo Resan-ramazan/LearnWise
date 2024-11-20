@@ -8,7 +8,8 @@ const Content = ({ chaptersLength, content }) => {
     return (
       <View
         style={{
-          width: Dimensions.get("screen").width * 0.91,
+          width: Dimensions.get("screen").width,
+          padding: 20,
         }}
       >
         <Text
@@ -26,7 +27,7 @@ const Content = ({ chaptersLength, content }) => {
   };
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={{ padding: 0 }}>
       <ProgressBar chaptersLength={chaptersLength.length} contentIndex={1} />
       <FlatList
         data={chaptersLength}

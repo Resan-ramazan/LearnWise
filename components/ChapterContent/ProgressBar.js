@@ -14,6 +14,7 @@ const ProgressBar = ({ chaptersLength, contentIndex }) => {
         justifyContent: "space-between",
         alignItems: "center",
         marginTop: 20,
+        padding:20,
       }}
     >
       {arrSize.map((item, index) => (
