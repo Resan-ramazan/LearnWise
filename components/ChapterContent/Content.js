@@ -1,5 +1,5 @@
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import ContenItem from "./ContenItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -7,7 +7,18 @@ import { useNavigation } from "@react-navigation/native";
 
 const Content = ({ chaptersLength, content, onChapterComplete }) => {
   let flatListRef;
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(content?.startIndex || 0);
+
+  useEffect(() => {
+    if (flatListRef && content?.startIndex) {
+      setTimeout(() => {
+        flatListRef.scrollToIndex({
+          index: content.startIndex,
+          animated: false
+        });
+      }, 100);
+    }
+  }, []);
 
   const onNextBtnPress = (index) => {
     if (index < chaptersLength.length - 1) {

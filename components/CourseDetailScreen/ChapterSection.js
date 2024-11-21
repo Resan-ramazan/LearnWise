@@ -18,7 +18,7 @@ const ChapterSection = ({
 }) => {
   const navigation = useNavigation();
 
-  const onChapterPress = (content) => {
+  const onChapterPress = (content, index) => {
     return () => {
       if (userEnrolledCourses.length == 0) {
         ToastAndroid.show(
@@ -41,6 +41,7 @@ const ChapterSection = ({
           chaptersLength: chapterList,
           courseId: enrolledCourse.courseId,
           userEmail: enrolledCourse.userEmail,
+          startIndex: index,
         });
       }
     };
@@ -79,7 +80,7 @@ const ChapterSection = ({
         </Text>
         {chapterList.map((item, index) => (
           <TouchableOpacity
-            onPress={onChapterPress(item)}
+            onPress={onChapterPress(item, index)}
             key={index}
             style={
               checkIsChapterCompleted(item)
