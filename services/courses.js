@@ -120,10 +120,10 @@ export const enrollcourse = async (courseId, userEmail) => {
 export const updateUserEnrolledCourse = async (
   courseId,
   userEmail,
-  chapterId
+  chapterId,
+  allChapterIds
 ) => {
   try {
-    // First, get the document reference
     const userCourseRef = collection(db, "UserEnrolledCourse");
     const q = query(
       userCourseRef,
@@ -135,19 +135,10 @@ export const updateUserEnrolledCourse = async (
     if (!querySnapshot.empty) {
       const docRef = doc(db, "UserEnrolledCourse", querySnapshot.docs[0].id);
 
-      // Get current completed chapters
-      const currentData = querySnapshot.docs[0].data();
-      const completedChapters = currentData.completedChapters || [];
-
-      // Add new chapter if not already completed
-      if (!completedChapters.includes(chapterId)) {
-        completedChapters.push(chapterId);
-      }
-
-      // Update the document
+      // Tüm chapter ID'lerini completedChapters'a ekle
       await updateDoc(docRef, {
-        completedChapters: completedChapters,
-        progress: (completedChapters.length / 6) * 100, // Assuming 6 chapters total
+        completedChapters: allChapterIds,
+        progress: allChapterIds.length,
       });
     }
   } catch (error) {

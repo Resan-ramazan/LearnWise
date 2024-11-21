@@ -46,8 +46,11 @@ const ChapterSection = ({
     };
   };
 
-  useEffect(() => {    
-    console.log("userEnrolledCourses", userEnrolledCourses[0]?.completedChapters);
+  useEffect(() => {
+    console.log(
+      "userEnrolledCourses",
+      userEnrolledCourses[0]?.completedChapters
+    );
   }, [userEnrolledCourses]);
 
   const checkIsChapterCompleted = (chapter) => {
@@ -157,6 +160,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     backgroundColor: Color.LIGHT_GREEN,
+    color: Color.TEXT_WHITE,
     alignItems: "center",
     justifyContent: "space-between",
     padding: 15,

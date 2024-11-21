@@ -22,11 +22,7 @@ const CourseDetailScreen = () => {
   const { user } = useUser();
 
   useEffect(() => {
-    console.log("CourseDetailScreen user data:", {
-      email: user?.primaryEmailAddress?.emailAddress,
-      courseId: params?.course?.id,
-      user: user,
-    });
+    
   }, [user, params]);
 
   const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);

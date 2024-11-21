@@ -13,7 +13,14 @@ const ChapterContentScreen = () => {
       return;
     }
 
-    updateUserEnrolledCourse(param.courseId, param.userEmail, param.content.id)
+    const allChapterIds = param.chaptersLength.map(chapter => chapter.id);
+
+    updateUserEnrolledCourse(
+      param.courseId, 
+      param.userEmail, 
+      param.content.id,
+      allChapterIds
+    )
       .then(() => {
         ToastAndroid.show("Course completed", ToastAndroid.SHORT);
         navigation.goBack();
