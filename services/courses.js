@@ -146,3 +146,42 @@ export const updateUserEnrolledCourse = async (
     throw error;
   }
 };
+
+export const updateUserProgress = async (
+  courseId,
+  userEmail,
+  currentChapterId,
+  currentIndex
+) => {
+  try {
+    const userCourseRef = collection(db, "UserEnrolledCourse");
+    const q = query(
+      userCourseRef,
+      where("courseId", "==", courseId),
+      where("userEmail", "==", userEmail)
+    );
+
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docRef = doc(db, "UserEnrolledCourse", querySnapshot.docs[0].id);
+      const currentData = querySnapshot.docs[0].data();
+      const completedChapters = currentData.completedChapters || [];
+
+      // Eğer bu chapter daha önce tamamlanmamışsa ekle
+      if (!completedChapters.includes(currentChapterId)) {
+        completedChapters.push(currentChapterId);
+      }
+
+      await updateDoc(docRef, {
+        lastChapterId: currentChapterId,
+        lastPosition: currentIndex,
+        lastUpdated: new Date().toISOString(),
+        completedChapters: completedChapters, // Tamamlanan chapter'ları güncelle
+        progress: completedChapters.length // Progress'i de güncelle
+      });
+    }
+  } catch (error) {
+    console.error("Error updating user progress:", error);
+    throw error;
+  }
+};

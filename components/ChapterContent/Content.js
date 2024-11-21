@@ -4,15 +4,17 @@ import ProgressBar from "./ProgressBar";
 import ContenItem from "./ContenItem";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { updateUserProgress } from "../../services/courses";
+import { ToastAndroid } from "react-native";
 
-const Content = ({ chaptersLength, content, onChapterComplete }) => {
-  let flatListRef;
-  const [activeIndex, setActiveIndex] = useState(content?.startIndex || 0);
+const Content = ({ chaptersLength, content, onChapterComplete, initialIndex, courseId, userEmail }) => {
+  const flatListRef = React.useRef(null);
+  const [activeIndex, setActiveIndex] = useState(initialIndex || 0);
 
   useEffect(() => {
     if (flatListRef && content?.startIndex) {
       setTimeout(() => {
-        flatListRef.scrollToIndex({
+        flatListRef.current?.scrollToIndex({
           index: content.startIndex,
           animated: false
         });
@@ -20,13 +22,45 @@ const Content = ({ chaptersLength, content, onChapterComplete }) => {
     }
   }, []);
 
-  const onNextBtnPress = (index) => {
-    if (index < chaptersLength.length - 1) {
+  const onSaveProgress = async (index) => {
+    const currentChapter = chaptersLength[index];
+    
+    console.log("Saving progress with:", {
+      courseId,
+      userEmail,
+      chapterId: currentChapter?.id,
+      index
+    });
+
+    if (!courseId || !userEmail || !currentChapter?.id) {
+      console.error("Missing required values:", {
+        courseId,
+        userEmail,
+        chapterId: currentChapter?.id
+      });
+      ToastAndroid.show("Error: Missing required data", ToastAndroid.SHORT);
+      return;
+    }
+
+    try {
+      await updateUserProgress(
+        courseId,
+        userEmail,
+        currentChapter.id,
+        index
+      );
+      ToastAndroid.show("Progress saved!", ToastAndroid.SHORT);
+      
       setActiveIndex(index + 1);
-      flatListRef.scrollToIndex({ index: index + 1, animted: true });
-    } else {
-      //navigation.goBack();
-      onChapterComplete();
+      if (flatListRef.current) {
+        flatListRef.current.scrollToIndex({ 
+          index: index + 1, 
+          animated: true 
+        });
+      }
+    } catch (error) {
+      console.error("Error saving progress:", error);
+      ToastAndroid.show("Error saving progress", ToastAndroid.SHORT);
     }
   };
 
@@ -38,41 +72,25 @@ const Content = ({ chaptersLength, content, onChapterComplete }) => {
 
   const renderContentItem = ({ item, index }) => {
     return (
-      <View
-        style={{
-          width: Dimensions.get("screen").width,
-          padding: 20,
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: "Poppins-Medium",
-            fontSize: 22,
-            marginTop: 15,
-          }}
-        >
-          {item.heading}
-        </Text>
+      <View style={{
+        width: Dimensions.get("screen").width,
+        padding: 20,
+      }}>
+        <Text style={styles.heading}>{item.heading}</Text>
         <ContenItem description={item.description} output={item.output} />
+        
         <TouchableOpacity
-          style={{ marginTop: 10 }}
+          style={styles.buttonContainer}
           onPress={() => {
-            onNextBtnPress(index);
+            if (index === chaptersLength.length - 1) {
+              onChapterComplete(); // Son sayfada Finish
+            } else {
+              onSaveProgress(index); // Diğer sayfalarda Save
+            }
           }}
         >
-          <Text
-            style={{
-              backgroundColor: "#FFA500",
-              padding: 15,
-              fontSize: 17,
-              borderRadius: 10,
-              fontFamily: "Poppins-Regular",
-              color: "#fff",
-              marginVertical: 10,
-              textAlign: "center",
-            }}
-          >
-            {index === chaptersLength.length - 1 ? "Finish" : "Next"}
+          <Text style={styles.buttonText}>
+            {index === chaptersLength.length - 1 ? "Finish" : "Save & Continue"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -91,11 +109,16 @@ const Content = ({ chaptersLength, content, onChapterComplete }) => {
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
         renderItem={renderContentItem}
-        ref={(ref) => {
-          flatListRef = ref;
-        }}
+        ref={flatListRef}
         keyExtractor={(item) => item.id}
         onScroll={onFlatListScroll}
+        getItemLayout={(data, index) => ({
+          length: Dimensions.get("screen").width,
+          offset: Dimensions.get("screen").width * index,
+          index,
+        })}
+        initialScrollIndex={initialIndex}
+        initialNumToRender={chaptersLength.length}
       />
     </View>
   );
@@ -103,4 +126,22 @@ const Content = ({ chaptersLength, content, onChapterComplete }) => {
 
 export default Content;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  heading: {
+    fontFamily: "Poppins-Medium",
+    fontSize: 22,
+    marginTop: 15,
+  },
+  buttonContainer: {
+    marginTop: 10,
+    backgroundColor: "#FFA500",
+    padding: 15,
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontFamily: "Poppins-Regular",
+    color: "#fff",
+    fontSize: 17,
+    textAlign: "center",
+  }
+});

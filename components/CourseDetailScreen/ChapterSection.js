@@ -59,62 +59,63 @@ const ChapterSection = ({
   };
 
   const checkIsChapterCompleted = (chapter) => {
-    return userEnrolledCourses[0]?.completedChapters.includes(chapter.id);
+    if (!userEnrolledCourses || userEnrolledCourses.length === 0) return false;
+    
+    const enrolledCourse = userEnrolledCourses[0];
+    return enrolledCourse?.completedChapters?.includes(chapter.id);
   };
 
   return (
     chapterList && (
-      <Animated.View style={{ opacity: fadeAnim }}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Chapters</Text>
-          <ScrollView style={styles.chapterList}>
-            {chapterList.map((item, index) => (
-              <TouchableOpacity
-                onPress={onChapterPress(item, index)}
-                key={index}
-                style={[
-                  styles.chapterItem,
-                  checkIsChapterCompleted(item)
-                    ? styles.completeChapter
-                    : styles.inCompleteChapter,
-                ]}
-              >
-                <View style={styles.chapterContent}>
-                  <Text
-                    style={[
-                      styles.chapterNumber,
-                      checkIsChapterCompleted(item) && styles.completedText,
-                    ]}
-                  >
-                    {index + 1}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.chapterTitle,
-                      checkIsChapterCompleted(item) && styles.completedText,
-                    ]}
-                  >
-                    {item.heading}
-                  </Text>
-                </View>
-                {userEnrolledCourses.length == 0 ? (
-                  <Ionicons name="lock-closed" size={25} color={Color.TEXT_GRAY} />
-                ) : (
-                  <Ionicons
-                    name={
-                      checkIsChapterCompleted(item) ? "checkmark-circle" : "play-circle"
-                    }
-                    size={28}
-                    color={
-                      checkIsChapterCompleted(item) ? Color.GREEN : Color.PRIMARY
-                    }
-                  />
-                )}
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </Animated.View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Chapters</Text>
+        <ScrollView style={styles.chapterList}>
+          {chapterList.map((item, index) => (
+            <TouchableOpacity
+              onPress={onChapterPress(item, index)}
+              key={index}
+              style={[
+                styles.chapterItem,
+                checkIsChapterCompleted(item)
+                  ? styles.completeChapter
+                  : styles.inCompleteChapter,
+              ]}
+            >
+              <View style={styles.chapterContent}>
+                <Text
+                  style={[
+                    styles.chapterNumber,
+                    checkIsChapterCompleted(item) && styles.completedText,
+                  ]}
+                >
+                  {index + 1}
+                </Text>
+                <Text
+                  style={[
+                    styles.chapterTitle,
+                    checkIsChapterCompleted(item) && styles.completedText,
+                  ]}
+                >
+                  {item.heading}
+                </Text>
+              </View>
+              {userEnrolledCourses.length == 0 ? (
+                <Ionicons name="lock-closed" size={25} color={Color.TEXT_GRAY} />
+              ) : (
+                <Ionicons
+                  name={
+                    checkIsChapterCompleted(item) ? "checkmark-circle" : "play-circle"
+                  }
+                  size={28}
+                  color={
+                    checkIsChapterCompleted(item) ? Color.GREEN : Color.PRIMARY
+                  }
+                />
+              )}
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     )
   );
 };
