@@ -17,6 +17,7 @@ const ChapterSection = ({
   userEnrolledCourses,
   courseId,
   userEmail,
+  refreshData,
 }) => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -39,20 +40,13 @@ const ChapterSection = ({
       } else {
         const enrolledCourse = userEnrolledCourses[0];
 
-        if (!enrolledCourse?.courseId || !enrolledCourse?.userEmail) {
-          ToastAndroid.show(
-            "Error: Missing course enrollment data",
-            ToastAndroid.SHORT
-          );
-          return;
-        }
-
         navigation.navigate("ChapterContent", {
           content: content,
           chaptersLength: chapterList,
           courseId: enrolledCourse.courseId,
           userEmail: enrolledCourse.userEmail,
           startIndex: index,
+          onComplete: refreshData,
         });
       }
     };

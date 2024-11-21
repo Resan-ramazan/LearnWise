@@ -19,11 +19,6 @@ const ChapterContentScreen = () => {
 
   const onChapterComplete = () => {
     if (!param?.courseId || !param?.userEmail || !param?.content?.id) {
-      console.log("Missing required params:", {
-        courseId: param?.courseId,
-        userEmail: param?.userEmail,
-        contentId: param?.content?.id
-      });
       return;
     }
 
@@ -37,6 +32,9 @@ const ChapterContentScreen = () => {
     )
       .then(() => {
         ToastAndroid.show("Course completed", ToastAndroid.SHORT);
+        if (param.onComplete) {
+          param.onComplete();
+        }
         navigation.goBack();
       })
       .catch((err) => {
@@ -50,7 +48,7 @@ const ChapterContentScreen = () => {
         <Content
           chaptersLength={param.chaptersLength}
           content={param.content}
-          onChapterComplete={() => onChapterComplete()}
+          onChapterComplete={onChapterComplete}
           initialIndex={param.startIndex}
           courseId={param.courseId}
           userEmail={param.userEmail}

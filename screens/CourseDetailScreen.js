@@ -15,42 +15,41 @@ import { enrollcourse } from "../services/courses";
 import { useUser } from "@clerk/clerk-expo";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
+import { useFocusEffect } from '@react-navigation/native';
 
 const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const params = useRoute().params;
   const { user } = useUser();
-
-  useEffect(() => {
-    
-  }, [user, params]);
-
   const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
-    const checkEnrollment = async () => {
-      if (params.course && user) {
-        try {
-          const userCourseRef = collection(db, "UserEnrolledCourse");
-          const q = query(
-            userCourseRef,
-            where("courseId", "==", params.course.id),
-            where("userEmail", "==", user.primaryEmailAddress.emailAddress)
-          );
+  useFocusEffect(
+    React.useCallback(() => {
+      const checkEnrollment = async () => {
+        if (params.course && user) {
+          try {
+            const userCourseRef = collection(db, "UserEnrolledCourse");
+            const q = query(
+              userCourseRef,
+              where("courseId", "==", params.course.id),
+              where("userEmail", "==", user.primaryEmailAddress.emailAddress)
+            );
 
-          const querySnapshot = await getDocs(q);
-          const courses = [];
-          querySnapshot.forEach((doc) => {
-            courses.push(doc.data());
-          });
-          setUserEnrolledCourses(courses);
-        } catch (error) {
-          console.error("Error checking course enrollment:", error);
+            const querySnapshot = await getDocs(q);
+            const courses = [];
+            querySnapshot.forEach((doc) => {
+              courses.push(doc.data());
+            });
+            setUserEnrolledCourses(courses);
+          } catch (error) {
+            console.error("Error checking course enrollment:", error);
+          }
         }
-      }
-    };
-    checkEnrollment();
-  }, [params.course, user]);
+      };
+      checkEnrollment();
+    }, [params.course, user, refreshKey])
+  );
 
   const UserEnrollCourse = async () => {
     try {
@@ -92,6 +91,7 @@ const CourseDetailScreen = () => {
           chapterList={params.course.chapters}
           courseId={params.course?.id || ""}
           userEmail={user?.primaryEmailAddress?.emailAddress || ""}
+          refreshData={() => setRefreshKey(prev => prev + 1)}
         />
       </ScrollView>
     )
