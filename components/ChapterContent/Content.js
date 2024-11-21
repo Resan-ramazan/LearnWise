@@ -2,12 +2,19 @@ import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import ContenItem from "./ContenItem";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { updateUserProgress } from "../../services/courses";
 import { ToastAndroid } from "react-native";
 
-const Content = ({ chaptersLength, content, onChapterComplete, initialIndex, courseId, userEmail }) => {
+const Content = ({
+  chaptersLength,
+  content,
+  onChapterComplete,
+  initialIndex,
+  courseId,
+  userEmail,
+}) => {
   const flatListRef = React.useRef(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex || 0);
 
@@ -16,7 +23,7 @@ const Content = ({ chaptersLength, content, onChapterComplete, initialIndex, cou
       setTimeout(() => {
         flatListRef.current?.scrollToIndex({
           index: content.startIndex,
-          animated: false
+          animated: false,
         });
       }, 100);
     }
@@ -24,38 +31,33 @@ const Content = ({ chaptersLength, content, onChapterComplete, initialIndex, cou
 
   const onSaveProgress = async (index) => {
     const currentChapter = chaptersLength[index];
-    
+
     console.log("Saving progress with:", {
       courseId,
       userEmail,
       chapterId: currentChapter?.id,
-      index
+      index,
     });
 
     if (!courseId || !userEmail || !currentChapter?.id) {
       console.error("Missing required values:", {
         courseId,
         userEmail,
-        chapterId: currentChapter?.id
+        chapterId: currentChapter?.id,
       });
       ToastAndroid.show("Error: Missing required data", ToastAndroid.SHORT);
       return;
     }
 
     try {
-      await updateUserProgress(
-        courseId,
-        userEmail,
-        currentChapter.id,
-        index
-      );
+      await updateUserProgress(courseId, userEmail, currentChapter.id, index);
       ToastAndroid.show("Progress saved!", ToastAndroid.SHORT);
-      
+
       setActiveIndex(index + 1);
       if (flatListRef.current) {
-        flatListRef.current.scrollToIndex({ 
-          index: index + 1, 
-          animated: true 
+        flatListRef.current.scrollToIndex({
+          index: index + 1,
+          animated: true,
         });
       }
     } catch (error) {
@@ -72,27 +74,34 @@ const Content = ({ chaptersLength, content, onChapterComplete, initialIndex, cou
 
   const renderContentItem = ({ item, index }) => {
     return (
-      <View style={{
-        width: Dimensions.get("screen").width,
-        padding: 20,
-      }}>
-        <Text style={styles.heading}>{item.heading}</Text>
-        <ContenItem description={item.description} output={item.output} />
-        
-        <TouchableOpacity
-          style={styles.buttonContainer}
-          onPress={() => {
-            if (index === chaptersLength.length - 1) {
-              onChapterComplete(); // Son sayfada Finish
-            } else {
-              onSaveProgress(index); // Diğer sayfalarda Save
-            }
+      <View>
+        <ScrollView
+          style={{
+            width: Dimensions.get("screen").width,
+            padding: 20,
+            paddingBottom:70
           }}
         >
-          <Text style={styles.buttonText}>
-            {index === chaptersLength.length - 1 ? "Finish" : "Save & Continue"}
-          </Text>
-        </TouchableOpacity>
+          <Text style={styles.heading}>{item.heading}</Text>
+          <ContenItem description={item.description} output={item.output} />
+
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              if (index === chaptersLength.length - 1) {
+                onChapterComplete(); // Son sayfada Finish
+              } else {
+                onSaveProgress(index); // Diğer sayfalarda Save
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>
+              {index === chaptersLength.length - 1
+                ? "Finish"
+                : "Save & Continue"}
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
     );
   };
@@ -143,5 +152,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 17,
     textAlign: "center",
-  }
+  },
 });

@@ -4,7 +4,7 @@ import { useUser } from "@clerk/clerk-react";
 import Color from "../../utils/Color";
 import coin from "../../assets/images/coins.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
-const Header = () => {
+const Header = ({ userData }) => {
   const { isLoaded, isSignedIn, user } = useUser();
   return (
     isLoaded && (
@@ -14,12 +14,12 @@ const Header = () => {
             <Image source={{ uri: user?.imageUrl }} style={styles.image} />
             <View>
               <Text style={styles.text}>Welcome,</Text>
-              <Text style={styles.text}>{user?.fullName}</Text>
+              <Text style={styles.text}>{userData.username}</Text>
             </View>
           </View>
           <View style={[styles.rowStyle, styles.coinContainer]}>
             <Image source={coin} style={styles.coin} />
-            <Text style={styles.text}>3450</Text>
+            <Text style={styles.text}>{userData.points}</Text>
           </View>
         </View>
         <View style={styles.inputContainer}>
