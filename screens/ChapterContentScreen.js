@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import Content from "../components/ChapterContent/Content";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { updateUserEnrolledCourse } from "../services/courses";
+import { useCourse } from '../contexts/CourseContext';
 
 const ChapterContentScreen = () => {
   const param = useRoute().params;
   const navigation = useNavigation();
+  const { currentCourse, refreshCourseData } = useCourse();
 
   // Debug için paramları kontrol edelim
   useEffect(() => {
@@ -22,7 +24,7 @@ const ChapterContentScreen = () => {
       return;
     }
 
-    const allChapterIds = param.chaptersLength.map(chapter => chapter.id);
+    const allChapterIds = currentCourse.chapters.map(chapter => chapter.id);
 
     updateUserEnrolledCourse(
       param.courseId, 
@@ -32,9 +34,7 @@ const ChapterContentScreen = () => {
     )
       .then(() => {
         ToastAndroid.show("Course completed", ToastAndroid.SHORT);
-        if (param.onComplete) {
-          param.onComplete();
-        }
+        refreshCourseData();
         navigation.goBack();
       })
       .catch((err) => {

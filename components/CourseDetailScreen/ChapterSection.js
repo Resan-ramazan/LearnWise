@@ -11,15 +11,11 @@ import React, { useEffect, useRef } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Color from "../../utils/Color";
 import { useNavigation } from "@react-navigation/native";
+import { useCourse } from '../../contexts/CourseContext';
 
-const ChapterSection = ({
-  chapterList,
-  userEnrolledCourses,
-  courseId,
-  userEmail,
-  refreshData,
-}) => {
+const ChapterSection = () => {
   const navigation = useNavigation();
+  const { userEnrolledCourses, currentCourse } = useCourse();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -42,11 +38,10 @@ const ChapterSection = ({
 
         navigation.navigate("ChapterContent", {
           content: content,
-          chaptersLength: chapterList,
+          chaptersLength: currentCourse.chapters,
           courseId: enrolledCourse.courseId,
           userEmail: enrolledCourse.userEmail,
           startIndex: index,
-          onComplete: refreshData,
         });
       }
     };
@@ -60,11 +55,11 @@ const ChapterSection = ({
   };
 
   return (
-    chapterList && (
+    currentCourse && currentCourse.chapters && (
       <View style={styles.container}>
         <Text style={styles.title}>Chapters</Text>
         <ScrollView style={styles.chapterList}>
-          {chapterList.map((item, index) => (
+          {currentCourse.chapters.map((item, index) => (
             <TouchableOpacity
               onPress={onChapterPress(item, index)}
               key={index}

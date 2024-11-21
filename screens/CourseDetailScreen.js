@@ -16,13 +16,13 @@ import { useUser } from "@clerk/clerk-expo";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
 import { useFocusEffect } from '@react-navigation/native';
+import { useCourse } from '../contexts/CourseContext';
 
 const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const params = useRoute().params;
   const { user } = useUser();
-  const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const { userEnrolledCourses, updateEnrolledCourses, updateCurrentCourse } = useCourse();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -41,21 +41,22 @@ const CourseDetailScreen = () => {
             querySnapshot.forEach((doc) => {
               courses.push(doc.data());
             });
-            setUserEnrolledCourses(courses);
+            updateEnrolledCourses(courses);
+            updateCurrentCourse(params.course);
           } catch (error) {
             console.error("Error checking course enrollment:", error);
           }
         }
       };
       checkEnrollment();
-    }, [params.course, user, refreshKey])
+    }, [params.course, user])
   );
 
   const UserEnrollCourse = async () => {
     try {
       await enrollcourse(params.course.id, user.primaryEmailAddress);
       ToastAndroid.show("Course enrolled successfully", ToastAndroid.SHORT);
-      setUserEnrolledCourses([
+      updateEnrolledCourses([
         ...userEnrolledCourses,
         {
           courseId: params.course.id,
@@ -91,7 +92,6 @@ const CourseDetailScreen = () => {
           chapterList={params.course.chapters}
           courseId={params.course?.id || ""}
           userEmail={user?.primaryEmailAddress?.emailAddress || ""}
-          refreshData={() => setRefreshKey(prev => prev + 1)}
         />
       </ScrollView>
     )
