@@ -5,30 +5,37 @@ import Color from "../utils/Color";
 import CourseList from "../components/HomeScreen/CourseList";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useUser as useClerkUser } from "@clerk/clerk-expo";
+import { useUser } from "../contexts/UserContext";
 
 const HomeScreen = () => {
-  const [loading, setLoading] = useState(true);
+  const { user: clerkUser } = useClerkUser();
+  const { userData, initializeUser, loading } = useUser();
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
+    if (clerkUser && !userData) {
+      initializeUser(clerkUser);
+    }
+  }, [clerkUser]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
 
   return (
     <View>
-      <View style={styles.header}>
-        <Header />
-      </View>
-      {loading ? (
-        <ActivityIndicator size="large" color={Color.PRIMARTY_COLOR} />
-      ) : (
-        <View style={{ padding: 20 }}>
-          <View style={{ marginTop: -100 }}>
-            <CourseList level={"basic"} />
+      {userData && (
+        <>
+          <View style={styles.header}>
+            <Header userData={userData} />
           </View>
-          <CourseList level={"advance"}  />
-        </View>
+          <View style={{ padding: 20 }}>
+            <View style={{ marginTop: -100 }}>
+              <CourseList level={"basic"} />
+            </View>
+            <CourseList level={"advance"} />
+          </View>
+        </>
       )}
     </View>
   );

@@ -7,6 +7,7 @@ import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./navigations/TabNavigation";
 import { CourseProvider } from './contexts/CourseContext';
+import { UserProvider } from './contexts/UserContext';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -26,21 +27,23 @@ export default function App() {
   });
 
   return (
-    <CourseProvider>
-      <ClerkProvider publishableKey={publishableKey}>
-        <StatusBar style="dark" />
-        <View style={styles.container}>
-          <SignedIn>
-            <NavigationContainer>
-              <TabNavigation />
-            </NavigationContainer>
-          </SignedIn>
-          <SignedOut>
-            <LoginScreen />
-          </SignedOut>
-        </View>
-      </ClerkProvider>
-    </CourseProvider>
+    <ClerkProvider publishableKey={publishableKey}>
+      <UserProvider>
+        <CourseProvider>
+          <StatusBar style="dark" />
+          <View style={styles.container}>
+            <SignedIn>
+              <NavigationContainer>
+                <TabNavigation />
+              </NavigationContainer>
+            </SignedIn>
+            <SignedOut>
+              <LoginScreen />
+            </SignedOut>
+          </View>
+        </CourseProvider>
+      </UserProvider>
+    </ClerkProvider>
   );
 }
 
