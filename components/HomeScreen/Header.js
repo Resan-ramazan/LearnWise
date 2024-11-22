@@ -6,6 +6,7 @@ import coin from "../../assets/images/coins.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
 const Header = ({ userData }) => {
   const { isLoaded, isSignedIn, user } = useUser();
+
   return (
     isLoaded && (
       <View>

@@ -6,41 +6,37 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DetailSection from "../components/CourseDetailScreen/DetailSection";
 import ChapterSection from "../components/CourseDetailScreen/ChapterSection";
-import { enrollcourse } from "../services/courses";
+import { enrollcourse, checkCourseEnrollment } from "../services/courses";
 import { useUser } from "@clerk/clerk-expo";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
-import { useFocusEffect } from '@react-navigation/native';
-import { useCourse } from '../contexts/CourseContext';
+import { useFocusEffect } from "@react-navigation/native";
+import { useCourse } from "../contexts/CourseContext";
 
 const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const params = useRoute().params;
   const { user } = useUser();
-  const { userEnrolledCourses, updateEnrolledCourses, updateCurrentCourse } = useCourse();
+  const { userEnrolledCourses, updateEnrolledCourses, updateCurrentCourse } =
+    useCourse();
 
+  /*
+  useFocusEffect, React Navigation'da ekran her odaklandığında (yani ekrana her dönüldüğünde) çalışmasını istediğimiz kodlar için kullanılır
+  */
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       const checkEnrollment = async () => {
         if (params.course && user) {
           try {
-            const userCourseRef = collection(db, "UserEnrolledCourse");
-            const q = query(
-              userCourseRef,
-              where("courseId", "==", params.course.id),
-              where("userEmail", "==", user.primaryEmailAddress.emailAddress)
+            const courses = await checkCourseEnrollment(
+              params.course.id, 
+              user.primaryEmailAddress.emailAddress
             );
-
-            const querySnapshot = await getDocs(q);
-            const courses = [];
-            querySnapshot.forEach((doc) => {
-              courses.push(doc.data());
-            });
             updateEnrolledCourses(courses);
             updateCurrentCourse(params.course);
           } catch (error) {
