@@ -1,25 +1,40 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/HomeScreen/Header";
 import Color from "../utils/Color";
 import CourseList from "../components/HomeScreen/CourseList";
-import { useState } from "react";
-import { useEffect } from "react";
 import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const { user: clerkUser } = useClerkUser();
-  const { userData, initializeUser, loading } = useUser();
+  const { userData, initializeUser, loading, refreshUserData } = useUser();
 
   useEffect(() => {
-    if (clerkUser && !userData) {
+    if (clerkUser) {
       initializeUser(clerkUser);
     }
   }, [clerkUser]);
 
+  // Ekran her odaklandığında verileri yenile
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (userData?.email) {
+        refreshUserData();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, userData]);
+
   if (loading) {
-    return <ActivityIndicator size="large" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Color.PRIMARY} />
+      </View>
+    );
   }
 
   return (
@@ -50,5 +65,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     padding: 20,
     height: 250,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

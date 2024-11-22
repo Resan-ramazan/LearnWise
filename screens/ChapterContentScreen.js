@@ -11,7 +11,7 @@ const ChapterContentScreen = () => {
   const param = useRoute().params;
   const navigation = useNavigation();
   const { currentCourse, refreshCourseData } = useCourse();
-  const { updateUserPoints } = useUser();
+  const { updateUserPoints, refreshUserData } = useUser();
 
   
 
@@ -31,22 +31,36 @@ const ChapterContentScreen = () => {
 
     const allChapterIds = currentCourse.chapters.map(chapter => chapter.id);
 
-    updateUserEnrolledCourse(
-      param.courseId, 
-      param.userEmail, 
-      param.content.id,
-      allChapterIds
-    )
-      .then(() => {
-        ToastAndroid.show("Course completed", ToastAndroid.SHORT);
-        refreshCourseData();
-        updateUserPoints(50);
-        ToastAndroid.show("Chapter completed! +50 points", ToastAndroid.SHORT);
-        navigation.goBack();
-      })
-      .catch((err) => {
-        console.error("Error completing chapter:", err);
-      });
+    try {
+      // Önce puanları güncelle
+      await updateUserPoints(50);
+      
+      // Sonra kurs ilerlemesini güncelle
+      const updatedUserData = await updateUserEnrolledCourse(
+        param.courseId, 
+        param.userEmail, 
+        param.content.id,
+        allChapterIds,
+        currentCourse.chapters.length
+      );
+
+      // CourseContext'i güncelle
+      refreshCourseData();
+      
+      // En son UserContext'i güncelle
+      await refreshUserData();
+      
+      ToastAndroid.show("Chapter completed! +50 points", ToastAndroid.SHORT);
+      
+      if (allChapterIds.length === currentCourse.chapters.length) {
+        ToastAndroid.show("Course completed!", ToastAndroid.SHORT);
+      }
+      
+      navigation.goBack();
+    } catch (err) {
+      console.error("Error completing chapter:", err);
+      ToastAndroid.show("Error completing chapter", ToastAndroid.SHORT);
+    }
   };
 
   return (

@@ -1,23 +1,38 @@
-import React, { createContext, useContext, useState } from 'react';
-import { createOrUpdateUser, getUserData } from '../services/users';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getUserData, createOrUpdateUser } from '../services/users';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const initializeUser = async (clerkUser) => {
     try {
       setLoading(true);
-      const userInfo = {
-        email: clerkUser.primaryEmailAddress.emailAddress,
-        username: clerkUser.username || clerkUser.firstName,
-        profileImage: clerkUser.profileImageUrl,
-      };
+      const email = clerkUser.primaryEmailAddress?.emailAddress;
       
-      const user = await createOrUpdateUser(userInfo);
-      setUserData(user);
+      if (!email) {
+        throw new Error('User email is required');
+      }
+
+      // Önce mevcut kullanıcı verilerini getir
+      let existingUser = await getUserData(email);
+      
+      if (!existingUser) {
+        // Kullanıcı yoksa yeni oluştur
+        const userInfo = {
+          email: email,
+          username: clerkUser.username || clerkUser.firstName || '',
+          profileImage: clerkUser.profileImageUrl || '',
+          points: 0,
+          completedCourses: [],
+          enrolledCourses: [],
+        };
+        existingUser = await createOrUpdateUser(userInfo);
+      }
+
+      setUserData(existingUser);
     } catch (error) {
       console.error('Error initializing user:', error);
     } finally {
@@ -34,10 +49,23 @@ export const UserProvider = ({ children }) => {
         points: (userData.points || 0) + points,
       };
       
-      await createOrUpdateUser(updatedUser);
-      setUserData(updatedUser);
+      const updatedUserData = await createOrUpdateUser(updatedUser);
+      setUserData(updatedUserData);
     } catch (error) {
       console.error('Error updating user points:', error);
+    }
+  };
+
+  const refreshUserData = async () => {
+    if (!userData?.email) return;
+    
+    try {
+      const freshUserData = await getUserData(userData.email);
+      if (freshUserData) {
+        setUserData(freshUserData);
+      }
+    } catch (error) {
+      console.error('Error refreshing user data:', error);
     }
   };
 
@@ -48,6 +76,7 @@ export const UserProvider = ({ children }) => {
         loading,
         initializeUser,
         updateUserPoints,
+        refreshUserData,
       }}
     >
       {children}

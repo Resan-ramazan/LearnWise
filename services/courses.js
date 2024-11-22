@@ -6,6 +6,8 @@ import {
   doc,
   updateDoc,
   where,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { query, orderBy } from "firebase/firestore";
@@ -58,59 +60,34 @@ export const getCoursesByLevel = async (level) => {
   }
 };
 
-// export const enrollcourse = async (course, user) => {
-//   try {
-//     const db = getFirestore();
-//     const userCourseRef = collection(db, "UserEnrolledCourse");
-
-//     const q = query(
-//       userCourseRef,
-//       where("courseId", "==", course.id),
-//     );
-
-//     const querySnapshot = await getDocs(q);
-
-//     if (!querySnapshot.empty) {
-//       throw new Error("User already enrolled in this course");
-//     }
-
-//     await addDoc(userCourseRef, {
-//       courseId: course.id,
-//       userEmail: user.email,
-//       completedChapters: [],
-//       progress: 0,
-//     });
-//     console.log("Course enrolled successfully");
-//   } catch (error) {
-//     console.error("Error enrolling course:", error);
-//     throw error;
-//   }
-// };
-
 export const enrollcourse = async (courseId, userEmail) => {
   try {
     const email = userEmail.emailAddress;
     const userCourseRef = collection(db, "UserEnrolledCourse");
 
-    const q = query(
-      userCourseRef,
-      where("courseId", "==", courseId),
-      where("userEmail", "==", email)
-    );
+    // Kullanıcı verisini al
+    const userRef = doc(db, 'users', email);
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data();
 
-    const querySnapshot = await getDocs(q);
+    // Enrolled courses listesini güncelle
+    const updatedUserData = {
+      ...userData,
+      enrolledCourses: Array.from(new Set([...(userData.enrolledCourses || []), courseId]))
+    };
 
-    if (!querySnapshot.empty) {
-      throw new Error("User already enrolled in this course");
-    }
+    // Kullanıcı verisini güncelle
+    await setDoc(userRef, updatedUserData);
 
+    // Kurs kaydını oluştur
     const docRef = await addDoc(userCourseRef, {
       courseId: courseId,
       userEmail: email,
       completedChapters: [],
       progress: 0,
     });
-    return docRef.id;
+
+    return { docRef: docRef.id, updatedUserData };
   } catch (error) {
     console.error("Error enrolling course:", error);
     throw error;
@@ -121,9 +98,11 @@ export const updateUserEnrolledCourse = async (
   courseId,
   userEmail,
   chapterId,
-  allChapterIds
+  allChapterIds,
+  chaptersLength
 ) => {
   try {
+    // UserEnrolledCourse koleksiyonunu güncelle
     const userCourseRef = collection(db, "UserEnrolledCourse");
     const q = query(
       userCourseRef,
@@ -134,13 +113,35 @@ export const updateUserEnrolledCourse = async (
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
       const docRef = doc(db, "UserEnrolledCourse", querySnapshot.docs[0].id);
-
-      // Tüm chapter ID'lerini completedChapters'a ekle
       await updateDoc(docRef, {
         completedChapters: allChapterIds,
         progress: allChapterIds.length,
       });
     }
+
+    // Users koleksiyonunu güncelle
+    const userRef = doc(db, 'users', userEmail);
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data();
+
+    // Tüm chapterlar tamamlandıysa kursu compsletedCourses'a ekle
+    const isFullyCompleted = allChapterIds.length === chaptersLength;
+    let updatedUserData = { ...userData };
+
+    if (isFullyCompleted) {
+      const completedCourses = Array.from(new Set([...(userData.completedCourses || []), courseId]));
+      updatedUserData = {
+        ...updatedUserData,
+        completedCourses,
+        // Mevcut enrolledCourses ve points değerlerini koru
+        enrolledCourses: userData.enrolledCourses || [],
+        points: userData.points || 0
+      };
+    }
+
+    await setDoc(userRef, updatedUserData, { merge: true });
+
+    return updatedUserData;
   } catch (error) {
     console.error("Error updating course progress:", error);
     throw error;
@@ -177,11 +178,32 @@ export const updateUserProgress = async (
         lastPosition: currentIndex,
         lastUpdated: new Date().toISOString(),
         completedChapters: completedChapters, // Tamamlanan chapter'ları güncelle
-        progress: completedChapters.length // Progress'i de güncelle
+        progress: completedChapters.length, // Progress'i de güncelle
       });
     }
   } catch (error) {
     console.error("Error updating user progress:", error);
+    throw error;
+  }
+};
+
+export const checkCourseEnrollment = async (courseId, userEmail) => {
+  try {
+    const userCourseRef = collection(db, "UserEnrolledCourse");
+    const q = query(
+      userCourseRef,
+      where("courseId", "==", courseId),
+      where("userEmail", "==", userEmail)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const courses = [];
+    querySnapshot.forEach((doc) => {
+      courses.push(doc.data());
+    });
+    return courses;
+  } catch (error) {
+    console.error("Error checking course enrollment:", error);
     throw error;
   }
 };

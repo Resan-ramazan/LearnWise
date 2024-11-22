@@ -4,31 +4,40 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 export const createOrUpdateUser = async (userData) => {
   try {
     const userRef = doc(db, 'users', userData.email);
-    
-    // Önce kullanıcının var olup olmadığını kontrol et
     const userDoc = await getDoc(userRef);
     
+    const sanitizedData = {
+      email: userData.email,
+      username: userData.username || '',
+      profileImage: userData.profileImage || '',
+      points: userData.points || 0,
+      completedCourses: userData.completedCourses || [],
+      enrolledCourses: userData.enrolledCourses || [],
+      lastLogin: new Date().toISOString(),
+    };
+    
     if (!userDoc.exists()) {
-      // Yeni kullanıcı oluştur
       const newUser = {
-        email: userData.email,
-        username: userData.username || '',
-        profileImage: userData.profileImage || '',
-        points: 0,
-        completedCourses: [],
-        enrolledCourses: [],
+        ...sanitizedData,
         createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
       };
       
       await setDoc(userRef, newUser);
       return newUser;
     } else {
-      // Sadece son giriş tarihini güncelle
+      // Mevcut verileri koru ve yeni verileri birleştir
+      const existingData = userDoc.data();
       const updatedData = {
-        ...userDoc.data(),
-        lastLogin: new Date().toISOString(),
+        ...existingData,
+        ...sanitizedData,
       };
+      
+      Object.keys(updatedData).forEach(key => {
+        if (updatedData[key] === undefined) {
+          delete updatedData[key];
+        }
+      });
+      
       await setDoc(userRef, updatedData);
       return updatedData;
     }

@@ -6,28 +6,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import DetailSection from "../components/CourseDetailScreen/DetailSection";
 import ChapterSection from "../components/CourseDetailScreen/ChapterSection";
 import { enrollcourse, checkCourseEnrollment } from "../services/courses";
-import { useUser } from "@clerk/clerk-expo";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../services/firebaseConfig";
+import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCourse } from "../contexts/CourseContext";
+import { useUser } from "../contexts/UserContext";
 
 const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const params = useRoute().params;
-  const { user } = useUser();
-  const { userEnrolledCourses, updateEnrolledCourses, updateCurrentCourse } =
-    useCourse();
+  const { user } = useClerkUser();
+  const { userEnrolledCourses, updateEnrolledCourses, updateCurrentCourse } = useCourse();
+  const { refreshUserData } = useUser();
 
-  /*
-  useFocusEffect, React Navigation'da ekran her odaklandığında (yani ekrana her dönüldüğünde) çalışmasını istediğimiz kodlar için kullanılır
-  */
   useFocusEffect(
     useCallback(() => {
       const checkEnrollment = async () => {
@@ -50,8 +46,13 @@ const CourseDetailScreen = () => {
 
   const UserEnrollCourse = async () => {
     try {
-      await enrollcourse(params.course.id, user.primaryEmailAddress);
+      const result = await enrollcourse(params.course.id, user.primaryEmailAddress);
       ToastAndroid.show("Course enrolled successfully", ToastAndroid.SHORT);
+      
+      // UserContext'i güncelle
+      await refreshUserData();
+      
+      // CourseContext'i güncelle
       updateEnrolledCourses([
         ...userEnrolledCourses,
         {
@@ -63,14 +64,9 @@ const CourseDetailScreen = () => {
       ]);
     } catch (error) {
       console.error("Error enrolling course:", error);
-      throw error;
+      ToastAndroid.show("Error enrolling in course", ToastAndroid.SHORT);
     }
   };
-
-  console.log("Course Detail params:", {
-    courseId: params?.course?.id,
-    userEmail: user?.primaryEmailAddress?.emailAddress,
-  });
 
   return (
     params.course && (
@@ -83,12 +79,7 @@ const CourseDetailScreen = () => {
           course={params.course}
           userEnrolledCourses={userEnrolledCourses}
         />
-        <ChapterSection
-          userEnrolledCourses={userEnrolledCourses}
-          chapterList={params.course.chapters}
-          courseId={params.course?.id || ""}
-          userEmail={user?.primaryEmailAddress?.emailAddress || ""}
-        />
+        <ChapterSection />
       </ScrollView>
     )
   );
