@@ -8,7 +8,8 @@ import {
   View,
 } from "react-native";
 import React, { useEffect } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useUser as useClerkUser } from "@clerk/clerk-expo";
+import { useUser } from "../../contexts/UserContext";
 import Color from "../../utils/Color";
 import coin from "../../assets/images/coins.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -17,7 +18,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
 const Header = ({ userData }) => {
-  const { user, updateUserProfileImage } = useUser();
+  const { user } = useClerkUser();
+  const { updateUserProfileImage } = useUser();
 
   const navigation = useNavigation();
 
