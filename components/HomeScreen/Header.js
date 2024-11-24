@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -16,9 +17,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
 const Header = ({ userData }) => {
-  const { isSignedIn, user, updateUserProfileImage } = useUser();
+  const { user, updateUserProfileImage } = useUser();
 
-  console.log("userData", userData);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -28,6 +28,7 @@ const Header = ({ userData }) => {
   }, []);
 
   const onProfilePress = () => {
+    Alert.alert("Profile", "Profile Pressed");
     navigation.navigate("Profile");
   };
 
