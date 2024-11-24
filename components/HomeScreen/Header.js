@@ -1,18 +1,28 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useUser } from "@clerk/clerk-react";
 import Color from "../../utils/Color";
 import coin from "../../assets/images/coins.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 const Header = ({ userData }) => {
   const { isLoaded, isSignedIn, user } = useUser();
+
+  console.log("userData", userData);
+  const navigation = useNavigation();
+
+  const onProfilePress = () => {
+    navigation.navigate("Profile");
+  };
 
   return (
     isLoaded && (
       <View>
         <View style={[styles.rowStyle, styles.container]}>
           <View style={styles.rowStyle}>
-            <Image source={{ uri: user?.imageUrl }} style={styles.image} />
+            <TouchableOpacity onPress={onProfilePress}>
+              <Image source={{ uri: user?.imageUrl }} style={styles.image} />
+            </TouchableOpacity>
             <View>
               <Text style={styles.text}>Welcome,</Text>
               <Text style={styles.text}>{userData.username}</Text>
