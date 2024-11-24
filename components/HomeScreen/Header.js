@@ -1,46 +1,60 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React from "react";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import Color from "../../utils/Color";
 import coin from "../../assets/images/coins.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
+
 const Header = ({ userData }) => {
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { isSignedIn, user, updateUserProfileImage } = useUser();
 
   console.log("userData", userData);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (user?.imageUrl && userData?.profileImage !== user.imageUrl) {
+      updateUserProfileImage(user.imageUrl);
+    }
+  }, []);
 
   const onProfilePress = () => {
     navigation.navigate("Profile");
   };
 
   return (
-    isLoaded && (
-      <View>
-        <View style={[styles.rowStyle, styles.container]}>
-          <View style={styles.rowStyle}>
-            <TouchableOpacity onPress={onProfilePress}>
-              <Image source={{ uri: user?.imageUrl }} style={styles.image} />
-            </TouchableOpacity>
-            <View>
-              <Text style={styles.text}>Welcome,</Text>
-              <Text style={styles.text}>{userData.username}</Text>
-            </View>
-          </View>
-          <View style={[styles.rowStyle, styles.coinContainer]}>
-            <Image source={coin} style={styles.coin} />
-            <Text style={styles.text}>{userData.points}</Text>
+    <View>
+      <View style={[styles.rowStyle, styles.container]}>
+        <View style={styles.rowStyle}>
+          <TouchableOpacity onPress={onProfilePress}>
+            <Image source={{ uri: user?.imageUrl }} style={styles.image} />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.text}>Welcome,</Text>
+            <Text style={styles.text}>{userData.username}</Text>
           </View>
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput placeholder="Search" />
-          <View style={styles.searchIcon}>
-            <Ionicons name="search" size={24} color="white" />
-          </View>
+        <View style={[styles.rowStyle, styles.coinContainer]}>
+          <Image source={coin} style={styles.coin} />
+          <Text style={styles.text}>{userData.points}</Text>
         </View>
       </View>
-    )
+      <View style={styles.inputContainer}>
+        <TextInput placeholder="Search" />
+        <View style={styles.searchIcon}>
+          <Ionicons name="search" size={24} color="white" />
+        </View>
+      </View>
+    </View>
   );
 };
 

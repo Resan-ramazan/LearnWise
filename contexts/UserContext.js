@@ -69,6 +69,22 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const updateUserProfileImage = async (imageUrl) => {
+    if (!userData?.email) return;
+    
+    try {
+      const updatedUser = {
+        ...userData,
+        profileImage: imageUrl,
+      };
+      
+      const updatedUserData = await createOrUpdateUser(updatedUser);
+      setUserData(updatedUserData);
+    } catch (error) {
+      console.error('Error updating profile image:', error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -77,6 +93,7 @@ export const UserProvider = ({ children }) => {
         initializeUser,
         updateUserPoints,
         refreshUserData,
+        updateUserProfileImage,
       }}
     >
       {children}
