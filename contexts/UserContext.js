@@ -106,8 +106,8 @@ export const UserProvider = ({ children }) => {
         initializeUser,
         updateUserPoints,
         refreshUserData,
-        updateUserProfileImage,
         getAllUsersByPoints,
+        updateUserProfileImage,
       }}
     >
       {children}
