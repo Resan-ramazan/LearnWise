@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getUserData, createOrUpdateUser } from '../services/users';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { getUserData, createOrUpdateUser, getAllUsers } from "../services/users";
+
+// Import'u test edelim
+console.log("getAllUsers function:", getAllUsers);
 
 const UserContext = createContext();
 
@@ -11,20 +14,20 @@ export const UserProvider = ({ children }) => {
     try {
       setLoading(true);
       const email = clerkUser.primaryEmailAddress?.emailAddress;
-      
+
       if (!email) {
-        throw new Error('User email is required');
+        throw new Error("User email is required");
       }
 
       // Önce mevcut kullanıcı verilerini getir
       let existingUser = await getUserData(email);
-      
+
       if (!existingUser) {
         // Kullanıcı yoksa yeni oluştur
         const userInfo = {
           email: email,
-          username: clerkUser.username || clerkUser.firstName || '',
-          profileImage: clerkUser.profileImageUrl || '',
+          username: clerkUser.username || clerkUser.firstName || "",
+          profileImage: clerkUser.profileImageUrl || "",
           points: 0,
           completedCourses: [],
           enrolledCourses: [],
@@ -34,7 +37,7 @@ export const UserProvider = ({ children }) => {
 
       setUserData(existingUser);
     } catch (error) {
-      console.error('Error initializing user:', error);
+      console.error("Error initializing user:", error);
     } finally {
       setLoading(false);
     }
@@ -42,46 +45,56 @@ export const UserProvider = ({ children }) => {
 
   const updateUserPoints = async (points) => {
     if (!userData?.email) return;
-    
+
     try {
       const updatedUser = {
         ...userData,
         points: (userData.points || 0) + points,
       };
-      
+
       const updatedUserData = await createOrUpdateUser(updatedUser);
       setUserData(updatedUserData);
     } catch (error) {
-      console.error('Error updating user points:', error);
+      console.error("Error updating user points:", error);
     }
   };
 
   const refreshUserData = async () => {
     if (!userData?.email) return;
-    
+
     try {
       const freshUserData = await getUserData(userData.email);
       if (freshUserData) {
         setUserData(freshUserData);
       }
     } catch (error) {
-      console.error('Error refreshing user data:', error);
+      console.error("Error refreshing user data:", error);
+    }
+  };
+
+  const getAllUsersByPoints = async () => {
+    try {
+      const users = await getAllUsers();
+      return users.sort((a, b) => b.points - a.points);
+    } catch (error) {
+      console.error("Error getting users by points:", error);
+      throw error;
     }
   };
 
   const updateUserProfileImage = async (imageUrl) => {
     if (!userData?.email) return;
-    
+
     try {
       const updatedUser = {
         ...userData,
         profileImage: imageUrl,
       };
-      
+
       const updatedUserData = await createOrUpdateUser(updatedUser);
       setUserData(updatedUserData);
     } catch (error) {
-      console.error('Error updating profile image:', error);
+      console.error("Error updating profile image:", error);
     }
   };
 
@@ -94,6 +107,7 @@ export const UserProvider = ({ children }) => {
         updateUserPoints,
         refreshUserData,
         updateUserProfileImage,
+        getAllUsersByPoints,
       }}
     >
       {children}
@@ -104,7 +118,7 @@ export const UserProvider = ({ children }) => {
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
-}; 
+};

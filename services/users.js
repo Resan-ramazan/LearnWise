@@ -1,5 +1,5 @@
 import { db } from "./firebaseConfig";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, getDocs, collection } from "firebase/firestore";
 
 export const createOrUpdateUser = async (userData) => {
   try {
@@ -58,6 +58,20 @@ export const getUserData = async (email) => {
     return null;
   } catch (error) {
     console.error("Error getting user data:", error);
+    throw error;
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    const users = [];
+    querySnapshot.forEach((doc) => {
+      users.push({ id: doc.id, ...doc.data() });
+    });
+    return users;
+  } catch (error) {
+    console.error("Error getting users:", error);
     throw error;
   }
 };
