@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image } from "react-native";
+import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import Gold from "../assets/images/gold-cup.png";
 import Silver from "../assets/images/silver-cup.png";
@@ -10,6 +10,7 @@ import Color from "../utils/Color";
 const LeaderBoard = () => {
   const { user: clerkUser } = useClerkUser();
   const { userData, getAllUsersByPoints } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
   const [leaderboardData, setLeaderboardData] = useState([]);
 
   const fetchLeaderboardData = async () => {
@@ -17,6 +18,7 @@ const LeaderBoard = () => {
       const resp = await getAllUsersByPoints();
       resp && setLeaderboardData(resp);
       console.log(resp);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching leaderboard data:", error);
     }
@@ -54,18 +56,19 @@ const LeaderBoard = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          <Ionicons 
-            name="trophy" 
-            size={32} 
-            color="white" 
-            style={styles.icon} 
-          />
+          <Ionicons name="trophy" size={32} color="white" style={styles.icon} />
           <Text style={styles.title}>Leaderboard</Text>
         </View>
       </View>
-      <View style={{ height: "85%" }}>
-        <FlatList data={leaderboardData} renderItem={renderItem} />
-      </View>
+      {isLoading ? (
+        <View style={{ height: "85%", justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator  size="large" color={Color.PRIMARTY_COLOR} />
+        </View>
+      ) : (
+        <View style={{ height: "85%" }}>
+          <FlatList data={leaderboardData} renderItem={renderItem} />
+        </View>
+      )}
     </View>
   );
 };
@@ -90,8 +93,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 16,
     paddingHorizontal: 20,
   },
@@ -100,8 +103,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontWeight: "bold",
+    color: "#FFFFFF",
     letterSpacing: 0.5,
   },
   itemContainer: {
