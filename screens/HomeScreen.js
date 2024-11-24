@@ -6,6 +6,8 @@ import CourseList from "../components/HomeScreen/CourseList";
 import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
+import CourseProgress from "../components/HomeScreen/CourseProgress";
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -46,6 +48,7 @@ const HomeScreen = () => {
           </View>
           <View style={{ padding: 20 }}>
             <View style={{ marginTop: -100 }}>
+              <CourseProgress text="Course Progress"  />
               <CourseList level={"basic"} />
             </View>
             <CourseList level={"advance"} />
