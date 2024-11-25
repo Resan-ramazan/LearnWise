@@ -17,7 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 const CourseList = ({ level }) => {
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const navigation = useNavigation();
 
   useEffect(() => {

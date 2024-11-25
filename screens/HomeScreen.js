@@ -7,6 +7,7 @@ import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
 import CourseProgress from "../components/HomeScreen/CourseProgress";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const HomeScreen = () => {
@@ -40,7 +41,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <View>
+    <ScrollView>
       {userData && (
         <>
           <View style={styles.header}>
@@ -55,7 +56,7 @@ const HomeScreen = () => {
           </View>
         </>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
