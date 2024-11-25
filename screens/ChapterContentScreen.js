@@ -44,8 +44,6 @@ const ChapterContentScreen = () => {
         currentCourse.chapters.length
       );
 
-      // CourseContext'i güncelle
-      refreshCourseData();
       
       // En son UserContext'i güncelle
       await refreshUserData();

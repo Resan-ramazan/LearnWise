@@ -8,100 +8,41 @@ import {
 import React, { useState, useCallback } from "react";
 import SubHeading from "../SubHeading";
 import Color from "../../utils/Color";
-import { getUserCourseProgress } from "../../services/users";
 import { useUser } from "@clerk/clerk-expo";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as Progress from "react-native-progress";
 import { useCourse } from "../../contexts/CourseContext";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
 
 const CourseProgress = () => {
   const { user } = useUser();
   const navigation = useNavigation();
-  const [inProgressCourses, setInProgressCourses] = useState([]);
-  const { updateCurrentCourse } = useCourse();
+  const { inProgressCourses, getInProgressCourses, handleCoursePress } = useCourse();
 
   useFocusEffect(
     useCallback(() => {
-      if (user?.primaryEmailAddress?.emailAddress) {
-        getInProgressCourses();
-      }
+      const loadCourses = async () => {
+        try {
+          const email = user?.primaryEmailAddress?.emailAddress;
+          if (email) {
+            await getInProgressCourses(email);
+          }
+        } catch (error) {
+          console.error("Error loading courses:", error);
+        }
+      };
+
+      loadCourses();
     }, [user])
   );
 
-  const getInProgressCourses = async () => {
+  const onCoursePress = async (course) => {
     try {
-      console.log(
-        "Fetching progress for user:",
-        user.primaryEmailAddress.emailAddress
-      );
-      const progress = await getUserCourseProgress(
-        user.primaryEmailAddress.emailAddress
-      );
-
-      // Tamamlanmamış kursları al ve son güncellemeye göre sırala
-      const currentCourses = progress.courseProgressDetails
-        .filter((course) => !course.isCompleted)
-        .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
-
-      console.log("Found in-progress courses:", currentCourses.length);
-
-      // Her kurs için detaylı bilgileri al
-      const coursesWithDetails = await Promise.all(
-        currentCourses.map(async (course) => {
-          const courseRef = doc(db, "Courses", course.courseId);
-          const courseDoc = await getDoc(courseRef);
-
-          if (courseDoc.exists()) {
-            const courseData = courseDoc.data();
-            return {
-              ...course,
-              ...courseData,
-              id: course.courseId,
-            };
-          }
-          return null;
-        })
-      );
-
-      const validCourses = coursesWithDetails.filter(
-        (course) => course !== null
-      );
-      console.log("Setting courses with details:", validCourses.length);
-      setInProgressCourses(validCourses);
-    } catch (error) {
-      console.error("Error loading courses progress:", error);
-    }
-  };
-
-  const handleCoursePress = async (course) => {
-    try {
-      const courseRef = doc(db, "Courses", course.courseId);
-      const courseDoc = await getDoc(courseRef);
-
-      if (courseDoc.exists()) {
-        const courseData = { id: courseDoc.id, ...courseDoc.data() };
-
-        const chaptersRef = collection(
-          db,
-          "Courses",
-          course.courseId,
-          "chapters"
-        );
-        const chaptersSnapshot = await getDocs(chaptersRef);
-        const chapters = chaptersSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const fullCourseData = { ...courseData, chapters };
-
-        updateCurrentCourse(fullCourseData);
+      const courseData = await handleCoursePress(course);
+      if (courseData) {
         navigation.navigate("CourseDetail", {
-          course: fullCourseData,
+          course: courseData,
         });
       }
     } catch (error) {
@@ -110,7 +51,7 @@ const CourseProgress = () => {
   };
 
   const renderCourseItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleCoursePress(item)}>
+    <TouchableOpacity onPress={() => onCoursePress(item)}>
       <View style={styles.courseContainer}>
         <Image source={{ uri: item?.banner }} style={styles.courseImage} />
         <View style={{ padding: 7 }}>

@@ -12,6 +12,7 @@ import {
 import { db } from "./firebaseConfig";
 import { query, orderBy } from "firebase/firestore";
 import { add } from "firebase/firestore";
+import { getUserCourseProgress } from './users';
 
 export const getAllCourseList = async () => {
   try {
@@ -204,6 +205,102 @@ export const checkCourseEnrollment = async (courseId, userEmail) => {
     return courses;
   } catch (error) {
     console.error("Error checking course enrollment:", error);
+    throw error;
+  }
+};
+
+export const getInProgressCourses = async (userEmail) => {
+  try {
+    console.log("Fetching progress for user:", userEmail);
+    const progress = await getUserCourseProgress(userEmail);
+
+    // Tamamlanmamış kursları al ve son güncellemeye göre sırala
+    const currentCourses = progress.courseProgressDetails
+      .filter((course) => !course.isCompleted)
+      .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+
+    console.log("Found in-progress courses:", currentCourses.length);
+
+    // Her kurs için detaylı bilgileri sırayla al
+    const coursesWithDetails = [];
+    for (const course of currentCourses) {
+      try {
+        // Ana kurs bilgilerini al
+        const courseRef = doc(db, "Courses", course.courseId);
+        const courseDoc = await getDoc(courseRef);
+
+        if (courseDoc.exists()) {
+          const courseData = courseDoc.data();
+
+          // Chapter'ları al
+          const chaptersRef = collection(db, "Courses", course.courseId, "chapters");
+          const chaptersSnapshot = await getDocs(chaptersRef);
+          const totalChapters = chaptersSnapshot.docs.length;
+
+          // UserEnrolledCourse'dan ilerleme bilgilerini al
+          const userCourseRef = collection(db, "UserEnrolledCourse");
+          const q = query(
+            userCourseRef,
+            where("courseId", "==", course.courseId),
+            where("userEmail", "==", userEmail)
+          );
+          const userCourseSnapshot = await getDocs(q);
+          const userCourseData = userCourseSnapshot.docs[0]?.data() || {};
+
+          coursesWithDetails.push({
+            ...course,
+            ...courseData,
+            id: course.courseId,
+            courseId: course.courseId,
+            completedChapters: userCourseData.completedChapters?.length || 0,
+            totalChapters: totalChapters,
+            progress: userCourseData.progress || 0,
+            progressPercentage: totalChapters > 0 
+              ? Math.round((userCourseData.completedChapters?.length || 0) / totalChapters * 100) 
+              : 0,
+            lastUpdated: userCourseData.lastUpdated || new Date().toISOString(),
+            lastChapterId: userCourseData.lastChapterId || null,
+            lastPosition: userCourseData.lastPosition || 0,
+            isCompleted: course.isCompleted || false
+          });
+        }
+      } catch (error) {
+        console.error("Error processing course:", course.courseId, error);
+        continue;
+      }
+    }
+
+    console.log("Successfully processed courses:", coursesWithDetails.length);
+    return coursesWithDetails;
+  } catch (error) {
+    console.error("Error loading courses progress:", error);
+    return [];
+  }
+};
+
+export const handleCoursePress = async (courseId) => {
+  try {
+    const courseRef = doc(db, "Courses", courseId);
+    const courseDoc = await getDoc(courseRef);
+
+    if (courseDoc.exists()) {
+      const courseData = { 
+        id: courseDoc.id, 
+        ...courseDoc.data() 
+      };
+
+      const chaptersRef = collection(db, "Courses", courseId, "chapters");
+      const chaptersSnapshot = await getDocs(chaptersRef);
+      const chapters = chaptersSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      return { ...courseData, chapters };
+    }
+    return null;
+  } catch (error) {
+    console.error("Error getting course details:", error);
     throw error;
   }
 };
