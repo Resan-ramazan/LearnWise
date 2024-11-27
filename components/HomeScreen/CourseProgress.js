@@ -14,6 +14,7 @@ import * as Progress from "react-native-progress";
 import { useCourse } from "../../contexts/CourseContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const CourseProgress = () => {
   const { user } = useUser();
@@ -51,34 +52,35 @@ const CourseProgress = () => {
   };
 
   const renderCourseItem = ({ item }) => (
-    <TouchableOpacity onPress={() => onCoursePress(item)}>
-      <View style={styles.courseContainer}>
-        <Image source={{ uri: item?.banner }} style={styles.courseImage} />
-        <View style={{ padding: 7 }}>
-          <Text style={styles.courseName}>{item.name}</Text>
-          <View style={styles.detailContaier}>
-            <View style={styles.chapterBox}>
-              <Ionicons name="book" size={18} color={Color.ORANGE} />
-              <Text style={styles.text}>
-                {item.completedChapters} / {item.totalChapters} Chapters
-              </Text>
-            </View>
-            <View style={styles.timeBox}>
-              <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
-              <Text style={styles.text}>{item.time}</Text>
-            </View>
-          </View>
-          <Progress.Bar
-            progress={item.progressPercentage / 100}
-            width={null}
-            height={3}
-            color={Color.ORANGE}
-            unfilledColor="#E0E0E0"
-            borderWidth={0}
-            style={styles.progressBar}
-          />
+    <TouchableOpacity 
+      onPress={() => onCoursePress(item)}
+      style={styles.courseContainer}
+      activeOpacity={0.7}
+    >
+      <Image source={{ uri: item?.banner }} style={styles.courseImage} />
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.8)']}
+        style={styles.gradient}
+      >
+        <Text style={styles.courseName}>{item.name}</Text>
+        <View style={styles.progressInfo}>
+          <Text style={styles.progressText}>
+            {item.completedChapters}/{item.totalChapters} Chapters
+          </Text>
+          <Text style={styles.progressPercent}>
+            {Math.round(item.progressPercentage)}%
+          </Text>
         </View>
-      </View>
+        <Progress.Bar
+          progress={item.progressPercentage / 100}
+          width={null}
+          height={4}
+          color={Color.ORANGE}
+          unfilledColor="rgba(255,255,255,0.3)"
+          borderWidth={0}
+          style={styles.progressBar}
+        />
+      </LinearGradient>
     </TouchableOpacity>
   );
 
@@ -86,84 +88,83 @@ const CourseProgress = () => {
 
   return (
     <View style={styles.container}>
-      <SubHeading text="IN PROGRESS 🎯" color={Color.TEXT_WHITE} />
+      <Text style={styles.sectionTitle}>Continue Learning</Text>
       <FlatList
         data={inProgressCourses}
         renderItem={renderCourseItem}
         keyExtractor={(item) => item.id}
-        horizontal={true}
+        horizontal
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
 };
 
-const COURSE_CONSTANTS = {
-  CARD_WIDTH: 250,
-  IMAGE_HEIGHT: 140,
-  BORDER_RADIUS: 12,
-  SPACING: {
-    SMALL: 8,
-    MEDIUM: 12,
-    LARGE: 16,
-  },
-  SHADOW_OPACITY: 0.1,
-};
-
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 15,
-    marginTop: -1,
+    marginBottom: 25,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Bold',
+    color: '#fff',
+    marginBottom: 15,
   },
   courseContainer: {
-    padding: 10,
-    backgroundColor: Color.TEXT_WHITE,
-    marginRight: COURSE_CONSTANTS.SPACING.LARGE,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    width: 300,
+    height: 180,
+    marginRight: 15,
+    borderRadius: 15,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: COURSE_CONSTANTS.SHADOW_OPACITY,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
   courseImage: {
-    width: COURSE_CONSTANTS.CARD_WIDTH,
-    height: COURSE_CONSTANTS.IMAGE_HEIGHT,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    width: '100%',
+    height: '100%',
+  },
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '60%',
+    padding: 15,
+    justifyContent: 'flex-end',
   },
   courseName: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 17,
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#fff',
+    marginBottom: 8,
   },
-  detailContaier: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 5,
+  progressInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
-  chapterBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
+  progressText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Medium',
+    color: '#fff',
   },
-  timeBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
-  },
-  text: {
-    fontFamily: "Poppins-Regular",
+  progressPercent: {
+    fontSize: 14,
+    fontFamily: 'Poppins-Bold',
+    color: Color.ORANGE,
   },
   progressBar: {
-    marginTop: 10,
+    marginTop: 5,
+  },
+  listContainer: {
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
 

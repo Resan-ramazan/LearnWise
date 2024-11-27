@@ -8,7 +8,7 @@ import { useUser } from "../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
 import CourseProgress from "../components/HomeScreen/CourseProgress";
 import { ScrollView } from "react-native-gesture-handler";
-
+import { LinearGradient } from "expo-linear-gradient";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -23,7 +23,7 @@ const HomeScreen = () => {
 
   // Ekran her odaklandığında verileri yenile
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       if (userData?.email) {
         refreshUserData();
       }
@@ -41,18 +41,25 @@ const HomeScreen = () => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       {userData && (
         <>
-          <View style={styles.header}>
+          <LinearGradient
+            colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+            style={styles.header}
+          >
             <Header userData={userData} />
-          </View>
-          <View style={{ padding: 20 }}>
-            <View style={{ marginTop: -100 }}>
-              <CourseProgress text="Course Progress"  />
-              <CourseList level={"basic"} />
+          </LinearGradient>
+
+          <View style={styles.content}>
+            <View style={styles.progressSection}>
+              <CourseProgress />
             </View>
-            <CourseList level={"advance"} />
+
+            <View style={styles.coursesSection}>
+              <CourseList level="basic" />
+              <CourseList level="advance" />
+            </View>
           </View>
         </>
       )}
@@ -63,16 +70,31 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
   header: {
-    backgroundColor: Color.PRIMARTY_COLOR,
-    borderBottomColor: "#f2f2f2",
-    borderBottomWidth: 1,
+    height: 280,
     padding: 20,
-    height: 250,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  content: {
+    flex: 1,
+    marginTop: -80,
+  },
+  progressSection: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  coursesSection: {
+    marginTop: -40,
+    padding: 20,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

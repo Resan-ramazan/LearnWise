@@ -14,6 +14,7 @@ import { useCourse } from "../contexts/CourseContext";
 import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import CourseProgItem from "../components/MyCourse/CourseProgItem";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MyCourse = () => {
   const { user } = useUser();
@@ -53,128 +54,120 @@ const MyCourse = () => {
   const renderCourseItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => onCoursePress(item)}
-      style={{ margin: 8, padding: 5 }}
+      style={styles.courseItemContainer}
     >
       <CourseProgItem item={item} />
     </TouchableOpacity>
   );
 
-  if (inProgressCourses.length === 0) return null;
+  if (inProgressCourses.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Ionicons name="book" size={80} color={Color.PRIMARTY_COLOR} />
+        <Text style={styles.emptyText}>No courses in progress</Text>
+      </View>
+    );
+  }
 
   return (
-    <View>
-      <View style={styles.header}>
+    <View style={styles.container}>
+      <LinearGradient
+        colors={[Color.PRIMARTY_COLOR, '#7c4dff']}
+        style={styles.header}
+      >
         <View style={styles.titleContainer}>
           <Ionicons name="book" size={32} color="white" style={styles.icon} />
-          <Text style={styles.title}>My Courses</Text>
+          <Text style={styles.title}>My Learning Journey</Text>
         </View>
+        <Text style={styles.subtitle}>
+          {inProgressCourses.length} Courses in Progress
+        </Text>
+      </LinearGradient>
+
+      <View style={styles.listContainer}>
+        <FlatList
+          data={inProgressCourses}
+          renderItem={renderCourseItem}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+        />
       </View>
-      <FlatList
-        data={inProgressCourses}
-        renderItem={renderCourseItem}
-        keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
-      />
     </View>
   );
 };
 
 export default MyCourse;
-const COURSE_CONSTANTS = {
-  CARD_WIDTH: 250,
-  IMAGE_HEIGHT: 140,
-  BORDER_RADIUS: 12,
-  SPACING: {
-    SMALL: 8,
-    MEDIUM: 12,
-    LARGE: 16,
-  },
-  SHADOW_OPACITY: 0.1,
-};
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
   header: {
-    height: 160,
-    backgroundColor: Color.PRIMARTY_COLOR,
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    marginBottom: 20,
+    height: 180,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    paddingTop: 20,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginLeft: 10,
-    marginRight: 10,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 7,
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
+    marginBottom: 10,
   },
   icon: {
-    marginRight: 12,
+    marginRight: 15,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 28,
+    fontFamily: 'Poppins-Bold',
     color: "#FFFFFF",
     letterSpacing: 0.5,
   },
-  container: {
-    marginVertical: 15,
-    marginTop: -1,
+  subtitle: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
+    color: "rgba(255,255,255,0.9)",
+    paddingHorizontal: 25,
   },
-  courseContainer: {
-    padding: 10,
-    backgroundColor: Color.TEXT_WHITE,
-    marginRight: COURSE_CONSTANTS.SPACING.LARGE,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+  listContainer: {
+    flex: 1,
+    marginTop: -30,
+    paddingHorizontal: 20,
+  },
+  listContent: {
+    paddingBottom: 20,
+  },
+  courseItemContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    marginBottom: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: COURSE_CONSTANTS.SHADOW_OPACITY,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    transform: [{ scale: 0.98 }],
   },
-  courseImage: {
-    width: COURSE_CONSTANTS.CARD_WIDTH,
-    height: COURSE_CONSTANTS.IMAGE_HEIGHT,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
   },
-  courseName: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 17,
-  },
-  detailContaier: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 5,
-  },
-  chapterBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
-  },
-  timeBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
-  },
-  text: {
-    fontFamily: "Poppins-Regular",
-  },
-  progressBar: {
-    marginTop: 10,
+  emptyText: {
+    marginTop: 20,
+    fontSize: 18,
+    fontFamily: 'Poppins-Medium',
+    color: '#666',
   },
 });

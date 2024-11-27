@@ -8,21 +8,28 @@ const CourseItem = ({ item }) => {
   return (
     <View style={styles.courseContainer}>
       <Image source={{ uri: item?.banner }} style={styles.courseImage} />
-      <View style={{ padding: 7 }}>
+      <View style={styles.overlay}>
+        <Text style={styles.level}>{item.level}</Text>
+      </View>
+      <View style={styles.content}>
         <Text style={styles.courseName}>{item.name}</Text>
-        <View style={styles.detailContaier}>
-          <View style={styles.chapterBox}>
-            <Ionicons name="book" size={18} color={Color.ORANGE} />
-            <Text style={styles.text}>{item.chapters.length || 0 } Chapters</Text>
+        <View style={styles.detailContainer}>
+          <View style={styles.infoItem}>
+            <Ionicons name="book" size={16} color={Color.ORANGE} />
+            <Text style={styles.infoText}>{item.chapters.length || 0} Chapters</Text>
           </View>
-          <View>
-            <View style={styles.timeBox}>
-              <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
-              <Text style={styles.text}>{item.time}</Text>
-            </View>
+          <View style={styles.infoItem}>
+            <Ionicons name="time-outline" size={16} color={Color.ORANGE} />
+            <Text style={styles.infoText}>{item.time}</Text>
           </View>
         </View>
-        <Text style={styles.freeText}>Free</Text>
+        <View style={styles.footer}>
+          <Text style={styles.freeText}>Free</Text>
+          <View style={styles.ratingContainer}>
+            <Ionicons name="star" size={14} color="#FFD700" />
+            <Text style={styles.ratingText}>4.5</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -30,71 +37,81 @@ const CourseItem = ({ item }) => {
 
 export default CourseItem;
 
-const COURSE_CONSTANTS = {
-  CARD_WIDTH: 250,
-  IMAGE_HEIGHT: 140,
-  BORDER_RADIUS: 12,
-  SPACING: {
-    SMALL: 8,
-    MEDIUM: 12,
-    LARGE: 16,
-  },
-  SHADOW_OPACITY: 0.1,
-};
-
 const styles = StyleSheet.create({
   courseContainer: {
-    padding: 10,
-    backgroundColor: Color.TEXT_WHITE,
+    width: 280,
+    backgroundColor: '#fff',
+    borderRadius: 15,
     marginRight: 15,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
-    marginRight: COURSE_CONSTANTS.SPACING.LARGE,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: COURSE_CONSTANTS.SHADOW_OPACITY,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
   },
   courseImage: {
-    width: COURSE_CONSTANTS.CARD_WIDTH,
-    height: COURSE_CONSTANTS.IMAGE_HEIGHT,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    width: '100%',
+    height: 160,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  level: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Poppins-Medium',
+  },
+  content: {
+    padding: 15,
   },
   courseName: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 17,
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#333',
+    marginBottom: 8,
   },
-  detailContaier: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 5,
+  detailContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
-  chapterBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
+  infoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
-  timeBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
+  infoText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+    color: '#666',
   },
-  text: {
-    fontFamily: "Poppins-Regular",
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
   },
   freeText: {
-    fontFamily: "Poppins-Regular",
+    fontSize: 14,
+    fontFamily: 'Poppins-Medium',
     color: Color.PRIMARTY_COLOR,
-    marginTop: 5,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  ratingText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Medium',
+    color: '#666',
   },
 });
