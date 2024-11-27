@@ -30,8 +30,8 @@ const Header = ({ userData }) => {
   }, []);
 
   const onProfilePress = () => {
-    Alert.alert("Profile", "Profile Pressed");
-    navigation.navigate("Profile");
+    
+    navigation.navigate("profile");
   };
 
   return (
