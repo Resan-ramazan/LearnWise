@@ -5,11 +5,11 @@ import Color from "../../utils/Color";
 
 const Info = ({ icon, value }) => {
   return (
-    <View>
-      <View style={styles.chapterBox}>
-        <Ionicons name={icon} size={18} color={Color.ORANGE} />
-        <Text style={styles.text}>{value}</Text>
+    <View style={styles.container}>
+      <View style={styles.iconContainer}>
+        <Ionicons name={icon} size={20} color={Color.ORANGE} />
       </View>
+      <Text style={styles.text}>{value}</Text>
     </View>
   );
 };
@@ -17,14 +17,24 @@ const Info = ({ icon, value }) => {
 export default Info;
 
 const styles = StyleSheet.create({
-  chapterBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    marginTop: 5,
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 5,
+    width: '48%',
+  },
+  iconContainer: {
+    backgroundColor: '#fff',
+    padding: 8,
+    borderRadius: 8,
+    marginRight: 10,
   },
   text: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Medium',
+    fontSize: 14,
+    color: '#333',
   },
 });

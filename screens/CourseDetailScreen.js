@@ -70,21 +70,40 @@ const CourseDetailScreen = () => {
 
   return (
     params.course && (
-      <ScrollView style={{ padding: 10 }}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back-circle-sharp" size={40} color="black" />
+      <View style={styles.container}>
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="arrow-back-circle" size={40} color="#fff" />
         </TouchableOpacity>
-        <DetailSection
-          enrollCourse={() => UserEnrollCourse()}
-          course={params.course}
-          userEnrolledCourses={userEnrolledCourses}
-        />
-        <ChapterSection />
-      </ScrollView>
+        
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <DetailSection
+            enrollCourse={() => UserEnrollCourse()}
+            course={params.course}
+            userEnrolledCourses={userEnrolledCourses}
+          />
+          <ChapterSection />
+        </ScrollView>
+      </View>
     )
   );
 };
 
 export default CourseDetailScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 20,
+  },
+});

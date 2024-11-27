@@ -56,8 +56,8 @@ const ChapterSection = () => {
 
   return (
     currentCourse && currentCourse.chapters && (
-      <View style={styles.container}>
-        <Text style={styles.title}>Chapters</Text>
+      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <Text style={styles.title}>Course Content</Text>
         <ScrollView style={styles.chapterList}>
           {currentCourse.chapters.map((item, index) => (
             <TouchableOpacity
@@ -71,40 +71,43 @@ const ChapterSection = () => {
               ]}
             >
               <View style={styles.chapterContent}>
-                <Text
-                  style={[
+                <View style={styles.numberContainer}>
+                  <Text style={[
                     styles.chapterNumber,
                     checkIsChapterCompleted(item) && styles.completedText,
-                  ]}
-                >
-                  {index + 1}
-                </Text>
-                <Text
-                  style={[
+                  ]}>
+                    {index + 1}
+                  </Text>
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={[
                     styles.chapterTitle,
                     checkIsChapterCompleted(item) && styles.completedText,
-                  ]}
-                >
-                  {item.heading}
-                </Text>
+                  ]}>
+                    {item.heading}
+                  </Text>
+                </View>
               </View>
               {userEnrolledCourses.length == 0 ? (
-                <Ionicons name="lock-closed" size={25} color={Color.TEXT_GRAY} />
+                <View style={styles.iconContainer}>
+                  <Ionicons name="lock-closed" size={22} color={Color.TEXT_GRAY} />
+                </View>
               ) : (
-                <Ionicons
-                  name={
-                    checkIsChapterCompleted(item) ? "checkmark-circle" : "play-circle"
-                  }
-                  size={28}
-                  color={
-                    checkIsChapterCompleted(item) ? Color.GREEN : Color.PRIMARY
-                  }
-                />
+                <View style={[
+                  styles.iconContainer,
+                  checkIsChapterCompleted(item) && styles.completedIcon
+                ]}>
+                  <Ionicons
+                    name={checkIsChapterCompleted(item) ? "checkmark-circle" : "play-circle"}
+                    size={24}
+                    color={checkIsChapterCompleted(item) ? Color.GREEN : Color.PRIMARY}
+                  />
+                </View>
               )}
             </TouchableOpacity>
           ))}
         </ScrollView>
-      </View>
+      </Animated.View>
     )
   );
 };
@@ -113,10 +116,10 @@ export default ChapterSection;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-    padding: 15,
+    backgroundColor: '#fff',
     borderRadius: 20,
-    backgroundColor: Color.TEXT_WHITE,
+    padding: 20,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -127,41 +130,59 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    fontSize: 24,
-    fontFamily: "Poppins-SemiBold",
-    color: Color.TEXT_DARK,
-    marginBottom: 15,
+    fontSize: 22,
+    fontFamily: 'Poppins-Bold',
+    color: '#333',
+    marginBottom: 20,
   },
   chapterList: {
     maxHeight: 400,
   },
   chapterItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 15,
     borderRadius: 12,
     marginBottom: 12,
+    backgroundColor: '#fff',
   },
   chapterContent: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
   },
-  chapterNumber: {
-    fontSize: 22,
-    fontFamily: "Poppins-Medium",
-    color: Color.TEXT_GRAY,
+  numberContainer: {
+    width: 35,
+    height: 35,
+    borderRadius: 18,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 15,
   },
-  chapterTitle: {
-    fontSize: 18,
-    fontFamily: "Poppins-Regular",
-    color: Color.TEXT_DARK,
+  chapterNumber: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#666',
+  },
+  textContainer: {
     flex: 1,
   },
+  chapterTitle: {
+    fontSize: 16,
+    fontFamily: 'Poppins-Medium',
+    color: '#333',
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   inCompleteChapter: {
-    backgroundColor: "#fff",
     borderLeftWidth: 4,
     borderLeftColor: Color.PRIMARY,
   },
@@ -172,5 +193,8 @@ const styles = StyleSheet.create({
   },
   completedText: {
     color: Color.GREEN,
+  },
+  completedIcon: {
+    backgroundColor: Color.LIGHT_GREEN,
   },
 });
