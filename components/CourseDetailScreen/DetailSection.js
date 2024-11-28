@@ -23,7 +23,7 @@ const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
       <Image
         source={{ uri: course?.banner }}
         style={{
-          width: Dimensions.get("window").width * 0.86,
+          width: "100%",
           height: 190,
           borderRadius: 15,
         }}
