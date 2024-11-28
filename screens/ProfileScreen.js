@@ -4,14 +4,16 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
+  Alert,
+  Platform,
+  BackHandler,
   Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Color from "../utils/Color";
 import { useUser as useClerkUser } from "@clerk/clerk-expo";
+import { useAuth } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
 import coin from "../assets/images/coins.png";
 import { LinearGradient } from "expo-linear-gradient";
@@ -19,8 +21,38 @@ import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const { userData } = useUser();
+  const { signOut } = useAuth(); // Clerk'ten signOut'u import ediyoruz
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const navigation = useNavigation();
+
+  const handleSignOut = () => {
+    Alert.alert(
+      "Sign Out",
+      "Are you sure you want to sign out?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Sign Out",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await signOut();
+              if (Platform.OS === "android") {
+                BackHandler.exitApp();
+              }
+            } catch (error) {
+              console.error("Error signing out:", error);
+              Alert.alert("Error", "Could not sign out. Please try again.");
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   const languages = [
     { code: "en", name: "English", flag: "🇺🇸" },
@@ -58,15 +90,13 @@ const ProfileScreen = () => {
       icon: "log-out-outline",
       label: "Logout",
       color: "#FF5252",
-      onPress: () => {
-        signOut();
-      },
+      onPress: handleSignOut,
     },
   ];
 
   const handleLanguageSelect = (langCode) => {
     // Burada dil değiştirme işlemini yapacak fonksiyonu çağırın
-    
+
     setShowLanguageModal(false);
   };
 
