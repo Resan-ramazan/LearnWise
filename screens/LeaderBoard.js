@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Gold from "../assets/images/gold-cup.png";
 import Silver from "../assets/images/silver-cup.png";
 import Bronze from "../assets/images/bronze-cup.png";
@@ -7,6 +7,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
 import Color from "../utils/Color";
+import { useFocusEffect } from "@react-navigation/native";
+
 const LeaderBoard = () => {
   const { user: clerkUser } = useClerkUser();
   const { userData, getAllUsersByPoints } = useUser();
@@ -24,9 +26,12 @@ const LeaderBoard = () => {
     }
   };
 
-  useEffect(() => {
-    fetchLeaderboardData();
-  }, []);
+  // Ekran her odaklandığında verileri yenile
+  useFocusEffect(
+    useCallback(() => {
+      fetchLeaderboardData();
+    }, [])
+  );
 
   const renderItem = ({ item, index }) => {
     return (
