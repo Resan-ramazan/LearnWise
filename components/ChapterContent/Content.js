@@ -6,6 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { updateUserProgress } from "../../services/courses";
 import { ToastAndroid } from "react-native";
+import Color from "../../utils/Color";
 
 const Content = ({
   chaptersLength,
@@ -74,31 +75,29 @@ const Content = ({
 
   const renderContentItem = ({ item, index }) => {
     return (
-      <View>
+      <View style={styles.contentContainer}>
         <ScrollView
-          style={{
-            width: Dimensions.get("screen").width,
-            padding: 20,
-            paddingBottom:70
-          }}
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
         >
           <Text style={styles.heading}>{item.heading}</Text>
           <ContenItem description={item.description} output={item.output} />
 
           <TouchableOpacity
-            style={styles.buttonContainer}
+            style={[
+              styles.buttonContainer,
+              index === chaptersLength.length - 1 && styles.finishButton
+            ]}
             onPress={() => {
               if (index === chaptersLength.length - 1) {
-                onChapterComplete(); // Son sayfada Finish
+                onChapterComplete();
               } else {
-                onSaveProgress(index); // Diğer sayfalarda Save
+                onSaveProgress(index);
               }
             }}
           >
             <Text style={styles.buttonText}>
-              {index === chaptersLength.length - 1
-                ? "Finish"
-                : "Save & Continue"}
+              {index === chaptersLength.length - 1 ? "Finish Chapter" : "Save & Continue"}
             </Text>
           </TouchableOpacity>
         </ScrollView>
@@ -107,7 +106,7 @@ const Content = ({
   };
 
   return (
-    <View style={{ padding: 0, height: "100%" }}>
+    <View style={styles.container}>
       <ProgressBar
         chaptersLength={chaptersLength.length}
         contentIndex={activeIndex}
@@ -136,21 +135,46 @@ const Content = ({
 export default Content;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  contentContainer: {
+    width: Dimensions.get("screen").width,
+    paddingBottom: 100,
+  },
+  scrollView: {
+    padding: 20,
+  },
   heading: {
-    fontFamily: "Poppins-Medium",
-    fontSize: 22,
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 24,
     marginTop: 15,
+    marginBottom: 20,
+    color: '#333',
   },
   buttonContainer: {
-    marginTop: 10,
-    backgroundColor: "#FFA500",
-    padding: 15,
-    borderRadius: 10,
+    marginTop: 30,
+    marginBottom: 20,
+    backgroundColor: Color.PRIMARTY_COLOR,
+    padding: 18,
+    borderRadius: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  finishButton: {
+    backgroundColor: Color.GREEN,
   },
   buttonText: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins-Medium",
     color: "#fff",
-    fontSize: 17,
+    fontSize: 16,
     textAlign: "center",
   },
 });

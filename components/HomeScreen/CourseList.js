@@ -38,7 +38,6 @@ const CourseList = ({ level }) => {
     <View>
       <SubHeading
         text={level.toUpperCase() + " Courses ⛳️"}
-        color={level == "basic" && Color.TEXT_WHITE}
       />
       <FlatList
         data={courseList}
