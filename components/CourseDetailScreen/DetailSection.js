@@ -10,45 +10,89 @@ import React from "react";
 import Color from "../../utils/Color";
 import Info from "./Info";
 import Description from "./Description";
-import { LinearGradient } from "expo-linear-gradient";
 
 const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        padding: 10,
+        borderRadius: 15,
+        backgroundColor: Color.TEXT_WHITE,
+      }}
+    >
       <Image
         source={{ uri: course?.banner }}
-        style={styles.banner}
+        style={{
+          width: Dimensions.get("window").width * 0.86,
+          height: 190,
+          borderRadius: 15,
+        }}
       />
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.8)']}
-        style={styles.gradient}
-      >
-        <Text style={styles.courseTitle}>{course.name}</Text>
-      </LinearGradient>
-
-      <View style={styles.content}>
-        <View style={styles.infoContainer}>
-          <Info icon="book-outline" value={`${course.chapters.length} Chapters`} />
-          <Info icon="time-outline" value={course.time} />
-          <Info icon="person-circle-outline" value={course.author} />
-          <Info icon="cellular-outline" value={course.level} />
+      <View style={{ padding: 10 }}>
+        <Text
+          style={{ fontSize: 24, fontFamily: "Poppins-Medium", marginTop: 10 }}
+        >
+          {course.name}
+        </Text>
+        <View>
+          <View style={styles.rowStyle}>
+            <Info
+              icon="book-outline"
+              value={course.chapters.length + " Chapters"}
+            />
+            <Info icon="time-outline" value={course.time} />
+          </View>
+          <View style={styles.rowStyle}>
+            <Info icon="person-circle-outline" value={course.author} />
+            <Info icon="cellular-outline" value={course.level} />
+          </View>
         </View>
 
         <Description course={course} />
-
-        <TouchableOpacity
-          onPress={() => enrollCourse()}
-          style={[
-            styles.button,
-            userEnrolledCourses == 0 
-              ? styles.enrollButton 
-              : styles.continueButton
-          ]}
-        >
-          <Text style={styles.buttonText}>
-            {userEnrolledCourses == 0 ? 'Enroll For Free' : 'Continue Learning'}
-          </Text>
-        </TouchableOpacity>
+        <View>
+          {userEnrolledCourses == 0 ? (
+            <TouchableOpacity
+              onPress={() => enrollCourse()}
+              style={{
+                padding: 15,
+                backgroundColor: Color.PRIMARTY_COLOR,
+                borderRadius: 15,
+                marginTop: 10,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "Poppins-Medium",
+                  color: Color.TEXT_WHITE,
+                  fontSize: 16,
+                }}
+              >
+                Enroll For Free
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <View
+              style={{
+                padding: 15,
+                backgroundColor: Color.ORANGE,
+                borderRadius: 15,
+                marginTop: 10,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontFamily: "Poppins-Medium",
+                  color: Color.TEXT_WHITE,
+                  fontSize: 16,
+                }}
+              >
+                Continue Learning
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -57,57 +101,10 @@ const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
 export default DetailSection;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 20,
-  },
-  banner: {
-    width: '100%',
-    height: 220,
-  },
-  gradient: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '50%',
-    justifyContent: 'flex-end',
-    padding: 20,
-  },
-  courseTitle: {
-    fontSize: 24,
-    fontFamily: 'Poppins-Bold',
-    color: '#fff',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 10
-  },
-  content: {
-    padding: 20,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  button: {
-    padding: 15,
-    borderRadius: 12,
-    marginTop: 20,
-  },
-  enrollButton: {
-    backgroundColor: Color.PRIMARTY_COLOR,
-  },
-  continueButton: {
-    backgroundColor: Color.ORANGE,
-  },
-  buttonText: {
-    textAlign: 'center',
-    fontFamily: 'Poppins-Medium',
-    color: '#fff',
-    fontSize: 16,
+  rowStyle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
 });

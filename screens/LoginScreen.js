@@ -14,32 +14,26 @@ import * as WebBrowser from "expo-web-browser";
 import { useWarmUpBrowser } from "../hooks/warmUpBrowser";
 import * as Linking from "expo-linking";
 import { useOAuth } from "@clerk/clerk-expo";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 import google from "../assets/images/google.png";
 
 WebBrowser.maybeCompleteAuthSession();
-
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const LoginScreen = () => {
   useWarmUpBrowser();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const onPress = React.useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const { createdSessionId, signIn, signUp, setActive } =
-        await startOAuthFlow({
-          redirectUrl: Linking.createURL("/dashboard", { scheme: "myapp" }),
-        });
-
+      const { createdSessionId, setActive } = await startOAuthFlow();
       if (createdSessionId) {
         setActive({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
       }
     } catch (err) {
       console.error("OAuth error", err);
@@ -50,38 +44,60 @@ const LoginScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView>
-      <View>
+    <View style={styles.container}>
+      {/* Üst Kısım - Görsel ve Gradient Overlay */}
+      <View style={styles.topSection}>
         <Image
-          style={styles.images}
+          style={styles.backgroundImage}
           source={require("../assets/images/login.jpeg")}
         />
-        <View style={styles.subContainer}>
-          <Text style={styles.text}>YAZILIM KIDS AKADEMI</Text>
-          <Text style={styles.subText}>
+        <LinearGradient
+          colors={['transparent', Color.PRIMARY]}
+          style={styles.gradient}
+        />
+      </View>
+
+      {/* Alt Kısım - İçerik */}
+      <View style={styles.bottomSection}>
+        <View style={styles.contentContainer}>
+          {/* Logo veya İkon */}
+          <View style={styles.logoContainer}>
+            <Ionicons name="code-slash" size={50} color={Color.LIGHT} />
+          </View>
+
+          {/* Başlıklar */}
+          <Text style={styles.title}>YAZILIM KIDS AKADEMI</Text>
+          <Text style={styles.subtitle}>
             Your Ultimate Programming Learning Box
           </Text>
+
+          {/* Giriş Butonu */}
           <TouchableOpacity
-            style={[
-              styles.signInContainer,
-              isLoading && styles.signInButtonDisabled,
-            ]}
+            style={[styles.signInButton, isLoading && styles.signInButtonDisabled]}
             onPress={onPress}
             disabled={isLoading}
+            activeOpacity={0.8}
           >
             {isLoading ? (
-              <ActivityIndicator color={Color.PRIMARTY_COLOR} />
+              <ActivityIndicator color={Color.PRIMARY} />
             ) : (
               <>
-                <Image style={{ height: 40, width: 40 }} source={google} />
-                <Text style={styles.signIn}>Sign in with Google</Text>
+                <Image style={styles.googleIcon} source={google} />
+                <Text style={styles.signInText}>Sign in with Google</Text>
               </>
             )}
           </TouchableOpacity>
+
+          {/* Hata Mesajı */}
+          {error && (
+            <View style={styles.errorContainer}>
+              <Ionicons name="alert-circle" size={20} color={Color.ERROR} />
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
         </View>
-        {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -89,65 +105,102 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    alignItems: "center",
+    flex: 1,
+    backgroundColor: Color.PRIMARY,
   },
-  images: {
-    width: width,
-    height: width * 1,
-    objectFit: "contain",
+  topSection: {
+    height: height * 0.5,
+    position: 'relative',
   },
-  subContainer: {
-    height: 600,
-    backgroundColor: Color.PRIMARTY_COLOR,
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
-  text: {
-    color: Color.TEXT_WHITE,
-    fontSize: 30,
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: height * 0.2,
+  },
+  bottomSection: {
+    flex: 1,
+    backgroundColor: Color.PRIMARY,
+  },
+  contentContainer: {
+    paddingHorizontal: 24,
+    paddingTop: 30,
+    alignItems: 'center',
+  },
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: Color.PRIMARY_LIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  title: {
+    color: Color.LIGHT,
+    fontSize: 28,
     fontFamily: "Poppins-Bold",
     textAlign: "center",
-    marginTop: 40,
+    marginBottom: 12,
   },
-  subText: {
+  subtitle: {
     textAlign: "center",
-    fontSize: 20,
-    marginTop: 30,
-    color: Color.ORANGE,
+    fontSize: 16,
+    color: Color.SECONDARY,
+    fontFamily: "Poppins-Medium",
+    marginBottom: 32,
+    opacity: 0.9,
   },
-  signIn: {
-    fontSize: 20,
-    color: Color.PRIMARTY_COLOR,
-    fontFamily: "Poppins-Regular",
-  },
-  signInContainer: {
-    backgroundColor: Color.TEXT_WHITE,
-    display: "flex",
+  signInButton: {
+    backgroundColor: Color.LIGHT,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
-    borderRadius: 99,
-    padding: 10,
-    marginTop: 25,
-    paddingVertical: 15,
-    marginHorizontal: 20,
-    elevation: 5,
+    borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    width: '100%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 8,
   },
   signInButtonDisabled: {
     opacity: 0.7,
   },
+  googleIcon: {
+    height: 24,
+    width: 24,
+    marginRight: 12,
+  },
+  signInText: {
+    fontSize: 16,
+    color: Color.DARK,
+    fontFamily: "Poppins-Medium",
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Color.ERROR + '15',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    marginTop: 16,
+  },
   errorText: {
     fontFamily: "Poppins-Regular",
-    color: "#D32F2F",
+    color: Color.ERROR,
     fontSize: 14,
-    marginTop: 12,
-    textAlign: "center",
+    marginLeft: 8,
   },
 });

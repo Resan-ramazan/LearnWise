@@ -52,7 +52,7 @@ const ChapterSection = () => {
     
     const enrolledCourse = userEnrolledCourses[0];
     return enrolledCourse?.completedChapters?.includes(chapter.id);
-  };
+  }; 
 
   return (
     currentCourse && currentCourse.chapters && (
