@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
@@ -16,37 +16,42 @@ const TabNavigation = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: Color.TEXT_WHITE,
-          paddingBottom: 10,
-          paddingTop: 10,
-          borderTopWidth: 1,
-          borderTopColor: "#f0f0f0",
-        },
-        tabBarActiveTintColor: Color.ORANGE,
-        tabBarInactiveTintColor: Color.TEXT_GRAY,
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "500",
-        },
+        tabBarStyle: styles.tabBar,
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: Color.PRIMARTY_COLOR,
+        tabBarInactiveTintColor: '#999',
+        tabBarLabelStyle: styles.tabLabel,
       }}
     >
       <Tab.Screen
         name="home"
         component={HomeScreenNavigation}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.iconContainer}>
+              <Ionicons 
+                name={focused ? "home" : "home-outline"} 
+                color={color} 
+                size={size} 
+              />
+            </View>
           ),
-          tabBarLabel: "Home",
         }}
       />
       <Tab.Screen
         name="mycourse"
         component={MyCourse}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" color={color} size={size} />
+          tabBarLabel: 'My Courses',
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.iconContainer}>
+              <Ionicons 
+                name={focused ? "book" : "book-outline"} 
+                color={color} 
+                size={size} 
+              />
+            </View>
           ),
         }}
       />
@@ -54,20 +59,32 @@ const TabNavigation = () => {
         name="leaderboard"
         component={LeaderBoard}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="podium" color={color} size={size} />
+          tabBarLabel: 'Leaderboard',
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.iconContainer}>
+              <Ionicons 
+                name={focused ? "podium" : "podium-outline"} 
+                color={color} 
+                size={size} 
+              />
+            </View>
           ),
-          tabBarLabel: "Leaderboard",
         }}
       />
       <Tab.Screen
         name="profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.iconContainer}>
+              <Ionicons 
+                name={focused ? "person" : "person-outline"} 
+                color={color} 
+                size={size} 
+              />
+            </View>
           ),
-          tabBarLabel: "Profile",
         }}
       />
     </Tab.Navigator>
@@ -76,4 +93,36 @@ const TabNavigation = () => {
 
 export default TabNavigation;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  tabBar: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 24 : 16,
+    left: 16,
+    right: 16,
+    elevation: 0,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    height: 65,
+    paddingBottom: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
+    borderTopWidth: 0,
+  },
+  tabLabel: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 12,
+    marginTop: -5,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop:10,
+  },
+
+});

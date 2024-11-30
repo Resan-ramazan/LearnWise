@@ -41,7 +41,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
       {userData && (
         <>
           <LinearGradient
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+    paddingBottom: 100,
   },
   header: {
     height: 280,
