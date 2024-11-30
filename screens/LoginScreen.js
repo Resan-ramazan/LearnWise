@@ -81,10 +81,10 @@ const LoginScreen = () => {
             {isLoading ? (
               <ActivityIndicator color={Color.PRIMARY} />
             ) : (
-              <>
+              <View style={styles.buttonContent}>
                 <Image style={styles.googleIcon} source={google} />
                 <Text style={styles.signInText}>Sign in with Google</Text>
-              </>
+              </View>
             )}
           </TouchableOpacity>
 
@@ -159,34 +159,40 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     backgroundColor: Color.LIGHT,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    width: '100%',
+    borderRadius: 12,
+    paddingVertical: 14,
+    width: '85%',
+    maxWidth: 300,
+    alignSelf: 'center',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 8,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
   },
-  signInButtonDisabled: {
-    opacity: 0.7,
+  buttonContent: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   googleIcon: {
-    height: 24,
-    width: 24,
+    height: 18,
+    width: 18,
     marginRight: 12,
   },
   signInText: {
     fontSize: 16,
-    color: Color.DARK,
+    color: '#3C4043', // Google'ın standart metin rengi
     fontFamily: "Poppins-Medium",
+    letterSpacing: 0.25,
+  },
+  signInButtonDisabled: {
+    opacity: 0.7,
   },
   errorContainer: {
     flexDirection: 'row',
