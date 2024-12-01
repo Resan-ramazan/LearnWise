@@ -6,7 +6,7 @@ import HomeScreen from "../screens/HomeScreen";
 import CourseDetailScreen from "../screens/CourseDetailScreen";
 import ChapterContentScreen from "../screens/ChapterContentScreen";
 import Color from "../utils/Color";
-
+import ScoreScreen from "../screens/ScoreScreen";
 const Stack = createStackNavigator();
 
 export default function HomeScreenNavigation() {
@@ -58,6 +58,13 @@ export default function HomeScreenNavigation() {
       <Stack.Screen 
         name="ChapterContent" 
         component={ChapterContentScreen}
+        options={{
+          animationEnabled: true,
+        }}
+      />
+      <Stack.Screen 
+        name="ScoreScreen" 
+        component={ScoreScreen}
         options={{
           animationEnabled: true,
         }}
