@@ -304,3 +304,46 @@ export const handleCoursePress = async (courseId) => {
     throw error;
   }
 };
+
+export const submitCourseRating = async (courseId, userEmail, rating) => {
+  try {
+    // 1. Ratings koleksiyonuna yeni değerlendirmeyi ekle
+    const ratingRef = collection(db, "CourseRatings");
+    await addDoc(ratingRef, {
+      courseId,
+      userEmail,
+      rating,
+      createdAt: new Date().toISOString()
+    });
+
+    // 2. Kursun mevcut değerlendirmelerini al
+    const ratingsQuery = query(
+      collection(db, "CourseRatings"),
+      where("courseId", "==", courseId)
+    );
+    const ratingsSnapshot = await getDocs(ratingsQuery);
+    
+    // 3. Ortalama puanı hesapla
+    let totalRating = 0;
+    ratingsSnapshot.forEach((doc) => {
+      totalRating += doc.data().rating;
+    });
+    const averageRating = totalRating / ratingsSnapshot.size;
+
+    // 4. Kursun ortalama puanını güncelle
+    const courseRef = doc(db, "Courses", courseId);
+    await updateDoc(courseRef, {
+      averageRating: averageRating,
+      totalRatings: ratingsSnapshot.size
+    });
+
+    return {
+      success: true,
+      averageRating,
+      totalRatings: ratingsSnapshot.size
+    };
+  } catch (error) {
+    console.error("Error submitting course rating:", error);
+    throw error;
+  }
+};
