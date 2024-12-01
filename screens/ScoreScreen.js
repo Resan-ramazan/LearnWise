@@ -1,26 +1,71 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Animated, TouchableOpacity, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from "@expo/vector-icons";
+import { submitCourseRating } from '../services/courses';
 
 const ScoreScreen = ({ route, navigation }) => {
-  const { points } = route.params;
+  const { points, courseId, userEmail } = route.params;
+  console.log("Score Screen Params:", { points, courseId, userEmail });
+  
+  const [rating, setRating] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const scaleAnim = new Animated.Value(0);
   
   useEffect(() => {
-    // Animasyon efekti
     Animated.spring(scaleAnim, {
       toValue: 1,
       friction: 5,
       tension: 40,
       useNativeDriver: true,
     }).start();
-
-    const timer = setTimeout(() => {
-      navigation.navigate("Home");
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
+
+  const handleRating = async (selectedRating) => {
+    if (!courseId || !userEmail) {
+      Alert.alert("Error", "Missing required information");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setRating(selectedRating);
+      
+      const result = await submitCourseRating(courseId, userEmail, selectedRating);
+      
+      Alert.alert(
+        "Thank You!",
+        "Your rating has been submitted successfully.",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Home")
+          }
+        ]
+      );
+    } catch (error) {
+      console.error("Rating error:", error);
+      Alert.alert("Error", "Failed to submit rating. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderStars = () => {
+    return [1, 2, 3, 4, 5].map((star) => (
+      <TouchableOpacity 
+        key={star} 
+        onPress={() => handleRating(star)}
+        style={styles.starButton}
+      >
+        <Ionicons 
+          name={rating >= star ? "star" : "star-outline"} 
+          size={35} 
+          color={rating >= star ? "#FFD700" : "#BCC6CC"}
+        />
+      </TouchableOpacity>
+    ));
+  };
 
   return (
     <LinearGradient
@@ -39,6 +84,20 @@ const ScoreScreen = ({ route, navigation }) => {
         />
         <Text style={styles.points}>{points}</Text>
         <Text style={styles.text}>Points Earned!</Text>
+        
+        <View style={styles.ratingContainer}>
+          <Text style={styles.ratingText}>Rate this course:</Text>
+          <View style={styles.starsContainer}>
+            {renderStars()}
+          </View>
+        </View>
+
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Text style={styles.buttonText}>Back to Home</Text>
+        </TouchableOpacity>
       </Animated.View>
     </LinearGradient>
   );
@@ -79,6 +138,35 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     marginBottom: 10,
+  },
+  ratingContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  ratingText: {
+    fontSize: 18,
+    color: '#4c669f',
+    marginBottom: 10,
+    fontWeight: '500',
+  },
+  starsContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  starButton: {
+    padding: 5,
+  },
+  button: {
+    backgroundColor: '#4c669f',
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 25,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
