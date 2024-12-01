@@ -51,7 +51,11 @@ const ChapterContentScreen = () => {
         ToastAndroid.show("Course completed!", ToastAndroid.SHORT);
       }
 
-      navigation.navigate("ScoreScreen", { points: 50 });
+      navigation.navigate("ScoreScreen", {
+        points: 50,
+        courseId: param.courseId,
+        userEmail: param.userEmail,
+      });
     } catch (err) {
       console.error("Error completing chapter:", err);
       ToastAndroid.show("Error completing chapter", ToastAndroid.SHORT);

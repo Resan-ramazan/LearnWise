@@ -16,7 +16,9 @@ const CourseItem = ({ item }) => {
         <View style={styles.detailContainer}>
           <View style={styles.infoItem}>
             <Ionicons name="book" size={16} color={Color.ORANGE} />
-            <Text style={styles.infoText}>{item.chapters.length || 0} Chapters</Text>
+            <Text style={styles.infoText}>
+              {item.chapters.length || 0} Chapters
+            </Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="time-outline" size={16} color={Color.ORANGE} />
@@ -27,7 +29,10 @@ const CourseItem = ({ item }) => {
           <Text style={styles.freeText}>Free</Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={14} color="#FFD700" />
-            <Text style={styles.ratingText}>4.5</Text>
+            <Text style={styles.ratingText}>
+              {item.averageRating ? item.averageRating.toFixed(1) : "New"}
+              {item.totalRatings > 0 && ` (${item.totalRatings})`}
+            </Text>
           </View>
         </View>
       </View>
@@ -40,7 +45,7 @@ export default CourseItem;
 const styles = StyleSheet.create({
   courseContainer: {
     width: 280,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 15,
     marginRight: 15,
     shadowColor: "#000",
@@ -50,68 +55,68 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   courseImage: {
-    width: '100%',
+    width: "100%",
     height: 160,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     right: 10,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
   },
   level: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 12,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
   },
   content: {
     padding: 15,
   },
   courseName: {
     fontSize: 16,
-    fontFamily: 'Poppins-SemiBold',
-    color: '#333',
+    fontFamily: "Poppins-SemiBold",
+    color: "#333",
     marginBottom: 8,
   },
   detailContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 12,
   },
   infoItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   infoText: {
     fontSize: 13,
-    fontFamily: 'Poppins-Regular',
-    color: '#666',
+    fontFamily: "Poppins-Regular",
+    color: "#666",
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 8,
   },
   freeText: {
     fontSize: 14,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
     color: Color.PRIMARTY_COLOR,
   },
   ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
   },
   ratingText: {
     fontSize: 13,
-    fontFamily: 'Poppins-Medium',
-    color: '#666',
+    fontFamily: "Poppins-Medium",
+    color: "#666",
   },
 });
