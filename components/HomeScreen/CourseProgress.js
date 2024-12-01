@@ -88,7 +88,7 @@ const CourseProgress = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Continue Learning</Text>
+      <SubHeading style={styles.sectionTitle}>Continue Learning</SubHeading>
       <FlatList
         data={inProgressCourses}
         renderItem={renderCourseItem}
