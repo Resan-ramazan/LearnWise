@@ -4,6 +4,7 @@ import Color from "../utils/Color";
 
 // Custom SubHeading component
 const SubHeading = ({ text, color = Color.TEXT_BLACK }) => {
+  const capitalizedText = text.charAt(0).toUpperCase() + text.slice(1);
   return (
     <View style={styles.container}>
       <Text
@@ -14,7 +15,7 @@ const SubHeading = ({ text, color = Color.TEXT_BLACK }) => {
           color === Color.TEXT_WHITE && styles.lightTextShadow,
         ]}
       >
-        {text}
+        {capitalizedText}
       </Text>
     </View>
   );
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontFamily: "Poppins-Bold",
-    letterSpacing: 0.5,
   },
   lightTextShadow: {
     textShadowColor: "rgba(0, 0, 0, 0.2)",

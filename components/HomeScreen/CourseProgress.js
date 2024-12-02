@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useCallback } from "react";
-import SubHeading from "../SubHeading";
 import Color from "../../utils/Color";
 import { useUser } from "@clerk/clerk-expo";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -19,7 +18,8 @@ import { LinearGradient } from "expo-linear-gradient";
 const CourseProgress = () => {
   const { user } = useUser();
   const navigation = useNavigation();
-  const { inProgressCourses, getInProgressCourses, handleCoursePress } = useCourse();
+  const { inProgressCourses, getInProgressCourses, handleCoursePress } =
+    useCourse();
 
   useFocusEffect(
     useCallback(() => {
@@ -52,43 +52,46 @@ const CourseProgress = () => {
   };
 
   const renderCourseItem = ({ item }) => (
-    <TouchableOpacity 
-      onPress={() => onCoursePress(item)}
-      style={styles.courseContainer}
-      activeOpacity={0.7}
-    >
-      <Image source={{ uri: item?.banner }} style={styles.courseImage} />
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.8)']}
-        style={styles.gradient}
+    <View>
+      <TouchableOpacity
+        onPress={() => onCoursePress(item)}
+        style={styles.courseContainer}
+        activeOpacity={0.7}
       >
-        <Text style={styles.courseName}>{item.name}</Text>
-        <View style={styles.progressInfo}>
-          <Text style={styles.progressText}>
-            {item.completedChapters}/{item.totalChapters} Chapters
-          </Text>
-          <Text style={styles.progressPercent}>
-            {Math.round(item.progressPercentage)}%
-          </Text>
-        </View>
-        <Progress.Bar
-          progress={item.progressPercentage / 100}
-          width={null}
-          height={4}
-          color={Color.ORANGE}
-          unfilledColor="rgba(255,255,255,0.3)"
-          borderWidth={0}
-          style={styles.progressBar}
-        />
-      </LinearGradient>
-    </TouchableOpacity>
+        <Image source={{ uri: item?.banner }} style={styles.courseImage} />
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.8)"]}
+          style={styles.gradient}
+        >
+          <Text style={styles.courseName}>{item.name}</Text>
+          <View style={styles.progressInfo}>
+            <Text style={styles.progressText}>
+              {item.completedChapters}/{item.totalChapters} Chapters
+            </Text>
+            <Text style={styles.progressPercent}>
+              {Math.round(item.progressPercentage)}%
+            </Text>
+          </View>
+          <Progress.Bar
+            progress={item.progressPercentage / 100}
+            width={null}
+            height={4}
+            color={Color.ORANGE}
+            unfilledColor="rgba(255,255,255,0.3)"
+            borderWidth={0}
+            style={styles.progressBar}
+          />
+        </LinearGradient>
+      </TouchableOpacity>
+    </View>
   );
 
   if (inProgressCourses.length === 0) return null;
 
+
   return (
     <View style={styles.container}>
-      <SubHeading style={styles.sectionTitle}>Continue Learning</SubHeading>
+      <Text style={styles.sectionTitle}>Continue Learning</Text>
       <FlatList
         data={inProgressCourses}
         renderItem={renderCourseItem}
@@ -106,18 +109,19 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontFamily: 'Poppins-Bold',
-    color: '#fff',
+    fontSize: 24,
+    fontFamily: "Poppins-Bold",
+    color: "#fff",
     marginBottom: 15,
+    marginLeft: 10,
   },
   courseContainer: {
     width: 300,
     height: 180,
     marginRight: 15,
     borderRadius: 15,
-    overflow: 'hidden',
-    backgroundColor: '#fff',
+    overflow: "hidden",
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
@@ -125,38 +129,38 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   courseImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   gradient: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: '60%',
+    height: "60%",
     padding: 15,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   courseName: {
     fontSize: 16,
-    fontFamily: 'Poppins-SemiBold',
-    color: '#fff',
+    fontFamily: "Poppins-SemiBold",
+    color: "#fff",
     marginBottom: 8,
   },
   progressInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   progressText: {
     fontSize: 13,
-    fontFamily: 'Poppins-Medium',
-    color: '#fff',
+    fontFamily: "Poppins-Medium",
+    color: "#fff",
   },
   progressPercent: {
     fontSize: 14,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: "Poppins-Bold",
     color: Color.ORANGE,
   },
   progressBar: {

@@ -13,11 +13,13 @@ import SubHeading from "../SubHeading";
 import Color from "../../utils/Color";
 import CourseItem from "./CourseItem";
 import { useNavigation } from "@react-navigation/native";
+import { useCourse } from "../../contexts/CourseContext";
 
 const CourseList = ({ level }) => {
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const { inProgressCourses } = useCourse();
 
   useEffect(() => {
     getCourses();
@@ -37,7 +39,12 @@ const CourseList = ({ level }) => {
   return (
     <View>
       <SubHeading
-        text={level.toUpperCase() + " Courses ⛳️"}
+        text={level + " Courses"}
+        color={
+          level == "basic" && inProgressCourses.length === 0
+            ? Color.TEXT_WHITE
+            : Color.TEXT_BLACK
+        }
       />
       <FlatList
         data={courseList}
