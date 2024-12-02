@@ -65,16 +65,17 @@ const ChapterSection = () => {
               key={index}
               style={[
                 styles.chapterItem,
-                checkIsChapterCompleted(item)
-                  ? styles.completeChapter
-                  : styles.inCompleteChapter,
+                checkIsChapterCompleted(item) && styles.completeChapter,
               ]}
             >
               <View style={styles.chapterContent}>
-                <View style={styles.numberContainer}>
+                <View style={[
+                  styles.numberContainer,
+                  checkIsChapterCompleted(item) && styles.completedNumberContainer
+                ]}>
                   <Text style={[
                     styles.chapterNumber,
-                    checkIsChapterCompleted(item) && styles.completedText,
+                    checkIsChapterCompleted(item) && styles.completedText
                   ]}>
                     {index + 1}
                   </Text>
@@ -82,7 +83,7 @@ const ChapterSection = () => {
                 <View style={styles.textContainer}>
                   <Text style={[
                     styles.chapterTitle,
-                    checkIsChapterCompleted(item) && styles.completedText,
+                    checkIsChapterCompleted(item) && styles.completedText
                   ]}>
                     {item.heading}
                   </Text>
@@ -98,9 +99,9 @@ const ChapterSection = () => {
                   checkIsChapterCompleted(item) && styles.completedIcon
                 ]}>
                   <Ionicons
-                    name={checkIsChapterCompleted(item) ? "checkmark-circle" : "play-circle"}
+                    name={checkIsChapterCompleted(item) ? "checkmark-circle" : "chevron-forward-circle"}
                     size={24}
-                    color={checkIsChapterCompleted(item) ? Color.GREEN : Color.PRIMARY}
+                    color={checkIsChapterCompleted(item) ? "#4CAF50" : Color.PRIMARY}
                   />
                 </View>
               )}
@@ -117,22 +118,22 @@ export default ChapterSection;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: 15,
     padding: 20,
     marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowRadius: 8,
     elevation: 5,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontFamily: 'Poppins-Bold',
-    color: '#333',
+    color: '#2D3436',
     marginBottom: 20,
   },
   chapterList: {
@@ -142,10 +143,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 15,
+    padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
   },
   chapterContent: {
     flexDirection: 'row',
@@ -153,13 +156,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   numberContainer: {
-    width: 35,
-    height: 35,
+    width: 36,
+    height: 36,
     borderRadius: 18,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 15,
+  },
+  completedNumberContainer: {
+    backgroundColor: '#E8F5E9',
   },
   chapterNumber: {
     fontSize: 16,
@@ -172,29 +178,25 @@ const styles = StyleSheet.create({
   chapterTitle: {
     fontSize: 16,
     fontFamily: 'Poppins-Medium',
-    color: '#333',
+    color: '#2D3436',
   },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#F5F5F5',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  inCompleteChapter: {
-    borderLeftWidth: 4,
-    borderLeftColor: Color.PRIMARY,
-  },
   completeChapter: {
-    backgroundColor: Color.LIGHT_GREEN,
-    borderLeftWidth: 4,
-    borderLeftColor: Color.GREEN,
+    backgroundColor: '#F8FFF9',
+    borderColor: '#4CAF50',
+    borderWidth: 1,
   },
   completedText: {
-    color: Color.GREEN,
+    color: '#4CAF50',
   },
   completedIcon: {
-    backgroundColor: Color.LIGHT_GREEN,
+    backgroundColor: '#E8F5E9',
   },
 });

@@ -70,7 +70,7 @@ const CourseDetailScreen = () => {
 
   return (
     params.course && (
-      <View style={styles.container}>
+      <View style={styles.container} >
         <TouchableOpacity 
           style={styles.backButton} 
           onPress={() => navigation.goBack()}
@@ -78,11 +78,12 @@ const CourseDetailScreen = () => {
           <Ionicons name="arrow-back-circle" size={40} color="#fff" />
         </TouchableOpacity>
         
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
           <DetailSection
             enrollCourse={() => UserEnrollCourse()}
             course={params.course}
             userEnrolledCourses={userEnrolledCourses}
+            style={styles.detailSection}
           />
           <ChapterSection />
         </ScrollView>
