@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { getInProgressCourses, handleCoursePress as getCourseDetails } from '../services/courses';
+import { getUserCourseProgress } from '../services/users';
 
 const CourseContext = createContext();
 
@@ -7,6 +8,7 @@ export const CourseProvider = ({ children }) => {
   const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
   const [inProgressCourses, setInProgressCourses] = useState([]);
+  const [completedCourses, setCompletedCourses] = useState([]);
 
   const fetchInProgressCourses = async (userEmail) => {
     try {
@@ -16,6 +18,22 @@ export const CourseProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching in-progress courses:", error);
       setInProgressCourses([]);
+      return [];
+    }
+  };
+
+  const fetchCompletedCourses = async (userEmail) => {
+    try {
+      const progress = await getUserCourseProgress(userEmail);
+      const completed = progress.courseProgressDetails
+        .filter(course => course.isCompleted)
+        .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+
+      setCompletedCourses(completed);
+      return completed;
+    } catch (error) {
+      console.error("Error fetching completed courses:", error);
+      setCompletedCourses([]);
       return [];
     }
   };
@@ -40,7 +58,9 @@ export const CourseProvider = ({ children }) => {
         userEnrolledCourses,
         currentCourse,
         inProgressCourses,
+        completedCourses,
         getInProgressCourses: fetchInProgressCourses,
+        getCompletedCourses: fetchCompletedCourses,
         handleCoursePress,
         updateCurrentCourse: setCurrentCourse,
         updateEnrolledCourses: setUserEnrolledCourses,

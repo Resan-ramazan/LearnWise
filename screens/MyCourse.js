@@ -19,8 +19,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 const MyCourse = () => {
   const { user } = useUser();
   const navigation = useNavigation();
-  const { inProgressCourses, getInProgressCourses, handleCoursePress } =
-    useCourse();
+  const { 
+    inProgressCourses = [], 
+    completedCourses = [], 
+    getInProgressCourses, 
+    getCompletedCourses, 
+    handleCoursePress 
+  } = useCourse();
+  const [activeTab, setActiveTab] = useState('inProgress');
 
   useFocusEffect(
     useCallback(() => {
@@ -28,7 +34,10 @@ const MyCourse = () => {
         try {
           const email = user?.primaryEmailAddress?.emailAddress;
           if (email) {
-            await getInProgressCourses(email);
+            await Promise.all([
+              getInProgressCourses(email),
+              getCompletedCourses(email)
+            ]);
           }
         } catch (error) {
           console.error("Error loading courses:", error);
@@ -51,23 +60,34 @@ const MyCourse = () => {
       console.error("Error navigating to course:", error);
     }
   };
+
   const renderCourseItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => onCoursePress(item)}
-      style={styles.courseItemContainer}
+      style={[
+        styles.courseItemContainer,
+        activeTab === 'completed' && styles.completedCourseItem
+      ]}
     >
-      <CourseProgItem item={item} />
+      <CourseProgItem 
+        item={item} 
+        isCompleted={activeTab === 'completed'}
+      />
     </TouchableOpacity>
   );
 
-  if (inProgressCourses.length === 0) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Ionicons name="book" size={80} color={Color.PRIMARTY_COLOR} />
-        <Text style={styles.emptyText}>No courses in progress</Text>
-      </View>
-    );
-  }
+  const currentCourses = activeTab === 'inProgress' ? inProgressCourses : completedCourses;
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <Ionicons name="book" size={80} color={Color.PRIMARTY_COLOR} />
+      <Text style={styles.emptyText}>
+        {activeTab === 'inProgress' 
+          ? 'No courses in progress' 
+          : 'No completed courses'}
+      </Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -79,18 +99,40 @@ const MyCourse = () => {
           <Ionicons name="book" size={32} color="white" style={styles.icon} />
           <Text style={styles.title}>My Learning Journey</Text>
         </View>
-        <Text style={styles.subtitle}>
-          {inProgressCourses.length} Courses in Progress
-        </Text>
+        <View style={styles.statsContainer}>
+          <Text style={styles.subtitle}>
+            {inProgressCourses?.length || 0} In Progress • {completedCourses?.length || 0} Completed
+          </Text>
+        </View>
       </LinearGradient>
 
-      <View style={styles.listContainer}>
+      <View style={styles.contentContainer}>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity 
+            style={[styles.tab, activeTab === 'inProgress' && styles.activeTab]}
+            onPress={() => setActiveTab('inProgress')}
+          >
+            <Text style={[styles.tabText, activeTab === 'inProgress' && styles.activeTabText]}>
+              In Progress
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.tab, activeTab === 'completed' && styles.activeTab]}
+            onPress={() => setActiveTab('completed')}
+          >
+            <Text style={[styles.tabText, activeTab === 'completed' && styles.activeTabText]}>
+              Completed
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <FlatList
-          data={inProgressCourses}
+          data={currentCourses}
           renderItem={renderCourseItem}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
+          ListEmptyComponent={renderEmptyState}
         />
       </View>
     </View>
@@ -105,10 +147,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    height: 180,
+    paddingTop: 20,
+    paddingBottom: 30,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    paddingTop: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -136,12 +178,42 @@ const styles = StyleSheet.create({
     color: "rgba(255,255,255,0.9)",
     paddingHorizontal: 25,
   },
-  listContainer: {
+  contentContainer: {
     flex: 1,
-    marginTop: -30,
-    paddingHorizontal: 20,
+    marginTop: -20,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    backgroundColor: 'white',
+    borderRadius: 25,
+    padding: 5,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  activeTab: {
+    backgroundColor: Color.PRIMARTY_COLOR,
+  },
+  tabText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 14,
+    color: '#666',
+  },
+  activeTabText: {
+    color: 'white',
   },
   listContent: {
+    paddingHorizontal: 20,
     paddingBottom: 20,
   },
   courseItemContainer: {
@@ -156,13 +228,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    transform: [{ scale: 0.98 }],
   },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    paddingTop: 50,
   },
   emptyText: {
     marginTop: 20,
