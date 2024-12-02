@@ -11,7 +11,7 @@ const ChapterContentScreen = () => {
   const param = useRoute().params;
   const navigation = useNavigation();
   const { currentCourse, refreshCourseData } = useCourse();
-  const { updateUserPoints, refreshUserData } = useUser();
+  const { updateUserPoints, refreshUserData, userData } = useUser();
 
   // Debug için paramları kontrol edelim
   useEffect(() => {
@@ -30,10 +30,19 @@ const ChapterContentScreen = () => {
     const allChapterIds = currentCourse.chapters.map((chapter) => chapter.id);
 
     try {
-      // Önce puanları güncelle
-      await updateUserPoints(50);
+      // Kullanıcının bu kursu daha önce tamamlayıp tamamlamadığını kontrol et
+      const userCompletedCourses = userData?.completedCourses || [];
+      const hasCompletedBefore = userCompletedCourses.includes(param.courseId);
 
-      // Sonra kurs ilerlemesini güncelle
+      // Sadece ilk kez tamamlıyorsa puan ver
+      if (!hasCompletedBefore) {
+        await updateUserPoints(50);
+        ToastAndroid.show("Chapter completed! +50 points", ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show("Chapter completed!", ToastAndroid.SHORT);
+      }
+
+      // Kurs ilerlemesini güncelle
       const updatedUserData = await updateUserEnrolledCourse(
         param.courseId,
         param.userEmail,
@@ -42,20 +51,21 @@ const ChapterContentScreen = () => {
         currentCourse.chapters.length
       );
 
-      // En son UserContext'i güncelle
+      // UserContext'i güncelle
       await refreshUserData();
-
-      ToastAndroid.show("Chapter completed! +50 points", ToastAndroid.SHORT);
 
       if (allChapterIds.length === currentCourse.chapters.length) {
         ToastAndroid.show("Course completed!", ToastAndroid.SHORT);
       }
-
-      navigation.navigate("ScoreScreen", {
-        points: 50,
-        courseId: param.courseId,
-        userEmail: param.userEmail,
-      });
+      if (hasCompletedBefore) {
+        navigation.navigate("Home");
+      } else {
+        navigation.navigate("ScoreScreen", {
+          points: hasCompletedBefore ? 0 : 50,
+          courseId: param.courseId,
+          userEmail: param.userEmail,
+        });
+      }
     } catch (err) {
       console.error("Error completing chapter:", err);
       ToastAndroid.show("Error completing chapter", ToastAndroid.SHORT);

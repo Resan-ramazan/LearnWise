@@ -58,7 +58,7 @@ const HomeScreen = () => {
 
             <View style={styles.coursesSection}>
               <CourseList level="basic" />
-              <CourseList level="advance" />
+              <CourseList level="advanced" />
             </View>
           </View>
         </>
