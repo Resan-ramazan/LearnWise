@@ -44,7 +44,7 @@ export default CourseItem;
 
 const styles = StyleSheet.create({
   courseContainer: {
-    width: 280,
+    width: 300,
     backgroundColor: "#fff",
     borderRadius: 15,
     marginRight: 15,
