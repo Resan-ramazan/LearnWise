@@ -129,7 +129,7 @@ const MyCourse = () => {
         <FlatList
           data={currentCourses}
           renderItem={renderCourseItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.courseId?.toString() || item.id?.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={renderEmptyState}
