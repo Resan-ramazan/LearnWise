@@ -62,7 +62,7 @@ const LoginScreen = () => {
         <View style={styles.contentContainer}>
           {/* Logo veya İkon */}
           <View style={styles.logoContainer}>
-            <Ionicons name="code-slash" size={50} color={Color.LIGHT} />
+            <Ionicons name="code-slash" size={40} color={Color.LIGHT} />
           </View>
 
           {/* Başlıklar */}
@@ -88,7 +88,6 @@ const LoginScreen = () => {
             )}
           </TouchableOpacity>
 
-          {/* Hata Mesajı */}
           {error && (
             <View style={styles.errorContainer}>
               <Ionicons name="alert-circle" size={20} color={Color.ERROR} />
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.PRIMARY,
   },
   topSection: {
-    height: height * 0.5,
+    height: height * 0.4,
     position: 'relative',
   },
   backgroundImage: {
@@ -122,48 +121,51 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: height * 0.2,
+    height: height * 0.15,
   },
   bottomSection: {
     flex: 1,
     backgroundColor: Color.PRIMARY,
+    justifyContent: 'center',
   },
   contentContainer: {
-    paddingHorizontal: 24,
-    paddingTop: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: Color.PRIMARY_LIGHT,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   title: {
     color: Color.LIGHT,
-    fontSize: 28,
+    fontSize: 24,
     fontFamily: "Poppins-Bold",
     textAlign: "center",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   subtitle: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 14,
     color: Color.SECONDARY,
     fontFamily: "Poppins-Medium",
-    marginBottom: 32,
+    marginBottom: 25,
     opacity: 0.9,
   },
   signInButton: {
     backgroundColor: Color.LIGHT,
     borderRadius: 12,
-    paddingVertical: 14,
-    width: '85%',
-    maxWidth: 300,
+    paddingVertical: 12,
+    width: '100%',
+    maxWidth: 280,
     alignSelf: 'center',
+    marginTop: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -179,15 +181,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 15,
   },
   googleIcon: {
     height: 18,
     width: 18,
-    marginRight: 12,
+    marginRight: 10,
   },
   signInText: {
-    fontSize: 16,
-    color: '#3C4043', // Google'ın standart metin rengi
+    fontSize: 15,
+    color: '#3C4043',
     fontFamily: "Poppins-Medium",
     letterSpacing: 0.25,
   },
@@ -198,15 +201,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Color.ERROR + '15',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    marginTop: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginTop: 12,
   },
   errorText: {
     fontFamily: "Poppins-Regular",
     color: Color.ERROR,
-    fontSize: 14,
-    marginLeft: 8,
+    fontSize: 13,
+    marginLeft: 6,
   },
 });
