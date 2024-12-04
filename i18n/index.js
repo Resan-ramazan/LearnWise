@@ -75,7 +75,13 @@ const resources = {
       "Start Course": "Start Course",
       "Continue Course": "Continue Course",
       "Course Completed": "Course Completed",
-      "lessons": "lessons"
+      "lessons": "lessons",
+      "Leaderboard": "Leaderboard",
+      "Points": "Points",
+      "Loading...": "Loading...",
+      "No rankings available": "No rankings available",
+      "Top Players": "Top Players",
+      "Global Ranking": "Global Ranking"
     }
   },
   tr: {
@@ -90,7 +96,7 @@ const resources = {
       "Home": "Ana Sayfa",
       "Search": "Arama",
       "Profile": "Profil",
-      "Leaderboard": "Sıralama",
+      "Leaderboard": "Lider Tablosu",
       
       // Course related
       "My Courses": "Kurslarım",
@@ -151,7 +157,13 @@ const resources = {
       "Start Course": "Kursa Başla",
       "Continue Course": "Kursa Devam Et",
       "Course Completed": "Kurs Tamamlandı",
-      "lessons": "ders"
+      "lessons": "ders",
+      "Leaderboard": "Lider Tablosu",
+      "Points": "Puan",
+      "Loading...": "Yükleniyor...",
+      "No rankings available": "Sıralama bulunmuyor",
+      "Top Players": "En İyi Oyuncular",
+      "Global Ranking": "Genel Sıralama"
     }
   }
 };

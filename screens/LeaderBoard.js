@@ -8,8 +8,10 @@ import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
 import Color from "../utils/Color";
 import { useFocusEffect } from "@react-navigation/native";
+import { useTranslation } from 'react-i18next';
 
 const LeaderBoard = () => {
+  const { t } = useTranslation();
   const { user: clerkUser } = useClerkUser();
   const { userData, getAllUsersByPoints } = useUser();
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +46,7 @@ const LeaderBoard = () => {
           />
           <View style={styles.userInfo}>
             <Text style={styles.username}>{item.username}</Text>
-            <Text style={styles.points}>{item.points} Points</Text>
+            <Text style={styles.points}>{item.points} {t('Points')}</Text>
           </View>
           {index < 3 && (
             <Image
@@ -62,16 +64,31 @@ const LeaderBoard = () => {
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Ionicons name="trophy" size={32} color="white" style={styles.icon} />
-          <Text style={styles.title}>Leaderboard</Text>
+          <Text style={styles.title}>{t('Leaderboard')}</Text>
         </View>
       </View>
       {isLoading ? (
         <View style={{ height: "85%", justifyContent: "center", alignItems: "center" }}>
-          <ActivityIndicator  size="large" color={Color.PRIMARTY_COLOR} />
+          <ActivityIndicator size="large" color={Color.PRIMARTY_COLOR} />
+          <Text style={styles.loadingText}>{t('Loading...')}</Text>
         </View>
       ) : (
         <View style={{ height: "85%" }}>
-          <FlatList data={leaderboardData} renderItem={renderItem} />
+          {leaderboardData.length > 0 ? (
+            <FlatList 
+              data={leaderboardData} 
+              renderItem={renderItem} 
+              ListEmptyComponent={() => (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>{t('No rankings available')}</Text>
+                </View>
+              )}
+            />
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>{t('No rankings available')}</Text>
+            </View>
+          )}
         </View>
       )}
     </View>
@@ -162,5 +179,23 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginLeft: "auto",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontFamily: "Poppins-Regular",
+    color: Color.TEXT_GRAY,
+    fontSize: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 50,
+  },
+  emptyText: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: Color.TEXT_GRAY,
+    textAlign: 'center',
   },
 });
