@@ -62,15 +62,17 @@ const MyCourse = () => {
   };
 
   const renderCourseItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => onCoursePress(item)}
-      style={[
-        styles.courseItemContainer,
-        activeTab === "completed" && styles.completedCourseItem,
-      ]}
-    >
-      <CourseProgItem item={item} isCompleted={activeTab === "completed"} />
-    </TouchableOpacity>
+    <View style={styles.itemWrapper}>
+      <TouchableOpacity
+        onPress={() => onCoursePress(item)}
+        style={[
+          styles.courseItemContainer,
+          activeTab === "completed" && styles.completedCourseItem,
+        ]}
+      >
+        <CourseProgItem item={item} isCompleted={activeTab === "completed"} />
+      </TouchableOpacity>
+    </View>
   );
 
   const currentCourses =
@@ -224,10 +226,15 @@ const styles = StyleSheet.create({
     color: "white",
   },
   listContent: {
-    paddingHorizontal: 20,
     paddingBottom: 20,
   },
+  itemWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
   courseItemContainer: {
+    width: '100%',
     backgroundColor: "#ffffff",
     borderRadius: 15,
     marginBottom: 15,

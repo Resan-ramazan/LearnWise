@@ -9,28 +9,26 @@ const CourseProgItem = ({ item }) => {
   return (
     <View style={styles.courseContainer}>
       <Image source={{ uri: item?.banner }} style={styles.courseImage} />
-      <View style={{ padding: 7 }}>
+      <View style={styles.contentWrapper}>
         <Text style={styles.courseName}>{item.name}</Text>
         <View style={styles.detailContaier}>
           <View style={styles.chapterBox}>
             <Ionicons name="book" size={18} color={Color.ORANGE} />
             <Text style={styles.text}>{item.totalChapters || 0} Chapters</Text>
           </View>
-          <View>
-            <View style={styles.timeBox}>
-              <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
-              <Text style={styles.text}>{item.time}</Text>
-            </View>
+          <View style={styles.timeBox}>
+            <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
+            <Text style={styles.text}>{item.time}</Text>
           </View>
         </View>
         <Text style={styles.freeText}>Free</Text>
       </View>
       <Progress.Bar
-         progress={item.progressPercentage / 100}
-         width={null}
-         height={3}
-         color={Color.ORANGE}
-         unfilledColor="#E0E0E0"
+        progress={item.progressPercentage / 100}
+        width={null}
+        height={3}
+        color={Color.ORANGE}
+        unfilledColor="#E0E0E0"
         borderWidth={0}
         style={styles.progressBar}
       />
@@ -54,50 +52,39 @@ const COURSE_CONSTANTS = {
 
 const styles = StyleSheet.create({
   courseContainer: {
-    padding: 10,
+    width: '100%',
     backgroundColor: Color.TEXT_WHITE,
-    marginRight: 15,
     borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
-    marginRight: COURSE_CONSTANTS.SPACING.LARGE,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: COURSE_CONSTANTS.SHADOW_OPACITY,
-    shadowRadius: 4,
-    elevation: 3,
+    overflow: 'hidden',
   },
   courseImage: {
-    width: "100%",
+    width: '100%',
     height: 170,
-    borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    borderTopLeftRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+    borderTopRightRadius: COURSE_CONSTANTS.BORDER_RADIUS,
+  },
+  contentWrapper: {
+    padding: 12,
   },
   courseName: {
     fontFamily: "Poppins-Medium",
     fontSize: 17,
   },
   detailContaier: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 5,
   },
   chapterBox: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
-    marginTop: 5,
   },
   timeBox: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
-    marginTop: 5,
   },
   text: {
     fontFamily: "Poppins-Regular",
@@ -109,5 +96,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     marginTop: 10,
+    marginHorizontal: 12,
+    marginBottom: 12,
   },
 });
