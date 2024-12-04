@@ -1,4 +1,11 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 import ContenItem from "./ContenItem";
@@ -46,13 +53,22 @@ const Content = ({
         userEmail,
         chapterId: currentChapter?.id,
       });
-      ToastAndroid.show("Error: Missing required data", ToastAndroid.SHORT);
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Error: Missing required data", ToastAndroid.SHORT);
+      } else {
+        alert("Error: Missing required data");
+      }
+
       return;
     }
 
     try {
       await updateUserProgress(courseId, userEmail, currentChapter.id, index);
-      ToastAndroid.show("Progress saved!", ToastAndroid.SHORT);
+      if (Platform.OS === "android") {
+        ToastAndroid.show("Progress saved!", ToastAndroid.SHORT);
+      } else {
+        alert("Progress saved!");
+      }
 
       setActiveIndex(index + 1);
       if (flatListRef.current) {
@@ -86,7 +102,7 @@ const Content = ({
           <TouchableOpacity
             style={[
               styles.buttonContainer,
-              index === chaptersLength.length - 1 && styles.finishButton
+              index === chaptersLength.length - 1 && styles.finishButton,
             ]}
             onPress={() => {
               if (index === chaptersLength.length - 1) {
@@ -97,7 +113,9 @@ const Content = ({
             }}
           >
             <Text style={styles.buttonText}>
-              {index === chaptersLength.length - 1 ? "Finish Chapter" : "Save & Continue"}
+              {index === chaptersLength.length - 1
+                ? "Finish Chapter"
+                : "Save & Continue"}
             </Text>
           </TouchableOpacity>
         </ScrollView>
@@ -137,7 +155,7 @@ export default Content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   contentContainer: {
     width: Dimensions.get("screen").width,
@@ -151,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginTop: 15,
     marginBottom: 20,
-    color: '#333',
+    color: "#333",
   },
   buttonContainer: {
     marginTop: 30,

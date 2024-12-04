@@ -57,8 +57,7 @@ const ProfileScreen = () => {
   const languages = [
     { code: "en", name: "English", flag: "🇺🇸" },
     { code: "tr", name: "Türkçe", flag: "🇹🇷" },
-    { code: "es", name: "Español", flag: "🇪🇸" },
-    { code: "fr", name: "Français", flag: "🇫🇷" },
+    
   ];
 
   const menuItems = [
