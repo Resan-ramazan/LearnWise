@@ -18,12 +18,15 @@ import { useUser } from "../contexts/UserContext";
 import coin from "../assets/images/coins.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from 'react-i18next';
+import '../i18n';
 
 const ProfileScreen = () => {
   const { userData } = useUser();
   const { signOut } = useAuth(); // Clerk'ten signOut'u import ediyoruz
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
 
   const handleSignOut = () => {
     Alert.alert(
@@ -63,39 +66,38 @@ const ProfileScreen = () => {
   const menuItems = [
     {
       icon: "book-outline",
-      label: "My Courses",
+      label: t("My Courses"),
       color: "#4CAF50",
       onPress: () => navigation.navigate("mycourse"),
     },
     {
       icon: "diamond-outline",
-      label: "Premium",
+      label: t("Premium"),
       color: "#2196F3",
       onPress: () => navigation.navigate("premium"),
     },
     {
       icon: "trophy-outline",
-      label: "Ranking",
+      label: t("Ranking"),
       color: "#FFC107",
       onPress: () => navigation.navigate("leaderboard"),
     },
     {
       icon: "language-outline",
-      label: "Change Language",
+      label: t("Change Language"),
       color: "#9C27B0",
       onPress: () => setShowLanguageModal(true),
     },
     {
       icon: "log-out-outline",
-      label: "Logout",
+      label: t("Logout"),
       color: "#FF5252",
       onPress: handleSignOut,
     },
   ];
 
   const handleLanguageSelect = (langCode) => {
-    // Burada dil değiştirme işlemini yapacak fonksiyonu çağırın
-
+    i18n.changeLanguage(langCode);
     setShowLanguageModal(false);
   };
 
@@ -112,7 +114,7 @@ const ProfileScreen = () => {
         <Text style={styles.name}>{userData?.username}</Text>
         <View style={styles.pointsBox}>
           <Image source={coin} style={styles.coinIcon} />
-          <Text style={styles.points}>{userData?.points} Points</Text>
+          <Text style={styles.points}>{userData?.points} {t('Points')}</Text>
         </View>
       </LinearGradient>
 
@@ -143,7 +145,7 @@ const ProfileScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Language</Text>
+              <Text style={styles.modalTitle}>{t('Select Language')}</Text>
               <TouchableOpacity
                 onPress={() => setShowLanguageModal(false)}
                 style={styles.closeButton}

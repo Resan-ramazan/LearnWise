@@ -8,6 +8,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./navigations/TabNavigation";
 import { CourseProvider } from './contexts/CourseContext';
 import { UserProvider } from './contexts/UserContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import './i18n';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -28,21 +30,23 @@ export default function App() {
 
   return (
     <ClerkProvider publishableKey={publishableKey}>
-      <UserProvider>
-        <CourseProvider>
-          <StatusBar style="dark" />
-          <View style={styles.container}>
-            <SignedIn>
-              <NavigationContainer>
-                <TabNavigation />
-              </NavigationContainer>
-            </SignedIn>
-            <SignedOut>
-              <LoginScreen />
-            </SignedOut>
-          </View>
-        </CourseProvider>
-      </UserProvider>
+      <LanguageProvider>
+        <UserProvider>
+          <CourseProvider>
+            <StatusBar style="dark" />
+            <View style={styles.container}>
+              <SignedIn>
+                <NavigationContainer>
+                  <TabNavigation />
+                </NavigationContainer>
+              </SignedIn>
+              <SignedOut>
+                <LoginScreen />
+              </SignedOut>
+            </View>
+          </CourseProvider>
+        </UserProvider>
+      </LanguageProvider>
     </ClerkProvider>
   );
 }

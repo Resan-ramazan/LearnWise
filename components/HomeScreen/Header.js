@@ -16,10 +16,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
+import { useTranslation } from 'react-i18next';
 
 const Header = ({ userData }) => {
   const { user } = useClerkUser();
   const { updateUserProfileImage } = useUser();
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
 
@@ -42,7 +44,7 @@ const Header = ({ userData }) => {
             <Image source={{ uri: user?.imageUrl }} style={styles.image} />
           </TouchableOpacity>
           <View>
-            <Text style={styles.text}>Welcome,</Text>
+            <Text style={styles.text}>{t('Hello')},</Text>
             <Text style={styles.text}>{userData.username}</Text>
           </View>
         </View>

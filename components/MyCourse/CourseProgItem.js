@@ -4,8 +4,11 @@ import { Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Color from "../../utils/Color";
 import * as Progress from "react-native-progress";
+import { useTranslation } from "react-i18next";
 
-const CourseProgItem = ({ item }) => {
+const CourseProgItem = ({ item, isCompleted }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.courseContainer}>
       <Image source={{ uri: item?.banner }} style={styles.courseImage} />
@@ -22,6 +25,14 @@ const CourseProgItem = ({ item }) => {
           </View>
         </View>
         <Text style={styles.freeText}>Free</Text>
+
+        <Text style={styles.status}>
+          {isCompleted
+            ? t("Course Completed")
+            : item.progress > 0
+            ? t("Continue Course")
+            : t("Start Course")}
+        </Text>
       </View>
       <Progress.Bar
         progress={item.progressPercentage / 100}
@@ -52,13 +63,13 @@ const COURSE_CONSTANTS = {
 
 const styles = StyleSheet.create({
   courseContainer: {
-    width: '100%',
+    width: "100%",
     backgroundColor: Color.TEXT_WHITE,
     borderRadius: COURSE_CONSTANTS.BORDER_RADIUS,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   courseImage: {
-    width: '100%',
+    width: "100%",
     height: 170,
     borderTopLeftRadius: COURSE_CONSTANTS.BORDER_RADIUS,
     borderTopRightRadius: COURSE_CONSTANTS.BORDER_RADIUS,
@@ -98,5 +109,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 12,
     marginBottom: 12,
+  },
+  lessonCount: {
+    fontFamily: "Poppins-Regular",
+    color: Color.PRIMARTY_COLOR,
+    marginTop: 5,
+  },
+  status: {
+    fontFamily: "Poppins-Regular",
+    color: Color.PRIMARTY_COLOR,
+    marginTop: 5,
   },
 });

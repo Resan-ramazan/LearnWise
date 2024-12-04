@@ -10,9 +10,12 @@ import HomeScreenNavigation from "./HomeScreenNavigation";
 import MyCourseNavigation from "./MyCourseNavigation";
 
 import Color from "../utils/Color";
+import { useTranslation } from 'react-i18next';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
+  const { t } = useTranslation();
+  
   return (
     <Tab.Navigator
       screenOptions={{
@@ -28,7 +31,7 @@ const TabNavigation = () => {
         name="home"
         component={HomeScreenNavigation}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: t('Home'),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
               <Ionicons 
@@ -44,7 +47,7 @@ const TabNavigation = () => {
         name="mycourse"
         component={MyCourseNavigation}
         options={{
-          tabBarLabel: 'My Courses',
+          tabBarLabel: t('My Courses'),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
               <Ionicons 
@@ -60,7 +63,7 @@ const TabNavigation = () => {
         name="leaderboard"
         component={LeaderBoard}
         options={{
-          tabBarLabel: 'Leaderboard',
+          tabBarLabel: t('Leaderboard'),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
               <Ionicons 
@@ -76,7 +79,7 @@ const TabNavigation = () => {
         name="profile"
         component={ProfileScreen}
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: t('Profile'),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
               <Ionicons 

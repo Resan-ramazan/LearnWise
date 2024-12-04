@@ -15,8 +15,10 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import CourseProgItem from "../components/MyCourse/CourseProgItem";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from 'react-i18next';
 
 const MyCourse = () => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const navigation = useNavigation();
   const {
@@ -83,8 +85,8 @@ const MyCourse = () => {
       <Ionicons name="book" size={80} color={Color.PRIMARTY_COLOR} />
       <Text style={styles.emptyText}>
         {activeTab === "inProgress"
-          ? "No courses in progress"
-          : "No completed courses"}
+          ? t("No courses in progress")
+          : t("No completed courses")}
       </Text>
     </View>
   );
@@ -97,12 +99,12 @@ const MyCourse = () => {
       >
         <View style={styles.titleContainer}>
           <Ionicons name="book" size={32} color="white" style={styles.icon} />
-          <Text style={styles.title}>My Learning Journey</Text>
+          <Text style={styles.title}>{t("My Learning Journey")}</Text>
         </View>
         <View style={styles.statsContainer}>
           <Text style={styles.subtitle}>
-            {inProgressCourses?.length || 0} In Progress •{" "}
-            {completedCourses?.length || 0} Completed
+            {inProgressCourses?.length || 0} {t("In Progress")} • {" "}
+            {completedCourses?.length || 0} {t("Completed")}
           </Text>
         </View>
       </LinearGradient>
@@ -119,7 +121,7 @@ const MyCourse = () => {
                 activeTab === "inProgress" && styles.activeTabText,
               ]}
             >
-              In Progress
+              {t("In Progress")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -132,7 +134,7 @@ const MyCourse = () => {
                 activeTab === "completed" && styles.activeTabText,
               ]}
             >
-              Completed
+              {t("Completed")}
             </Text>
           </TouchableOpacity>
         </View>
