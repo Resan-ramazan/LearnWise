@@ -7,6 +7,7 @@ import LeaderBoard from "../screens/LeaderBoard";
 import ProfileScreen from "../screens/ProfileScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreenNavigation from "./HomeScreenNavigation";
+import MyCourseNavigation from "./MyCourseNavigation";
 
 import Color from "../utils/Color";
 const Tab = createBottomTabNavigator();
@@ -41,7 +42,7 @@ const TabNavigation = () => {
       />
       <Tab.Screen
         name="mycourse"
-        component={MyCourse}
+        component={MyCourseNavigation}
         options={{
           tabBarLabel: 'My Courses',
           tabBarIcon: ({ color, size, focused }) => (

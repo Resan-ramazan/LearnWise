@@ -14,19 +14,19 @@ import { useCourse } from "../contexts/CourseContext";
 import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import CourseProgItem from "../components/MyCourse/CourseProgItem";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 const MyCourse = () => {
   const { user } = useUser();
   const navigation = useNavigation();
-  const { 
-    inProgressCourses = [], 
-    completedCourses = [], 
-    getInProgressCourses, 
-    getCompletedCourses, 
-    handleCoursePress 
+  const {
+    inProgressCourses = [],
+    completedCourses = [],
+    getInProgressCourses,
+    getCompletedCourses,
+    handleCoursePress,
   } = useCourse();
-  const [activeTab, setActiveTab] = useState('inProgress');
+  const [activeTab, setActiveTab] = useState("inProgress");
 
   useFocusEffect(
     useCallback(() => {
@@ -36,7 +36,7 @@ const MyCourse = () => {
           if (email) {
             await Promise.all([
               getInProgressCourses(email),
-              getCompletedCourses(email)
+              getCompletedCourses(email),
             ]);
           }
         } catch (error) {
@@ -66,25 +66,23 @@ const MyCourse = () => {
       onPress={() => onCoursePress(item)}
       style={[
         styles.courseItemContainer,
-        activeTab === 'completed' && styles.completedCourseItem
+        activeTab === "completed" && styles.completedCourseItem,
       ]}
     >
-      <CourseProgItem 
-        item={item} 
-        isCompleted={activeTab === 'completed'}
-      />
+      <CourseProgItem item={item} isCompleted={activeTab === "completed"} />
     </TouchableOpacity>
   );
 
-  const currentCourses = activeTab === 'inProgress' ? inProgressCourses : completedCourses;
+  const currentCourses =
+    activeTab === "inProgress" ? inProgressCourses : completedCourses;
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
       <Ionicons name="book" size={80} color={Color.PRIMARTY_COLOR} />
       <Text style={styles.emptyText}>
-        {activeTab === 'inProgress' 
-          ? 'No courses in progress' 
-          : 'No completed courses'}
+        {activeTab === "inProgress"
+          ? "No courses in progress"
+          : "No completed courses"}
       </Text>
     </View>
   );
@@ -92,7 +90,7 @@ const MyCourse = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={[Color.PRIMARTY_COLOR, '#7c4dff']}
+        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
         <View style={styles.titleContainer}>
@@ -101,26 +99,37 @@ const MyCourse = () => {
         </View>
         <View style={styles.statsContainer}>
           <Text style={styles.subtitle}>
-            {inProgressCourses?.length || 0} In Progress • {completedCourses?.length || 0} Completed
+            {inProgressCourses?.length || 0} In Progress •{" "}
+            {completedCourses?.length || 0} Completed
           </Text>
         </View>
       </LinearGradient>
 
       <View style={styles.contentContainer}>
         <View style={styles.tabContainer}>
-          <TouchableOpacity 
-            style={[styles.tab, activeTab === 'inProgress' && styles.activeTab]}
-            onPress={() => setActiveTab('inProgress')}
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "inProgress" && styles.activeTab]}
+            onPress={() => setActiveTab("inProgress")}
           >
-            <Text style={[styles.tabText, activeTab === 'inProgress' && styles.activeTabText]}>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === "inProgress" && styles.activeTabText,
+              ]}
+            >
               In Progress
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.tab, activeTab === 'completed' && styles.activeTab]}
-            onPress={() => setActiveTab('completed')}
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "completed" && styles.activeTab]}
+            onPress={() => setActiveTab("completed")}
           >
-            <Text style={[styles.tabText, activeTab === 'completed' && styles.activeTabText]}>
+            <Text
+              style={[
+                styles.tabText,
+                activeTab === "completed" && styles.activeTabText,
+              ]}
+            >
               Completed
             </Text>
           </TouchableOpacity>
@@ -129,7 +138,9 @@ const MyCourse = () => {
         <FlatList
           data={currentCourses}
           renderItem={renderCourseItem}
-          keyExtractor={(item) => item.courseId?.toString() || item.id?.toString()}
+          keyExtractor={(item) =>
+            item.courseId?.toString() || item.id?.toString()
+          }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={renderEmptyState}
@@ -144,7 +155,7 @@ export default MyCourse;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   header: {
     paddingTop: 20,
@@ -168,13 +179,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: "Poppins-Bold",
     color: "#FFFFFF",
     letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: 'Poppins-Regular',
+    fontFamily: "Poppins-Regular",
     color: "rgba(255,255,255,0.9)",
     paddingHorizontal: 25,
   },
@@ -183,9 +194,9 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   tabContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginHorizontal: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 25,
     padding: 5,
     marginBottom: 20,
@@ -198,26 +209,26 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 20,
   },
   activeTab: {
     backgroundColor: Color.PRIMARTY_COLOR,
   },
   tabText: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
     fontSize: 14,
-    color: '#666',
+    color: "#666",
   },
   activeTabText: {
-    color: 'white',
+    color: "white",
   },
   listContent: {
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
   courseItemContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderRadius: 15,
     marginBottom: 15,
     shadowColor: "#000",
@@ -231,14 +242,14 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 50,
   },
   emptyText: {
     marginTop: 20,
     fontSize: 18,
-    fontFamily: 'Poppins-Medium',
-    color: '#666',
+    fontFamily: "Poppins-Medium",
+    color: "#666",
   },
 });
