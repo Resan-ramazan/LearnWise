@@ -6,9 +6,9 @@ import { updateUserEnrolledCourse } from "../services/courses";
 import { useCourse } from "../contexts/CourseContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { useUser } from "../contexts/UserContext";
-
+import { Platform } from "react-native";
 const ChapterContentScreen = () => {
-  const param = useRoute().params;
+  const param = useRoute().params ?? {};
   const navigation = useNavigation();
   const { currentCourse, refreshCourseData } = useCourse();
   const { updateUserPoints, refreshUserData, userData } = useUser();
@@ -28,6 +28,26 @@ const ChapterContentScreen = () => {
     }
 
     const allChapterIds = currentCourse.chapters.map((chapter) => chapter.id);
+    
+    // Kullanıcının tamamladığı chapter'ları kontrol et
+    const userEnrolledCourse = userData?.enrolledCourses?.find(
+      course => course.courseId === param.courseId
+    );
+    
+    const completedChapters = userEnrolledCourse?.completedChapters || [];
+    
+    // Eğer tüm chapter'lar tamamlanmamışsa uyarı ver
+    if (completedChapters.length < allChapterIds.length - 1) { // -1 çünkü şu anki chapter henüz eklenmedi
+      if (Platform.OS === "android") {
+      ToastAndroid.show(
+          "Please complete all chapters before finishing the course!",
+          ToastAndroid.LONG
+        );
+      } else {
+        alert("Please complete all chapters before finishing the course!");
+      }
+      return;
+    }
 
     try {
       // Kullanıcının bu kursu daha önce tamamlayıp tamamlamadığını kontrol et
@@ -73,15 +93,15 @@ const ChapterContentScreen = () => {
   };
 
   return (
-    param.content && (
+    (param?.content) && (
       <ScrollView>
         <Content
-          chaptersLength={param.chaptersLength}
-          content={param.content}
+          chaptersLength={param?.chaptersLength ?? 0}
+          content={param?.content}
           onChapterComplete={onChapterComplete}
-          initialIndex={param.startIndex}
-          courseId={param.courseId}
-          userEmail={param.userEmail}
+          initialIndex={param?.startIndex ?? 0}
+          courseId={param?.courseId}
+          userEmail={param?.userEmail}
         />
       </ScrollView>
     )
