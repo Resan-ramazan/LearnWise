@@ -18,23 +18,23 @@ export default Info;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f8f8f8",
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
-    width: '48%',
+    width: "49%",
   },
   iconContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 8,
     borderRadius: 8,
-    marginRight: 10,
+    marginRight: 7,
   },
   text: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
     fontSize: 14,
-    color: '#333',
+    color: "#333",
   },
 });
