@@ -14,12 +14,13 @@ import { useCourse } from "../../contexts/CourseContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from 'react-i18next';
 
 const CourseProgress = () => {
+  const { t } = useTranslation();
   const { user } = useUser();
   const navigation = useNavigation();
-  const { inProgressCourses, getInProgressCourses, handleCoursePress } =
-    useCourse();
+  const { inProgressCourses, getInProgressCourses, handleCoursePress } = useCourse();
 
   useFocusEffect(
     useCallback(() => {
@@ -66,7 +67,7 @@ const CourseProgress = () => {
           <Text style={styles.courseName}>{item.name}</Text>
           <View style={styles.progressInfo}>
             <Text style={styles.progressText}>
-              {item.completedChapters}/{item.totalChapters} Chapters
+              {item.completedChapters}/{item.totalChapters} {t('Chapters')}
             </Text>
             <Text style={styles.progressPercent}>
               {Math.round(item.progressPercentage)}%
@@ -88,10 +89,9 @@ const CourseProgress = () => {
 
   if (inProgressCourses.length === 0) return null;
 
-
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Continue Learning</Text>
+      <Text style={styles.sectionTitle}>{t('Continue Learning')}</Text>
       <FlatList
         data={inProgressCourses}
         renderItem={renderCourseItem}

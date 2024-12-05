@@ -17,21 +17,23 @@ const CourseProgItem = ({ item, isCompleted }) => {
         <View style={styles.detailContaier}>
           <View style={styles.chapterBox}>
             <Ionicons name="book" size={18} color={Color.ORANGE} />
-            <Text style={styles.text}>{item.totalChapters || 0} Chapters</Text>
+            <Text style={styles.text}>
+              {item.totalChapters || 0} {t('Chapters')}
+            </Text>
           </View>
           <View style={styles.timeBox}>
             <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
             <Text style={styles.text}>{item.time}</Text>
           </View>
         </View>
-        <Text style={styles.freeText}>Free</Text>
+        <Text style={styles.freeText}>{t('Free')}</Text>
 
         <Text style={styles.status}>
           {isCompleted
-            ? t("Course Completed")
+            ? t('Course Completed')
             : item.progress > 0
-            ? t("Continue Course")
-            : t("Start Course")}
+            ? t('Continue Learning')
+            : t('Start Course')}
         </Text>
       </View>
       <Progress.Bar

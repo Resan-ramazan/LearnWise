@@ -81,7 +81,10 @@ const resources = {
       "Loading...": "Loading...",
       "No rankings available": "No rankings available",
       "Top Players": "Top Players",
-      "Global Ranking": "Global Ranking"
+      "Global Ranking": "Global Ranking",
+      "No courses available": "No courses available",
+      "Chapters": "Chapters",
+      "Time": "Time"
     }
   },
   tr: {
@@ -163,7 +166,10 @@ const resources = {
       "Loading...": "Yükleniyor...",
       "No rankings available": "Sıralama bulunmuyor",
       "Top Players": "En İyi Oyuncular",
-      "Global Ranking": "Genel Sıralama"
+      "Global Ranking": "Genel Sıralama",
+      "No courses available": "Kurs bulunamadı",
+      "Chapters": "Bölüm",
+      "Time": "Süre"
     }
   }
 };
