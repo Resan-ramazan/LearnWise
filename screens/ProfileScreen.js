@@ -8,6 +8,7 @@ import {
   Platform,
   BackHandler,
   Modal,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,8 +19,8 @@ import { useUser } from "../contexts/UserContext";
 import coin from "../assets/images/coins.png";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { useTranslation } from 'react-i18next';
-import '../i18n';
+import { useTranslation } from "react-i18next";
+import "../i18n";
 
 const ProfileScreen = () => {
   const { userData } = useUser();
@@ -60,7 +61,6 @@ const ProfileScreen = () => {
   const languages = [
     { code: "en", name: "English", flag: "🇺🇸" },
     { code: "tr", name: "Türkçe", flag: "🇹🇷" },
-    
   ];
 
   const menuItems = [
@@ -102,7 +102,11 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
       <LinearGradient
         colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
@@ -114,7 +118,9 @@ const ProfileScreen = () => {
         <Text style={styles.name}>{userData?.username}</Text>
         <View style={styles.pointsBox}>
           <Image source={coin} style={styles.coinIcon} />
-          <Text style={styles.points}>{userData?.points} {t('Points')}</Text>
+          <Text style={styles.points}>
+            {userData?.points} {t("Points")}
+          </Text>
         </View>
       </LinearGradient>
 
@@ -145,7 +151,7 @@ const ProfileScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{t('Select Language')}</Text>
+              <Text style={styles.modalTitle}>{t("Select Language")}</Text>
               <TouchableOpacity
                 onPress={() => setShowLanguageModal(false)}
                 style={styles.closeButton}
@@ -167,7 +173,7 @@ const ProfileScreen = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 };
 

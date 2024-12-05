@@ -1,4 +1,12 @@
-import { StyleSheet, Text, View, FlatList, Image, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import Gold from "../assets/images/gold-cup.png";
 import Silver from "../assets/images/silver-cup.png";
@@ -8,7 +16,7 @@ import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../contexts/UserContext";
 import Color from "../utils/Color";
 import { useFocusEffect } from "@react-navigation/native";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const LeaderBoard = () => {
   const { t } = useTranslation();
@@ -46,7 +54,9 @@ const LeaderBoard = () => {
           />
           <View style={styles.userInfo}>
             <Text style={styles.username}>{item.username}</Text>
-            <Text style={styles.points}>{item.points} {t('Points')}</Text>
+            <Text style={styles.points}>
+              {item.points} {t("Points")}
+            </Text>
           </View>
           {index < 3 && (
             <Image
@@ -60,38 +70,50 @@ const LeaderBoard = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Ionicons name="trophy" size={32} color="white" style={styles.icon} />
-          <Text style={styles.title}>{t('Leaderboard')}</Text>
+          <Text style={styles.title}>{t("Leaderboard")}</Text>
         </View>
+        
       </View>
       {isLoading ? (
-        <View style={{ height: "85%", justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            height: "85%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <ActivityIndicator size="large" color={Color.PRIMARTY_COLOR} />
-          <Text style={styles.loadingText}>{t('Loading...')}</Text>
+          <Text style={styles.loadingText}>{t("Loading...")}</Text>
         </View>
       ) : (
         <View style={{ height: "85%" }}>
           {leaderboardData.length > 0 ? (
-            <FlatList 
-              data={leaderboardData} 
-              renderItem={renderItem} 
+            <FlatList
+              data={leaderboardData}
+              renderItem={renderItem}
               ListEmptyComponent={() => (
                 <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>{t('No rankings available')}</Text>
+                  <Text style={styles.emptyText}>
+                    {t("No rankings available")}
+                  </Text>
                 </View>
               )}
             />
           ) : (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>{t('No rankings available')}</Text>
+              <Text style={styles.emptyText}>{t("No rankings available")}</Text>
             </View>
           )}
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -188,14 +210,14 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: 50,
   },
   emptyText: {
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     color: Color.TEXT_GRAY,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
