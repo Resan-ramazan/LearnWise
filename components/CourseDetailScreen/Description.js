@@ -2,10 +2,12 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useCallback } from "react";
 import Color from "../../utils/Color";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from 'react-i18next';
 
 const Description = ({ course }) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const maxLength = 150; // Maksimum karakter sayısı
+  const maxLength = 150;
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -20,11 +22,8 @@ const Description = ({ course }) => {
       return (
         <>
           <Text style={styles.description}>{course.description}</Text>
-          <TouchableOpacity 
-            style={styles.readMoreButton} 
-            onPress={toggleExpand}
-          >
-            <Text style={styles.readMoreText}>Show Less</Text>
+          <TouchableOpacity style={styles.readMoreButton} onPress={toggleExpand}>
+            <Text style={styles.readMoreText}>{t('Show Less')}</Text>
             <Ionicons name="chevron-up" size={16} color={Color.PRIMARTY_COLOR} />
           </TouchableOpacity>
         </>
@@ -34,11 +33,8 @@ const Description = ({ course }) => {
     return (
       <>
         <Text style={styles.description}>{course.description.slice(0, maxLength)}...</Text>
-        <TouchableOpacity 
-          style={styles.readMoreButton} 
-          onPress={toggleExpand}
-        >
-          <Text style={styles.readMoreText}>Read More</Text>
+        <TouchableOpacity style={styles.readMoreButton} onPress={toggleExpand}>
+          <Text style={styles.readMoreText}>{t('Read More')}</Text>
           <Ionicons name="chevron-down" size={16} color={Color.PRIMARTY_COLOR} />
         </TouchableOpacity>
       </>
@@ -47,7 +43,7 @@ const Description = ({ course }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Description</Text>
+      <Text style={styles.title}>{t('Description')}</Text>
       {renderDescription()}
     </View>
   );

@@ -10,8 +10,11 @@ import React from "react";
 import Color from "../../utils/Color";
 import Info from "./Info";
 import Description from "./Description";
+import { useTranslation } from 'react-i18next';
 
 const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: course?.banner }} style={styles.bannerImage} />
@@ -21,13 +24,13 @@ const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
           <View style={styles.rowStyle}>
             <Info
               icon="book-outline"
-              value={course.chapters.length + " Chapters"}
+              value={`${course.chapters.length} ${t('Chapters')}`}
             />
             <Info icon="time-outline" value={course.time} />
           </View>
           <View style={styles.rowStyle}>
             <Info icon="person-circle-outline" value={course.author} />
-            <Info icon="cellular-outline" value={course.level} />
+            <Info icon="cellular-outline" value={t(course.level)} />
           </View>
         </View>
 
@@ -38,11 +41,11 @@ const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
               onPress={() => enrollCourse()}
               style={styles.enrollButton}
             >
-              <Text style={styles.buttonText}>Enroll For Free</Text>
+              <Text style={styles.buttonText}>{t('Enroll For Free')}</Text>
             </TouchableOpacity>
           ) : (
             <View style={styles.continueButton}>
-              <Text style={styles.buttonText}>Continue Learning</Text>
+              <Text style={styles.buttonText}>{t('Continue Learning')}</Text>
             </View>
           )}
         </View>

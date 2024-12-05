@@ -84,7 +84,20 @@ const resources = {
       "Global Ranking": "Global Ranking",
       "No courses available": "No courses available",
       "Chapters": "Chapters",
-      "Time": "Time"
+      "Time": "Time",
+      "Description": "Description",
+      "Show Less": "Show Less",
+      "Read More": "Read More",
+      "Chapters": "Chapters",
+      "Enroll For Free": "Enroll For Free",
+      "Continue Learning": "Continue Learning",
+      "basic": "Basic",
+      "advanced": "Advanced",
+      "Finish Chapter": "Finish Chapter",
+      "Save & Continue": "Save & Continue",
+      "Hide": "Hide",
+      "Run": "Run",
+      "Output": "Output"
     }
   },
   tr: {
@@ -169,7 +182,20 @@ const resources = {
       "Global Ranking": "Genel Sıralama",
       "No courses available": "Kurs bulunamadı",
       "Chapters": "Bölüm",
-      "Time": "Süre"
+      "Time": "Süre",
+      "Description": "Açıklama",
+      "Show Less": "Daha Az Göster",
+      "Read More": "Devamını Oku",
+      "Chapters": "Bölüm",
+      "Enroll For Free": "Ücretsiz Kaydol",
+      "Continue Learning": "Öğrenmeye Devam Et",
+      "basic": "Temel",
+      "advanced": "İleri Seviye",
+      "Finish Chapter": "Bölümü Bitir",
+      "Save & Continue": "Kaydet ve Devam Et",
+      "Hide": "Gizle",
+      "Run": "Çalıştır",
+      "Output": "Çıktı"
     }
   }
 };

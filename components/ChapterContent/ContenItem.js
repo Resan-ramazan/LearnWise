@@ -4,8 +4,10 @@ import RenderHTML from "react-native-render-html";
 import Color from "../../utils/Color";
 import { Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTranslation } from 'react-i18next';
 
 const ContenItem = ({ description, output }) => {
+  const { t } = useTranslation();
   const [isRun, setIsRun] = useState(false);
   const { width } = useWindowDimensions();
 
@@ -38,7 +40,7 @@ const ContenItem = ({ description, output }) => {
                 textAlign: "center",
               }}
             >
-              {isRun ? "Hide" : "Run"}
+              {isRun ? t('Hide') : t('Run')}
             </Text>
           </TouchableOpacity>
         ) : null}
@@ -52,7 +54,7 @@ const ContenItem = ({ description, output }) => {
                 marginBottom: 10,
               }}
             >
-              Output
+              {t('Output')}
             </Text>
             <RenderHTML
               contentWidth={width}

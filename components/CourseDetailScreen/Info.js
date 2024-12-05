@@ -2,8 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Color from "../../utils/Color";
+import { useTranslation } from 'react-i18next';
 
 const Info = ({ icon, value }) => {
+  const { t } = useTranslation();
+  
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>

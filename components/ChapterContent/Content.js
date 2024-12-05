@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { updateUserProgress } from "../../services/courses";
 import { ToastAndroid } from "react-native";
 import Color from "../../utils/Color";
+import { useTranslation } from 'react-i18next';
 
 const Content = ({
   chaptersLength,
@@ -23,6 +24,7 @@ const Content = ({
   courseId,
   userEmail,
 }) => {
+  const { t } = useTranslation();
   const flatListRef = React.useRef(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex || 0);
 
@@ -114,8 +116,8 @@ const Content = ({
           >
             <Text style={styles.buttonText}>
               {index === chaptersLength.length - 1
-                ? "Finish Chapter"
-                : "Save & Continue"}
+                ? t('Finish Chapter')
+                : t('Save & Continue')}
             </Text>
           </TouchableOpacity>
         </ScrollView>
