@@ -70,56 +70,52 @@ const LeaderBoard = () => {
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: 100 }}
-    >
+    <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Ionicons name="trophy" size={32} color="white" style={styles.icon} />
           <Text style={styles.title}>{t("Leaderboard")}</Text>
         </View>
-        
       </View>
+      
       {isLoading ? (
-        <View
-          style={{
-            height: "85%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Color.PRIMARTY_COLOR} />
           <Text style={styles.loadingText}>{t("Loading...")}</Text>
         </View>
       ) : (
-        <View style={{ height: "85%" }}>
-          {leaderboardData.length > 0 ? (
-            <FlatList
-              data={leaderboardData}
-              renderItem={renderItem}
-              ListEmptyComponent={() => (
-                <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>
-                    {t("No rankings available")}
-                  </Text>
-                </View>
-              )}
-            />
-          ) : (
+        <FlatList
+          data={leaderboardData}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+          ListEmptyComponent={() => (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>{t("No rankings available")}</Text>
+              <Text style={styles.emptyText}>
+                {t("No rankings available")}
+              </Text>
             </View>
           )}
-        </View>
+        />
       )}
-    </ScrollView>
+    </View>
   );
 };
 
 export default LeaderBoard;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  listContainer: {
+    paddingBottom: 100,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   header: {
     height: 160,
     backgroundColor: Color.PRIMARTY_COLOR,
