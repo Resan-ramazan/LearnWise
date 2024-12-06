@@ -7,8 +7,8 @@ import LeaderBoard from "../screens/LeaderBoard";
 import ProfileScreen from "../screens/ProfileScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreenNavigation from "./HomeScreenNavigation";
-import MyCourseNavigation from "./MyCourseNavigation";
-
+import MyCourseNavigation from "./MyCourseNavigation"; 
+import Quiz from "../screens/Quiz.js";
 import Color from "../utils/Color";
 import { useTranslation } from 'react-i18next';
 const Tab = createBottomTabNavigator();
@@ -59,6 +59,7 @@ const TabNavigation = () => {
           ),
         }}
       />
+     
       <Tab.Screen
         name="leaderboard"
         component={LeaderBoard}

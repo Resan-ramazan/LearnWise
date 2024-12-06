@@ -74,7 +74,7 @@ const ChapterContentScreen = () => {
 
   return (
     param.content && (
-      <ScrollView>
+      <View style={[styles.container, { paddingBottom: 0 }]}>
         <Content
           chaptersLength={param.chaptersLength}
           content={param.content}
@@ -83,11 +83,16 @@ const ChapterContentScreen = () => {
           courseId={param.courseId}
           userEmail={param.userEmail}
         />
-      </ScrollView>
+      </View>
     )
   );
 };
 
 export default ChapterContentScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
