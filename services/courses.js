@@ -308,7 +308,7 @@ export const handleCoursePress = async (courseId) => {
 export const submitCourseRating = async (courseId, userEmail, rating) => {
   try {
     // 1. Ratings koleksiyonuna yeni değerlendirmeyi ekle
-    const ratingRef = collection(db, "Courses");
+    const ratingRef = collection(db, "CourseRatings");
     await addDoc(ratingRef, {
       courseId,
       userEmail,
@@ -318,7 +318,7 @@ export const submitCourseRating = async (courseId, userEmail, rating) => {
 
     // 2. Kursun mevcut değerlendirmelerini al
     const ratingsQuery = query(
-      collection(db, "Courses"),
+      collection(db, "CourseRatings"),
       where("courseId", "==", courseId)
     );
     const ratingsSnapshot = await getDocs(ratingsQuery);

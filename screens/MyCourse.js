@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import CourseProgItem from "../components/MyCourse/CourseProgItem";
 import { LinearGradient } from "expo-linear-gradient";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const MyCourse = () => {
   const { t } = useTranslation();
@@ -103,7 +103,7 @@ const MyCourse = () => {
         </View>
         <View style={styles.statsContainer}>
           <Text style={styles.subtitle}>
-            {inProgressCourses?.length || 0} {t("In Progress")} • {" "}
+            {inProgressCourses?.length || 0} {t("In Progress")} •{" "}
             {completedCourses?.length || 0} {t("Completed")}
           </Text>
         </View>
@@ -231,12 +231,12 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   itemWrapper: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   courseItemContainer: {
-    width: '100%',
+    width: "100%",
     backgroundColor: "#ffffff",
     borderRadius: 15,
     marginBottom: 15,

@@ -102,8 +102,23 @@ const outputTagsStyles = {
   a: {
     color: Color.TEXT_WHITE,
     textAlign: "center",
-    backgroundColor: Color.ORANGE,
+    backgroundColor: Color.GREEN,
     width: 200,
+  },
+
+  h1: {
+    fontFamily: "Poppins-Medium",
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: Color.GREEN,
+    padding: 10,
+    borderRadius: 5,
+  },
+  img: {
+    width: 200,
+    height: 200,
   },
 };
 
