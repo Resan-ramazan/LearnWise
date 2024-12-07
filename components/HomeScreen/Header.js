@@ -14,10 +14,8 @@ import Color from "../../utils/Color";
 import coin from "../../assets/images/coins.png";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
-import { useTranslation } from 'react-i18next';
-
+import { useTranslation } from "react-i18next";
+import { Image as ExpoImage } from "expo-image";
 const Header = ({ userData, onSearch }) => {
   const { user } = useClerkUser();
   const { updateUserProfileImage } = useUser();
@@ -33,7 +31,6 @@ const Header = ({ userData, onSearch }) => {
   }, []);
 
   const onProfilePress = () => {
-    
     navigation.navigate("profile");
   };
 
@@ -47,10 +44,16 @@ const Header = ({ userData, onSearch }) => {
       <View style={[styles.rowStyle, styles.container]}>
         <View style={styles.rowStyle}>
           <TouchableOpacity onPress={onProfilePress}>
-            <Image source={{ uri: user?.imageUrl }} style={styles.image} />
+            <ExpoImage
+              source={{ uri: user?.imageUrl }}
+              style={styles.image}
+              contentFit="cover"
+              transition={200}
+              cachePolicy="memory-disk"
+            />
           </TouchableOpacity>
           <View>
-            <Text style={styles.text}>{t('Hello')},</Text>
+            <Text style={styles.text}>{t("Hello")},</Text>
             <Text style={styles.text}>{userData.username}</Text>
           </View>
         </View>
@@ -60,8 +63,8 @@ const Header = ({ userData, onSearch }) => {
         </View>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput 
-          placeholder={t('Search')} 
+        <TextInput
+          placeholder={t("Search")}
           value={searchQuery}
           onChangeText={handleSearch}
           style={styles.input}

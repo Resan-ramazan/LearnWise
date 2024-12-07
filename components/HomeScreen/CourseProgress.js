@@ -14,13 +14,14 @@ import { useCourse } from "../../contexts/CourseContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useTranslation } from 'react-i18next';
-
+import { useTranslation } from "react-i18next";
+import { Image as ExpoImage } from "expo-image";
 const CourseProgress = () => {
   const { t } = useTranslation();
   const { user } = useUser();
   const navigation = useNavigation();
-  const { inProgressCourses, getInProgressCourses, handleCoursePress } = useCourse();
+  const { inProgressCourses, getInProgressCourses, handleCoursePress } =
+    useCourse();
 
   useFocusEffect(
     useCallback(() => {
@@ -59,7 +60,13 @@ const CourseProgress = () => {
         style={styles.courseContainer}
         activeOpacity={0.7}
       >
-        <Image source={{ uri: item?.banner }} style={styles.courseImage} />
+        <ExpoImage
+          source={{ uri: item?.banner }}
+          style={styles.courseImage}
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
+        />
         <LinearGradient
           colors={["transparent", "rgba(0,0,0,0.8)"]}
           style={styles.gradient}
@@ -67,7 +74,7 @@ const CourseProgress = () => {
           <Text style={styles.courseName}>{item.name}</Text>
           <View style={styles.progressInfo}>
             <Text style={styles.progressText}>
-              {item.completedChapters}/{item.totalChapters} {t('Chapters')}
+              {item.completedChapters}/{item.totalChapters} {t("Chapters")}
             </Text>
             <Text style={styles.progressPercent}>
               {Math.round(item.progressPercentage)}%
@@ -91,7 +98,7 @@ const CourseProgress = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>{t('Continue Learning')}</Text>
+      <Text style={styles.sectionTitle}>{t("Continue Learning")}</Text>
       <FlatList
         data={inProgressCourses}
         renderItem={renderCourseItem}

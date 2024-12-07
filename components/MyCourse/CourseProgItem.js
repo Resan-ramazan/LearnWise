@@ -5,13 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import Color from "../../utils/Color";
 import * as Progress from "react-native-progress";
 import { useTranslation } from "react-i18next";
+import { Image as ExpoImage } from "expo-image";
 
 const CourseProgItem = ({ item, isCompleted }) => {
   const { t } = useTranslation();
 
   return (
     <View style={styles.courseContainer}>
-      <Image source={{ uri: item?.banner }} style={styles.courseImage} />
+      <ExpoImage source={{ uri: item?.banner }} style={styles.courseImage} contentFit="cover" transition={200}  cachePolicy="memory-disk" />
       <View style={styles.contentWrapper}>
         <Text style={styles.courseName}>{item.name}</Text>
         <View style={styles.detailContaier}>

@@ -11,13 +11,14 @@ import Color from "../../utils/Color";
 import Info from "./Info";
 import Description from "./Description";
 import { useTranslation } from 'react-i18next';
+import { Image as ExpoImage } from "expo-image";
 
 const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
   const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: course?.banner }} style={styles.bannerImage} />
+      <ExpoImage source={{ uri: course?.banner }} style={styles.bannerImage} contentFit="cover" transition={200}  cachePolicy="memory-disk" />
       <View style={styles.contentWrapper}>
         <Text style={styles.courseTitle}>{course.name}</Text>
         <View>

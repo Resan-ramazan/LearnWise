@@ -1,16 +1,22 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Image } from "react-native";
+import { Image as ExpoImage } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import Color from "../../utils/Color";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const CourseItem = ({ item }) => {
   const { t } = useTranslation();
-  
+
   return (
     <View style={styles.courseContainer}>
-      <Image source={{ uri: item?.banner }} style={styles.courseImage} />
+      <ExpoImage
+        source={{ uri: item?.banner }}
+        style={styles.courseImage}
+        contentFit="cover"
+        transition={200}
+        cachePolicy="memory-disk"
+      />
       <View style={styles.overlay}>
         <Text style={styles.level}>{t(item.level)}</Text>
       </View>
@@ -20,20 +26,22 @@ const CourseItem = ({ item }) => {
           <View style={styles.infoItem}>
             <Ionicons name="book" size={16} color={Color.ORANGE} />
             <Text style={styles.infoText}>
-              {item.chapters.length || 0} {t('Chapters')}
+              {item.chapters.length || 0} {t("Chapters")}
             </Text>
           </View>
           <View style={styles.infoItem}>
             <Ionicons name="time-outline" size={16} color={Color.ORANGE} />
-            <Text style={styles.infoText}>{item.time} {t('minutes')}</Text>
+            <Text style={styles.infoText}>
+              {item.time} {t("minutes")}
+            </Text>
           </View>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.freeText}>{t('Free')}</Text>
+          <Text style={styles.freeText}>{t("Free")}</Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={14} color="#FFD700" />
             <Text style={styles.ratingText}>
-              {item.averageRating ? item.averageRating.toFixed(1) : t('New')}
+              {item.averageRating ? item.averageRating.toFixed(1) : t("New")}
               {item.totalRatings > 0 && ` (${item.totalRatings})`}
             </Text>
           </View>
