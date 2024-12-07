@@ -7,15 +7,15 @@ import LeaderBoard from "../screens/LeaderBoard";
 import ProfileScreen from "../screens/ProfileScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreenNavigation from "./HomeScreenNavigation";
-import MyCourseNavigation from "./MyCourseNavigation"; 
+import MyCourseNavigation from "./MyCourseNavigation";
 import Quiz from "../screens/Quiz.js";
 import Color from "../utils/Color";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
   const { t } = useTranslation();
-  
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -23,7 +23,7 @@ const TabNavigation = () => {
         tabBarStyle: styles.tabBar,
         tabBarShowLabel: true,
         tabBarActiveTintColor: Color.PRIMARTY_COLOR,
-        tabBarInactiveTintColor: '#999',
+        tabBarInactiveTintColor: "#999",
         tabBarLabelStyle: styles.tabLabel,
       }}
     >
@@ -31,13 +31,13 @@ const TabNavigation = () => {
         name="home"
         component={HomeScreenNavigation}
         options={{
-          tabBarLabel: t('Home'),
+          tabBarLabel: t("Home"),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
-              <Ionicons 
-                name={focused ? "home" : "home-outline"} 
-                color={color} 
-                size={size} 
+              <Ionicons
+                name={focused ? "home" : "home-outline"}
+                color={color}
+                size={size}
               />
             </View>
           ),
@@ -47,30 +47,46 @@ const TabNavigation = () => {
         name="mycourse"
         component={MyCourseNavigation}
         options={{
-          tabBarLabel: t('My Courses'),
+          tabBarLabel: t("My Courses"),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
-              <Ionicons 
-                name={focused ? "book" : "book-outline"} 
-                color={color} 
-                size={size} 
+              <Ionicons
+                name={focused ? "book" : "book-outline"}
+                color={color}
+                size={size}
               />
             </View>
           ),
         }}
       />
-     
+
+      <Tab.Screen
+        name="quiz"
+        component={Quiz}
+        options={{
+          tabBarLabel: t("Quiz"),
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.iconContainer}>
+              <Ionicons
+                name={focused ? "trophy" : "trophy-outline"}
+                color={color}
+                size={size}
+              />
+            </View>
+          ),
+        }}
+      />
       <Tab.Screen
         name="leaderboard"
         component={LeaderBoard}
         options={{
-          tabBarLabel: t('Leaderboard'),
+          tabBarLabel: t("Leaderboard"),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
-              <Ionicons 
-                name={focused ? "podium" : "podium-outline"} 
-                color={color} 
-                size={size} 
+              <Ionicons
+                name={focused ? "podium" : "podium-outline"}
+                color={color}
+                size={size}
               />
             </View>
           ),
@@ -80,13 +96,13 @@ const TabNavigation = () => {
         name="profile"
         component={ProfileScreen}
         options={{
-          tabBarLabel: t('Profile'),
+          tabBarLabel: t("Profile"),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={styles.iconContainer}>
-              <Ionicons 
-                name={focused ? "person" : "person-outline"} 
-                color={color} 
-                size={size} 
+              <Ionicons
+                name={focused ? "person" : "person-outline"}
+                color={color}
+                size={size}
               />
             </View>
           ),
@@ -100,12 +116,12 @@ export default TabNavigation;
 
 const styles = StyleSheet.create({
   tabBar: {
-    position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 24 : 16,
+    position: "absolute",
+    bottom: Platform.OS === "ios" ? 24 : 16,
     left: 16,
     right: 16,
     elevation: 0,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
     height: 65,
     paddingBottom: 8,
@@ -120,14 +136,13 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
   },
   tabLabel: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
     fontSize: 12,
     marginTop: -5,
   },
   iconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop:10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 10,
   },
-
 });

@@ -17,7 +17,7 @@ import { useUser } from "../contexts/UserContext";
 import Color from "../utils/Color";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-
+import { Image as ExpoImage } from "expo-image";
 const LeaderBoard = () => {
   const { t } = useTranslation();
   const { user: clerkUser } = useClerkUser();
@@ -48,9 +48,12 @@ const LeaderBoard = () => {
       <View style={styles.itemContainer}>
         <View style={styles.userContainer}>
           <Text style={styles.rank}>{index + 1}</Text>
-          <Image
+          <ExpoImage
             source={{ uri: item.profileImage }}
             style={styles.profileImage}
+            contentFit="cover"
+            transition={200}
+            cachePolicy="memory-disk"
           />
           <View style={styles.userInfo}>
             <Text style={styles.username}>{item.username}</Text>

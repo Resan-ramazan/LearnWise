@@ -71,10 +71,10 @@ const ProfileScreen = () => {
       onPress: () => navigation.navigate("mycourse"),
     },
     {
-      icon: "diamond-outline",
-      label: t("Premium"),
+      icon: "trophy",
+      label: t("Leaderboard"),
       color: "#2196F3",
-      onPress: () => navigation.navigate("premium"),
+      onPress: () => navigation.navigate("leaderboard"),
     },
     {
       icon: "trophy-outline",
