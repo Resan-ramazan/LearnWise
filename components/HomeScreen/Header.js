@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useUser } from "../../contexts/UserContext";
 import Color from "../../utils/Color";
@@ -18,10 +18,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import { useTranslation } from 'react-i18next';
 
-const Header = ({ userData }) => {
+const Header = ({ userData, onSearch }) => {
   const { user } = useClerkUser();
   const { updateUserProfileImage } = useUser();
   const { t } = useTranslation();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const navigation = useNavigation();
 
@@ -34,6 +35,11 @@ const Header = ({ userData }) => {
   const onProfilePress = () => {
     
     navigation.navigate("profile");
+  };
+
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+    onSearch(text);
   };
 
   return (
@@ -54,7 +60,12 @@ const Header = ({ userData }) => {
         </View>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput placeholder="Search" />
+        <TextInput 
+          placeholder={t('Search')} 
+          value={searchQuery}
+          onChangeText={handleSearch}
+          style={styles.input}
+        />
         <View style={styles.searchIcon}>
           <Ionicons name="search" size={24} color="white" />
         </View>
@@ -124,5 +135,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.ORANGE,
     borderRadius: 20,
     padding: 10,
+  },
+  input: {
+    flex: 1,
+    fontFamily: "Poppins-Regular",
   },
 });

@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/HomeScreen/Header";
 import Color from "../utils/Color";
 import CourseList from "../components/HomeScreen/CourseList";
@@ -14,6 +14,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const { user: clerkUser } = useClerkUser();
   const { userData, initializeUser, loading, refreshUserData } = useUser();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (clerkUser) {
@@ -32,6 +33,10 @@ const HomeScreen = () => {
     return unsubscribe;
   }, [navigation, userData]);
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -48,7 +53,7 @@ const HomeScreen = () => {
             colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
             style={styles.header}
           >
-            <Header userData={userData} />
+            <Header userData={userData} onSearch={handleSearch} />
           </LinearGradient>
 
           <View style={styles.content}>
@@ -57,8 +62,8 @@ const HomeScreen = () => {
             </View>
 
             <View style={styles.coursesSection}>
-              <CourseList level="basic" />
-              <CourseList level="advanced" />
+              <CourseList level="basic" searchQuery={searchQuery} />
+              <CourseList level="advanced" searchQuery={searchQuery} />
             </View>
           </View>
         </>

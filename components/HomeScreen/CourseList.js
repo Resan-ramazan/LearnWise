@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useCourse } from "../../contexts/CourseContext";
 import { useTranslation } from 'react-i18next';
 
-const CourseList = ({ level }) => {
+const CourseList = ({ level, searchQuery }) => {
   const { t } = useTranslation();
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +47,14 @@ const CourseList = ({ level }) => {
     return "";
   };
 
+  const getFilteredCourses = () => {
+    if (!searchQuery) return courseList;
+    
+    return courseList.filter(course => 
+      course.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
   return (
     <View>
       <SubHeading
@@ -61,7 +69,7 @@ const CourseList = ({ level }) => {
         <ActivityIndicator size="large" color={Color.PRIMARY_COLOR} />
       ) : (
         <FlatList
-          data={courseList}
+          data={getFilteredCourses()}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -71,21 +79,15 @@ const CourseList = ({ level }) => {
                 })
               }
             >
-              <CourseItem 
-                item={{
-                  ...item,
-                  chapters: item.chapters.map(chapter => ({
-                    ...chapter,
-                    title: t('Chapters')  // Chapters kelimesini çeviriyoruz
-                  }))
-                }} 
-              />
+              <CourseItem item={item} />
             </TouchableOpacity>
           )}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>{t('No courses available')}</Text>
+            <Text style={styles.emptyText}>
+              {searchQuery ? t('No matching courses found') : t('No courses available')}
+            </Text>
           )}
         />
       )}
