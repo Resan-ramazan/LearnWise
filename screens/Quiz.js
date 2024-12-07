@@ -6,11 +6,15 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { fetchQuizzes } from "../services/quizService";
 import { Image as ExpoImage } from "expo-image";
-
+import { useNavigation } from "@react-navigation/native";
+import Color from "../utils/Color";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = width * 0.85;
 
@@ -18,10 +22,14 @@ const Quiz = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const navigation = useNavigation();
+
+  const handleQuizStart = (quiz) => {
+    navigation.navigate("QuizQuestions", { quiz });
+  };
+
   useEffect(() => {
     loadQuizzes();
-    console.log("Quizler yüklendi", quizzes);
-    console.log("quiz resimleri", quizzes[0].image);
   }, []);
 
   const loadQuizzes = async () => {
@@ -36,35 +44,6 @@ const Quiz = () => {
     }
   };
 
-  const renderQuizItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.quizItem}
-      onPress={() => {
-        /* Quiz'e başlama fonksiyonu gelecek */
-      }}
-    >
-      <ExpoImage
-        source={{ uri: item.image }}
-        style={styles.quizImage}
-        contentFit="cover"
-      >
-        <View style={styles.overlay}>
-          <Text style={styles.quizName}>{item.name}</Text>
-          <View style={styles.infoContainer}>
-            <View style={styles.infoItem}>
-              <Text style={styles.infoText}>
-                {item.questions?.length || 0} Question
-              </Text>
-            </View>
-            <View style={styles.infoItem}>
-              <Text style={styles.infoText}>{item.estimatedTime} Minutes</Text>
-            </View>
-          </View>
-        </View>
-      </ExpoImage>
-    </TouchableOpacity>
-  );
-
   if (loading) {
     return (
       <View style={styles.container}>
@@ -75,14 +54,63 @@ const Quiz = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quizzes</Text>
-      <FlatList
-        data={quizzes}
-        renderItem={renderQuizItem}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
-      />
+      <LinearGradient
+        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+        style={styles.header}
+      >
+        <View style={styles.titleContainer}>
+          <Ionicons name="school" size={35} color="#fff" style={styles.titleIcon} />
+          <Text style={styles.title}>Fun Quiz Time!</Text>
+        </View>
+        <Text style={styles.subtitle}>Let's test your knowledge! 🚀</Text>
+      </LinearGradient>
+      
+      <View style={styles.listWrapper}>
+        <FlatList
+          data={quizzes}
+          renderItem={({ item }) => (
+            <TouchableOpacity 
+              style={styles.quizItem}
+              onPress={() => handleQuizStart(item)}
+            >
+              <View style={styles.imageContainer}>
+                <ExpoImage
+                  source={{ uri: item.image }}
+                  style={styles.quizImage}
+                  contentFit="cover"
+                />
+                <LinearGradient
+                  colors={['transparent', 'rgba(0,0,0,0.8)']}
+                  style={styles.overlay}
+                >
+                  <View style={styles.quizContent}>
+                    <Text style={styles.quizName}>{item.name}</Text>
+                    <View style={styles.infoContainer}>
+                      <View style={styles.infoItem}>
+                        <Ionicons name="help-circle" size={20} color="#fff" />
+                        <Text style={styles.infoText}>
+                          {item.questions?.length || 0} Questions
+                        </Text>
+                      </View>
+                      <View style={styles.infoItem}>
+                        <Ionicons name="time" size={20} color="#fff" />
+                        <Text style={styles.infoText}>
+                          {item.estimatedTime} mins
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </LinearGradient>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+          ListHeaderComponent={<View style={{ height: 20 }} />}
+          ListFooterComponent={<View style={{ height: 20 }} />}
+        />
+      </View>
     </View>
   );
 };
@@ -92,68 +120,105 @@ export default Quiz;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f0f2f5",
+  },
+  header: {
+    height: 180,
+    paddingTop: 40,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  titleIcon: {
+    marginRight: 10,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginVertical: 20,
-    marginLeft: 20,
-    color: "#333",
+    fontSize: 32,
+    color: "#fff",
+    fontFamily: "Poppins-Bold",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "rgba(255,255,255,0.9)",
+    fontFamily: "Poppins-Medium",
+    marginLeft: 45,
+  },
+  listWrapper: {
+    flex: 1,
+    marginTop: -40,
+    paddingHorizontal: 15,
   },
   listContainer: {
-    padding: 10,
-    alignItems: "center",
+    paddingHorizontal: 5,
   },
   quizItem: {
-    width: ITEM_WIDTH,
+    width: '100%',
     height: 200,
     marginBottom: 20,
-    borderRadius: 15,
-    elevation: 5,
+    borderRadius: 20,
+    elevation: 8,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    backgroundColor: '#fff',
+    transform: [{ scale: 1 }],
+  },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   quizImage: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "flex-end",
-  },
-  imageStyle: {
-    borderRadius: 15,
+    width: '100%',
+    height: '100%',
   },
   overlay: {
-    height: "100%",
-    width: "100%",
-    backgroundColor: "rgba(0,0,0,0.4)",
-    borderRadius: 15,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '60%',
     padding: 20,
-    justifyContent: "flex-end",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  quizContent: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   quizName: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
+    color: '#fff',
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
   },
   infoContainer: {
-    flexDirection: "row",
-    marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
   },
   infoItem: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
-    marginRight: 10,
+    borderRadius: 25,
+    gap: 6,
   },
   infoText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 14,
+    fontFamily: "Poppins-Medium",
   },
 });
