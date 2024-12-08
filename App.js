@@ -11,6 +11,7 @@ import { UserProvider } from './contexts/UserContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import './i18n';
 import { ToastProvider } from './contexts/ToastContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -30,27 +31,29 @@ export default function App() {
   });
 
   return (
-    <ClerkProvider publishableKey={publishableKey}>
-      <LanguageProvider>
-        <UserProvider>
-          <CourseProvider>
-            <ToastProvider>
-              <StatusBar style="dark" />
-              <View style={styles.container}>
-                <SignedIn>
-                  <NavigationContainer>
-                    <TabNavigation />
-                  </NavigationContainer>
-                </SignedIn>
-                <SignedOut>
-                  <LoginScreen />
-                </SignedOut>
-              </View>
-            </ToastProvider>
-          </CourseProvider>
-        </UserProvider>
-      </LanguageProvider>
-    </ClerkProvider>
+    <ThemeProvider>
+      <ClerkProvider publishableKey={publishableKey}>
+        <LanguageProvider>
+          <UserProvider>
+            <CourseProvider>
+              <ToastProvider>
+                <StatusBar style="dark" />
+                <View style={styles.container}>
+                  <SignedIn>
+                    <NavigationContainer>
+                      <TabNavigation />
+                    </NavigationContainer>
+                  </SignedIn>
+                  <SignedOut>
+                    <LoginScreen />
+                  </SignedOut>
+                </View>
+              </ToastProvider>
+            </CourseProvider>
+          </UserProvider>
+        </LanguageProvider>
+      </ClerkProvider>
+    </ThemeProvider>
   );
 }
 
