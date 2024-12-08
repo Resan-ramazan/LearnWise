@@ -6,30 +6,55 @@ import Color from "../../utils/Color";
 import * as Progress from "react-native-progress";
 import { useTranslation } from "react-i18next";
 import { Image as ExpoImage } from "expo-image";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const CourseProgItem = ({ item, isCompleted }) => {
   const { t } = useTranslation();
+  const { theme, colors } = useTheme();
+
+  const accentColor = theme === 'dark' ? Color.ORANGE : Color.PRIMARTY_COLOR;
+  const iconColor = theme === 'dark' ? Color.ORANGE : Color.ORANGE;
+  const statusColor = theme === 'dark' ? '#ffa726' : Color.PRIMARTY_COLOR;
 
   return (
-    <View style={styles.courseContainer}>
+    <View style={[styles.courseContainer, {
+      backgroundColor: colors.surface,
+      shadowColor: colors.shadowColor
+    }]}>
       <ExpoImage source={{ uri: item?.banner }} style={styles.courseImage} contentFit="cover" transition={200}  cachePolicy="memory-disk" />
       <View style={styles.contentWrapper}>
-        <Text style={styles.courseName}>{item.name}</Text>
+        <Text style={[styles.courseName, { 
+          color: theme === 'dark' ? '#fff' : '#333'
+        }]}>
+          {item.name}
+        </Text>
         <View style={styles.detailContaier}>
           <View style={styles.chapterBox}>
-            <Ionicons name="book" size={18} color={Color.ORANGE} />
-            <Text style={styles.text}>
+            <Ionicons name="book" size={18} color={iconColor} />
+            <Text style={[styles.text, { 
+              color: theme === 'dark' ? '#e0e0e0' : '#666'
+            }]}>
               {item.totalChapters || 0} {t('Chapters')}
             </Text>
           </View>
           <View style={styles.timeBox}>
-            <Ionicons name="time-outline" size={18} color={Color.ORANGE} />
-            <Text style={styles.text}>{item.time}</Text>
+            <Ionicons name="time-outline" size={18} color={iconColor} />
+            <Text style={[styles.text, { 
+              color: theme === 'dark' ? '#e0e0e0' : '#666'
+            }]}>
+              {item.time}
+            </Text>
           </View>
         </View>
-        <Text style={styles.freeText}>{t('Free')}</Text>
+        <Text style={[styles.freeText, { 
+          color: accentColor
+        }]}>
+          {t('Free')}
+        </Text>
 
-        <Text style={styles.status}>
+        <Text style={[styles.status, { 
+          color: statusColor
+        }]}>
           {isCompleted
             ? t('Course Completed')
             : item.progress > 0
@@ -41,8 +66,8 @@ const CourseProgItem = ({ item, isCompleted }) => {
         progress={item.progressPercentage / 100}
         width={null}
         height={3}
-        color={Color.ORANGE}
-        unfilledColor="#E0E0E0"
+        color={theme === 'dark' ? Color.ORANGE : Color.ORANGE}
+        unfilledColor={theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#E0E0E0'}
         borderWidth={0}
         style={styles.progressBar}
       />

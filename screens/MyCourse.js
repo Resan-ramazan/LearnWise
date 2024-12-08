@@ -16,6 +16,7 @@ import * as Progress from "react-native-progress";
 import CourseProgItem from "../components/MyCourse/CourseProgItem";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../contexts/ThemeContext";
 
 const MyCourse = () => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ const MyCourse = () => {
     handleCoursePress,
   } = useCourse();
   const [activeTab, setActiveTab] = useState("inProgress");
+  const { theme, colors } = useTheme();
 
   useFocusEffect(
     useCallback(() => {
@@ -82,8 +84,12 @@ const MyCourse = () => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Ionicons name="book" size={80} color={Color.PRIMARTY_COLOR} />
-      <Text style={styles.emptyText}>
+      <Ionicons 
+        name="book" 
+        size={80} 
+        color={theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR} 
+      />
+      <Text style={[styles.emptyText, { color: colors.text }]}>
         {activeTab === "inProgress"
           ? t("No courses in progress")
           : t("No completed courses")}
@@ -92,9 +98,11 @@ const MyCourse = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient
-        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+        colors={theme === 'dark' 
+          ? [colors.primary, '#4a2e9b']
+          : [Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
         <View style={styles.titleContainer}>
@@ -110,30 +118,41 @@ const MyCourse = () => {
       </LinearGradient>
 
       <View style={styles.contentContainer}>
-        <View style={styles.tabContainer}>
+        <View style={[styles.tabContainer, {
+          backgroundColor: colors.surface,
+          shadowColor: colors.shadowColor
+        }]}>
           <TouchableOpacity
-            style={[styles.tab, activeTab === "inProgress" && styles.activeTab]}
+            style={[
+              styles.tab,
+              activeTab === "inProgress" && [styles.activeTab, {
+                backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
+              }]
+            ]}
             onPress={() => setActiveTab("inProgress")}
           >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === "inProgress" && styles.activeTabText,
-              ]}
-            >
+            <Text style={[
+              styles.tabText,
+              { color: theme === 'dark' ? colors.textSecondary : '#666' },
+              activeTab === "inProgress" && styles.activeTabText
+            ]}>
               {t("In Progress")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tab, activeTab === "completed" && styles.activeTab]}
+            style={[
+              styles.tab,
+              activeTab === "completed" && [styles.activeTab, {
+                backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
+              }]
+            ]}
             onPress={() => setActiveTab("completed")}
           >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === "completed" && styles.activeTabText,
-              ]}
-            >
+            <Text style={[
+              styles.tabText,
+              { color: theme === 'dark' ? colors.textSecondary : '#666' },
+              activeTab === "completed" && styles.activeTabText
+            ]}>
               {t("Completed")}
             </Text>
           </TouchableOpacity>
