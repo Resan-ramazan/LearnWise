@@ -120,40 +120,48 @@ const ProfileScreen = () => {
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       <LinearGradient
-        colors={theme === 'dark' 
-          ? [colors.primary, '#4a2e9b'] // Koyu tema için daha koyu renkler
-          : [Color.PRIMARTY_COLOR, "#7c4dff"]} // Açık tema için mevcut renkler
+        colors={
+          theme === "dark"
+            ? [colors.primary, "#4a2e9b"] // Koyu tema için daha koyu renkler
+            : [Color.PRIMARTY_COLOR, "#7c4dff"]
+        } // Açık tema için mevcut renkler
         style={styles.header}
       >
         <Image
           source={{ uri: userData?.profileImage }}
-          style={[styles.profileImage, {
-            borderColor: theme === 'dark' ? colors.border : 'white'
-          }]}
+          style={[
+            styles.profileImage,
+            {
+              borderColor: theme === "dark" ? colors.border : "white",
+            },
+          ]}
         />
-        <Text style={[styles.name, {
-          color: theme === 'dark' ? colors.textLight : 'white'
-        }]}>
-          {userData?.username}
-        </Text>
-        <View style={[styles.pointsBox, {
-          backgroundColor: theme === 'dark' 
-            ? 'rgba(0,0,0,0.2)' 
-            : 'rgba(255,255,255,0.2)'
-        }]}>
+        <Text style={[styles.name]}>{userData?.username}</Text>
+        <View
+          style={[
+            styles.pointsBox,
+            {
+              backgroundColor:
+                theme === "dark" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.2)",
+            },
+          ]}
+        >
           <Image source={coin} style={styles.coinIcon} />
-          <Text style={[styles.points, {
-            color: theme === 'dark' ? colors.textLight : 'white'
-          }]}>
+          <Text style={[styles.points]}>
             {userData?.points} {t("Points")}
           </Text>
         </View>
       </LinearGradient>
 
-      <View style={[styles.menuContainer, { 
-        backgroundColor: colors.surface,
-        shadowColor: colors.shadowColor,
-      }]}>
+      <View
+        style={[
+          styles.menuContainer,
+          {
+            backgroundColor: colors.surface,
+            shadowColor: colors.shadowColor,
+          },
+        ]}
+      >
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -168,14 +176,12 @@ const ProfileScreen = () => {
               {item.label}
             </Text>
             {item.rightElement && (
-              <View style={styles.themeToggle}>
-                {item.rightElement}
-              </View>
+              <View style={styles.themeToggle}>{item.rightElement}</View>
             )}
-            <Ionicons 
-              name="chevron-forward" 
-              size={20} 
-              color={colors.textSecondary} 
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={colors.textSecondary}
             />
           </TouchableOpacity>
         ))}
@@ -189,12 +195,22 @@ const ProfileScreen = () => {
         onRequestClose={() => setShowLanguageModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { 
-            backgroundColor: colors.modalBackground 
-          }]}>
-            <View style={[styles.modalHeader, { 
-              borderBottomColor: colors.border 
-            }]}>
+          <View
+            style={[
+              styles.modalContent,
+              {
+                backgroundColor: colors.modalBackground,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.modalHeader,
+                {
+                  borderBottomColor: colors.border,
+                },
+              ]}
+            >
               <Text style={[styles.modalTitle, { color: colors.text }]}>
                 {t("Select Language")}
               </Text>
@@ -212,8 +228,26 @@ const ProfileScreen = () => {
                 style={styles.languageItem}
                 onPress={() => handleLanguageSelect(lang.code)}
               >
-                <Text style={styles.languageFlag}>{lang.flag}</Text>
-                <Text style={styles.languageName}>{lang.name}</Text>
+                <Text
+                  style={[
+                    styles.languageFlag,
+                    {
+                      color: colors.text,
+                    },
+                  ]}
+                >
+                  {lang.flag}
+                </Text>
+                <Text
+                  style={[
+                    styles.languageName,
+                    {
+                      color: colors.text,
+                    },
+                  ]}
+                >
+                  {lang.name}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
