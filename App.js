@@ -37,7 +37,7 @@ export default function App() {
           <UserProvider>
             <CourseProvider>
               <ToastProvider>
-                <StatusBar style="dark" />
+                <StatusBar style="auto" />
                 <View style={styles.container}>
                   <SignedIn>
                     <NavigationContainer>

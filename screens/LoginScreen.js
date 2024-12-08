@@ -8,26 +8,30 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Color from "../utils/Color";
 import * as WebBrowser from "expo-web-browser";
 import { useWarmUpBrowser } from "../hooks/warmUpBrowser";
-import * as Linking from "expo-linking";
 import { useOAuth } from "@clerk/clerk-expo";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import google from "../assets/images/google.png";
 
+// Initialize WebBrowser for OAuth and get device dimensions
 WebBrowser.maybeCompleteAuthSession();
 const { width, height } = Dimensions.get("window");
 
 const LoginScreen = () => {
+  // Custom hook to warm up browser for faster OAuth
   useWarmUpBrowser();
+  
+  // State management for loading and error handling
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
-  const onPress = React.useCallback(async () => {
+  // Handle Google Sign-In process
+  const onPress = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -45,35 +49,38 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Üst Kısım - Görsel ve Gradient Overlay */}
+      {/* Top Section - Background Image with Gradient Overlay */}
       <View style={styles.topSection}>
         <Image
           style={styles.backgroundImage}
           source={require("../assets/images/login.jpeg")}
         />
         <LinearGradient
-          colors={['transparent', Color.PRIMARY]}
+          colors={["transparent", Color.PRIMARY]}
           style={styles.gradient}
         />
       </View>
 
-      {/* Alt Kısım - İçerik */}
+      {/* Bottom Section - Main Content */}
       <View style={styles.bottomSection}>
         <View style={styles.contentContainer}>
-          {/* Logo veya İkon */}
+          {/* App Logo/Icon */}
           <View style={styles.logoContainer}>
             <Ionicons name="code-slash" size={40} color={Color.LIGHT} />
           </View>
 
-          {/* Başlıklar */}
-          <Text style={styles.title}>YAZILIM KIDS AKADEMI</Text>
+          {/* App Title and Subtitle */}
+          <Text style={styles.title}>LearnWise</Text>
           <Text style={styles.subtitle}>
             Your Ultimate Programming Learning Box
           </Text>
 
-          {/* Giriş Butonu */}
+          {/* Google Sign-In Button with Loading State */}
           <TouchableOpacity
-            style={[styles.signInButton, isLoading && styles.signInButtonDisabled]}
+            style={[
+              styles.signInButton,
+              isLoading && styles.signInButtonDisabled,
+            ]}
             onPress={onPress}
             disabled={isLoading}
             activeOpacity={0.8}
@@ -88,6 +95,7 @@ const LoginScreen = () => {
             )}
           </TouchableOpacity>
 
+          {/* Error Message Display */}
           {error && (
             <View style={styles.errorContainer}>
               <Ionicons name="alert-circle" size={20} color={Color.ERROR} />
@@ -109,15 +117,15 @@ const styles = StyleSheet.create({
   },
   topSection: {
     height: height * 0.4,
-    position: 'relative',
+    position: "relative",
   },
   backgroundImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
   gradient: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     bottom: 0,
@@ -126,21 +134,21 @@ const styles = StyleSheet.create({
   bottomSection: {
     flex: 1,
     backgroundColor: Color.PRIMARY,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   contentContainer: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   logoContainer: {
     width: 70,
     height: 70,
     borderRadius: 35,
     backgroundColor: Color.PRIMARY_LIGHT,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 20,
   },
   title: {
@@ -162,9 +170,9 @@ const styles = StyleSheet.create({
     backgroundColor: Color.LIGHT,
     borderRadius: 12,
     paddingVertical: 12,
-    width: '100%',
+    width: "100%",
     maxWidth: 280,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 3,
     borderWidth: 1,
-    borderColor: '#E8E8E8',
+    borderColor: "#E8E8E8",
   },
   buttonContent: {
     flexDirection: "row",
@@ -190,7 +198,7 @@ const styles = StyleSheet.create({
   },
   signInText: {
     fontSize: 15,
-    color: '#3C4043',
+    color: "#3C4043",
     fontFamily: "Poppins-Medium",
     letterSpacing: 0.25,
   },
@@ -198,9 +206,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   errorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Color.ERROR + '15',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Color.ERROR + "15",
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,

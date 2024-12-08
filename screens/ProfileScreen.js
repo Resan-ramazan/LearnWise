@@ -86,14 +86,14 @@ const ProfileScreen = () => {
       onPress: () => setShowLanguageModal(true),
     },
     {
-      icon: "moon-outline",
-      label: t("Dark Mode"),
+      icon: theme === "dark" ? "sunny" : "moon",
+      label: theme === "dark" ? t("Light Mode") : t("Dark Mode"),
       color: "#2196F3",
       onPress: toggleTheme,
       rightElement: (
         <View style={styles.themeToggle}>
           <Ionicons
-            name={theme === "dark" ? "moon" : "moon-outline"}
+            name={theme === "dark" ? "sunny" : "moon"}
             size={22}
             color={theme === "dark" ? "#2196F3" : "#999"}
           />

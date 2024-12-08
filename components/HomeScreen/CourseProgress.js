@@ -19,8 +19,7 @@ const CourseProgress = () => {
   const { t } = useTranslation();
   const { user } = useUser();
   const navigation = useNavigation();
-  const { inProgressCourses, getInProgressCourses, handleCoursePress } =
-    useCourse();
+  const { inProgressCourses, getInProgressCourses, handleCoursePress } =useCourse();
 
   useFocusEffect(
     useCallback(() => {

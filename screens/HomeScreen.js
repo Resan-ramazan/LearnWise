@@ -12,19 +12,21 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "../contexts/ThemeContext";
 
 const HomeScreen = () => {
+  // Navigation and user management hooks
   const navigation = useNavigation();
   const { user: clerkUser } = useClerkUser();
   const { userData, initializeUser, loading, refreshUserData } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
   const { theme, colors } = useTheme();
 
+  // Initialize user data when Clerk user is available
   useEffect(() => {
     if (clerkUser) {
       initializeUser(clerkUser);
     }
   }, [clerkUser]);
 
-  // Ekran her odaklandığında verileri yenile
+  // Refresh user data when screen comes into focus
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       if (userData?.email) {
@@ -35,10 +37,12 @@ const HomeScreen = () => {
     return unsubscribe;
   }, [navigation, userData]);
 
+  // Search handler for course filtering
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
+  // Loading state display
   if (loading) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
@@ -54,6 +58,7 @@ const HomeScreen = () => {
     >
       {userData && (
         <>
+          {/* Header section with gradient background */}
           <LinearGradient
             colors={theme === 'dark' 
               ? ['#1a1a1a', '#2d2d2d']
@@ -68,20 +73,25 @@ const HomeScreen = () => {
             />
           </LinearGradient>
 
+          {/* Main content section */}
           <View style={[styles.content, {
             backgroundColor: 'transparent'
           }]}>
+            {/* Course progress overview */}
             <View style={styles.progressSection}>
               <CourseProgress theme={theme} colors={colors} />
             </View>
 
+            {/* Course lists section */}
             <View style={styles.coursesSection}>
+              {/* Basic level courses */}
               <CourseList 
                 level="basic" 
                 searchQuery={searchQuery}
                 theme={theme}
                 colors={colors}
               />
+              {/* Advanced level courses */}
               <CourseList 
                 level="advanced" 
                 searchQuery={searchQuery}
