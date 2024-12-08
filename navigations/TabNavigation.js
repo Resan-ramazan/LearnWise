@@ -11,20 +11,33 @@ import MyCourseNavigation from "./MyCourseNavigation";
 import QuizNavigator from "./QuizNavigator";
 import Color from "../utils/Color";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../contexts/ThemeContext";
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
   const { t } = useTranslation();
+  const { theme, colors } = useTheme();
 
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            backgroundColor: colors.surface,
+            shadowColor: colors.shadowColor,
+          }
+        ],
         tabBarShowLabel: true,
         tabBarActiveTintColor: Color.PRIMARTY_COLOR,
-        tabBarInactiveTintColor: "#999",
-        tabBarLabelStyle: styles.tabLabel,
+        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarLabelStyle: [
+          styles.tabLabel,
+          {
+            color: colors.text
+          }
+        ],
       }}
     >
       <Tab.Screen
@@ -122,11 +135,9 @@ const styles = StyleSheet.create({
     left: 16,
     right: 16,
     elevation: 0,
-    backgroundColor: "#fff",
     borderRadius: 20,
     height: 65,
     paddingBottom: 8,
-    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
