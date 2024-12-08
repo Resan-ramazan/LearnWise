@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Color from "../utils/Color";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme } from "../contexts/ThemeContext";
 
 const QuizQuestions = ({ route, navigation }) => {
   const { quiz } = route.params;
@@ -11,6 +12,7 @@ const QuizQuestions = ({ route, navigation }) => {
   const [timeLeft, setTimeLeft] = useState(30);
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const timerRef = useRef(null);
+  const { theme, colors } = useTheme();
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
 
@@ -81,9 +83,11 @@ const QuizQuestions = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient
-        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+        colors={theme === 'dark' 
+          ? [colors.primary, '#4a2e9b']
+          : [Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
         <View style={styles.headerTop}>
@@ -121,30 +125,46 @@ const QuizQuestions = ({ route, navigation }) => {
       <Animated.View 
         style={[styles.contentContainer, { opacity: fadeAnim }]}
       >
-        <View style={styles.questionContainer}>
-          <View style={styles.questionBadge}>
+        <View style={[styles.questionContainer, {
+          backgroundColor: colors.surface,
+          shadowColor: colors.shadowColor
+        }]}>
+          <View style={[styles.questionBadge, {
+            backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
+          }]}>
             <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
           </View>
-          <Text style={styles.questionText}>{currentQuestion.question}</Text>
+          <Text style={[styles.questionText, { color: colors.text }]}>
+            {currentQuestion.question}
+          </Text>
         </View>
 
         <View style={styles.optionsContainer}>
           {currentQuestion.options.map((option, index) => (
             <TouchableOpacity
               key={index}
-              style={styles.optionButton}
+              style={[styles.optionButton, {
+                backgroundColor: colors.surface,
+                shadowColor: colors.shadowColor
+              }]}
               onPress={() => handleAnswer(option)}
             >
               <LinearGradient
-                colors={['#fff', '#f8f9fa']}
+                colors={theme === 'dark' 
+                  ? [colors.surface, colors.surface]
+                  : ['#fff', '#f8f9fa']}
                 style={styles.optionGradient}
               >
-                <View style={styles.optionLetterContainer}>
+                <View style={[styles.optionLetterContainer, {
+                  backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
+                }]}>
                   <Text style={styles.optionLetter}>
                     {String.fromCharCode(65 + index)}
                   </Text>
                 </View>
-                <Text style={styles.optionText}>{option}</Text>
+                <Text style={[styles.optionText, { color: colors.text }]}>
+                  {option}
+                </Text>
               </LinearGradient>
             </TouchableOpacity>
           ))}

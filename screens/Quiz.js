@@ -15,10 +15,12 @@ import { useNavigation } from "@react-navigation/native";
 import Color from "../utils/Color";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../contexts/ThemeContext";
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = width * 0.85;
 
 const Quiz = () => {
+  const { theme, colors } = useTheme();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
@@ -45,7 +47,10 @@ const Quiz = () => {
 
   const renderQuizItem = ({ item }) => (
     <TouchableOpacity 
-      style={styles.quizItem}
+      style={[styles.quizItem, {
+        backgroundColor: colors.surface,
+        shadowColor: colors.shadowColor
+      }]}
       onPress={() => handleQuizStart(item)}
     >
       <View style={styles.imageContainer}>
@@ -61,13 +66,21 @@ const Quiz = () => {
           <View style={styles.quizContent}>
             <Text style={styles.quizName}>{item.name}</Text>
             <View style={styles.infoContainer}>
-              <View style={styles.infoItem}>
+              <View style={[styles.infoItem, {
+                backgroundColor: theme === 'dark' 
+                  ? 'rgba(255,255,255,0.15)'
+                  : 'rgba(255,255,255,0.2)'
+              }]}>
                 <Ionicons name="help-circle" size={20} color="#fff" />
                 <Text style={styles.infoText}>
                   {item.questions?.length || 0} Questions
                 </Text>
               </View>
-              <View style={styles.infoItem}>
+              <View style={[styles.infoItem, {
+                backgroundColor: theme === 'dark' 
+                  ? 'rgba(255,255,255,0.15)'
+                  : 'rgba(255,255,255,0.2)'
+              }]}>
                 <Ionicons name="time" size={20} color="#fff" />
                 <Text style={styles.infoText}>
                   {item.estimatedTime} mins
@@ -82,16 +95,18 @@ const Quiz = () => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={{ color: colors.text }}>Loading...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient
-        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+        colors={theme === 'dark' 
+          ? [colors.primary, '#4a2e9b']
+          : [Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
         <View style={styles.titleContainer}>
@@ -101,7 +116,9 @@ const Quiz = () => {
         <Text style={styles.subtitle}>Let's test your knowledge! 🚀</Text>
       </LinearGradient>
       
-      <View style={styles.listWrapper}>
+      <View style={[styles.listWrapper, { 
+        backgroundColor: 'transparent'
+      }]}>
         <FlatList
           data={quizzes}
           renderItem={renderQuizItem}

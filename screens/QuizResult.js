@@ -4,10 +4,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import Color from "../utils/Color";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
+import { useTheme } from "../contexts/ThemeContext";
 
 const QuizResult = ({ route, navigation }) => {
   const { score, totalQuestions, quizName } = route.params;
   const percentage = (score / totalQuestions) * 100;
+  const { theme, colors } = useTheme();
 
   const renderMessage = () => {
     if (percentage >= 80) {
@@ -20,9 +22,11 @@ const QuizResult = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient
-        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+        colors={theme === 'dark' 
+          ? [colors.primary, '#4a2e9b']
+          : [Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
         <Text style={styles.title}>Quiz Complete!</Text>
@@ -35,23 +39,30 @@ const QuizResult = ({ route, navigation }) => {
       </LinearGradient>
 
       <View style={styles.resultContainer}>
-        <View style={styles.scoreCard}>
-          <Text style={styles.message}>{renderMessage()}</Text>
-          <Text style={styles.quizName}>{quizName}</Text>
+        <View style={[styles.scoreCard, {
+          backgroundColor: colors.surface,
+          shadowColor: colors.shadowColor
+        }]}>
+          <Text style={[styles.message, { color: colors.text }]}>{renderMessage()}</Text>
+          <Text style={[styles.quizName, { color: colors.textSecondary }]}>{quizName}</Text>
 
-          <View style={styles.scoreCircle}>
+          <View style={[styles.scoreCircle, {
+            backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
+          }]}>
             <Text style={styles.scoreText}>{score}</Text>
             <Text style={styles.totalText}>/ {totalQuestions}</Text>
           </View>
 
-          <Text style={styles.percentageText}>
+          <Text style={[styles.percentageText, { color: colors.text }]}>
             {percentage.toFixed(0)}% Correct
           </Text>
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={[styles.button, styles.retryButton]}
+            style={[styles.button, styles.retryButton, {
+              backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
+            }]}
             onPress={() => navigation.navigate("QuizHome")}
           >
             <Ionicons name="reload" size={24} color="#fff" />
@@ -59,7 +70,9 @@ const QuizResult = ({ route, navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.button, styles.homeButton]}
+            style={[styles.button, styles.homeButton, {
+              backgroundColor: theme === 'dark' ? '#4a2e9b' : '#7c4dff'
+            }]}
             onPress={() => navigation.navigate("QuizHome")}
           >
             <Ionicons name="home" size={24} color="#fff" />
