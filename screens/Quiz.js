@@ -21,12 +21,7 @@ const ITEM_WIDTH = width * 0.85;
 const Quiz = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const navigation = useNavigation();
-
-  const handleQuizStart = (quiz) => {
-    navigation.navigate("QuizQuestions", { quiz });
-  };
 
   useEffect(() => {
     loadQuizzes();
@@ -43,6 +38,47 @@ const Quiz = () => {
       setLoading(false);
     }
   };
+
+  const handleQuizStart = (quiz) => {
+    navigation.navigate('QuizQuestions', { quiz });
+  };
+
+  const renderQuizItem = ({ item }) => (
+    <TouchableOpacity 
+      style={styles.quizItem}
+      onPress={() => handleQuizStart(item)}
+    >
+      <View style={styles.imageContainer}>
+        <ExpoImage
+          source={{ uri: item.image }}
+          style={styles.quizImage}
+          contentFit="cover"
+        />
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.9)']}
+          style={styles.overlay}
+        >
+          <View style={styles.quizContent}>
+            <Text style={styles.quizName}>{item.name}</Text>
+            <View style={styles.infoContainer}>
+              <View style={styles.infoItem}>
+                <Ionicons name="help-circle" size={20} color="#fff" />
+                <Text style={styles.infoText}>
+                  {item.questions?.length || 0} Questions
+                </Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Ionicons name="time" size={20} color="#fff" />
+                <Text style={styles.infoText}>
+                  {item.estimatedTime} mins
+                </Text>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </View>
+    </TouchableOpacity>
+  );
 
   if (loading) {
     return (
@@ -80,43 +116,6 @@ const Quiz = () => {
   );
 };
 
-const renderQuizItem = ({ item }) => (
-  <TouchableOpacity 
-    style={styles.quizItem}
-    onPress={() => handleQuizStart(item)}
-  >
-    <View style={styles.imageContainer}>
-      <ExpoImage
-        source={{ uri: item.image }}
-        style={styles.quizImage}
-        contentFit="cover"
-      />
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.9)']}
-        style={styles.overlay}
-      >
-        <View style={styles.quizContent}>
-          <Text style={styles.quizName}>{item.name}</Text>
-          <View style={styles.infoContainer}>
-            <View style={styles.infoItem}>
-              <Ionicons name="help-circle" size={20} color="#fff" />
-              <Text style={styles.infoText}>
-                {item.questions?.length || 0} Questions
-              </Text>
-            </View>
-            <View style={styles.infoItem}>
-              <Ionicons name="time" size={20} color="#fff" />
-              <Text style={styles.infoText}>
-                {item.estimatedTime} mins
-              </Text>
-            </View>
-          </View>
-        </View>
-      </LinearGradient>
-    </View>
-  </TouchableOpacity>
-);
-
 export default Quiz;
 
 const styles = StyleSheet.create({
@@ -132,8 +131,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8,
   },
   titleIcon: {
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   quizItem: {
-    width: '100%',
+    width: "100%",
     height: 200,
     marginBottom: 20,
     borderRadius: 20,
@@ -171,26 +170,26 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   imageContainer: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 20,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   quizImage: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   overlay: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: '100%',
+    height: "100%",
     padding: 20,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     borderRadius: 20,
   },
   quizContent: {
@@ -198,31 +197,31 @@ const styles = StyleSheet.create({
   },
   quizName: {
     fontSize: 24,
-    color: '#fff',
+    color: "#fff",
     fontFamily: "Poppins-SemiBold",
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
   infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
   },
   infoItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255,255,255,0.2)",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 25,
     gap: 6,
   },
   infoText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
     fontFamily: "Poppins-Medium",
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 5,
   },
