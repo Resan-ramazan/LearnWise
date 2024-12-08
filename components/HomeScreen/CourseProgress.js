@@ -11,6 +11,7 @@ import { useUser } from "@clerk/clerk-expo";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as Progress from "react-native-progress";
 import { useCourse } from "../../contexts/CourseContext";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { Image as ExpoImage } from "expo-image";

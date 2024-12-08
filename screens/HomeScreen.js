@@ -9,12 +9,14 @@ import { useNavigation } from "@react-navigation/native";
 import CourseProgress from "../components/HomeScreen/CourseProgress";
 import { ScrollView } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "../contexts/ThemeContext";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const { user: clerkUser } = useClerkUser();
   const { userData, initializeUser, loading, refreshUserData } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
+  const { theme, colors } = useTheme();
 
   useEffect(() => {
     if (clerkUser) {
@@ -39,31 +41,53 @@ const HomeScreen = () => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Color.PRIMARY} />
+      <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={theme === 'dark' ? Color.ORANGE : Color.PRIMARY} />
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 100 }}>
+    <ScrollView 
+      style={[styles.container, { backgroundColor: colors.background }]} 
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
       {userData && (
         <>
           <LinearGradient
-            colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+            colors={theme === 'dark' 
+              ? ['#1a1a1a', '#2d2d2d']
+              : [Color.PRIMARTY_COLOR, "#7c4dff"]}
             style={styles.header}
           >
-            <Header userData={userData} onSearch={handleSearch} />
+            <Header 
+              userData={userData} 
+              onSearch={handleSearch}
+              theme={theme}
+              colors={colors}
+            />
           </LinearGradient>
 
-          <View style={styles.content}>
+          <View style={[styles.content, {
+            backgroundColor: 'transparent'
+          }]}>
             <View style={styles.progressSection}>
-              <CourseProgress />
+              <CourseProgress theme={theme} colors={colors} />
             </View>
 
             <View style={styles.coursesSection}>
-              <CourseList level="basic" searchQuery={searchQuery} />
-              <CourseList level="advanced" searchQuery={searchQuery} />
+              <CourseList 
+                level="basic" 
+                searchQuery={searchQuery}
+                theme={theme}
+                colors={colors}
+              />
+              <CourseList 
+                level="advanced" 
+                searchQuery={searchQuery}
+                theme={theme}
+                colors={colors}
+              />
             </View>
           </View>
         </>
@@ -77,7 +101,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
     paddingBottom: 100,
   },
   header: {

@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,9 +14,11 @@ import CourseItem from "./CourseItem";
 import { useNavigation } from "@react-navigation/native";
 import { useCourse } from "../../contexts/CourseContext";
 import { useTranslation } from 'react-i18next';
+import { useTheme } from "../../contexts/ThemeContext";
 
 const CourseList = ({ level, searchQuery }) => {
   const { t } = useTranslation();
+  const { theme, colors } = useTheme();
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
@@ -55,18 +56,24 @@ const CourseList = ({ level, searchQuery }) => {
     );
   };
 
+  const getHeadingColor = () => {
+    if (level === "basic" && inProgressCourses.length === 0) {
+      return theme === 'dark' ? colors.textLight : Color.TEXT_WHITE;
+    }
+    return theme === 'dark' ? colors.text : Color.TEXT_BLACK;
+  };
+
   return (
-    <View>
+    <View style={{ backgroundColor: 'transparent' }}>
       <SubHeading
         text={getTitle()}
-        color={
-          level == "basic" && inProgressCourses.length === 0
-            ? Color.TEXT_WHITE
-            : Color.TEXT_BLACK
-        }
+        color={getHeadingColor()}
       />
       {loading ? (
-        <ActivityIndicator size="large" color={Color.PRIMARY_COLOR} />
+        <ActivityIndicator 
+          size="large" 
+          color={theme === 'dark' ? Color.ORANGE : Color.PRIMARY_COLOR} 
+        />
       ) : (
         <FlatList
           data={getFilteredCourses()}
@@ -79,13 +86,15 @@ const CourseList = ({ level, searchQuery }) => {
                 })
               }
             >
-              <CourseItem item={item} />
+              <CourseItem item={item} theme={theme} colors={colors} />
             </TouchableOpacity>
           )}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={() => (
-            <Text style={styles.emptyText}>
+            <Text style={[styles.emptyText, { 
+              color: theme === 'dark' ? colors.textSecondary : '#333'
+            }]}>
               {searchQuery ? t('No matching courses found') : t('No courses available')}
             </Text>
           )}
@@ -100,7 +109,7 @@ export default CourseList;
 const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-SemiBold',
     textAlign: 'center',
     marginTop: 20,
   },

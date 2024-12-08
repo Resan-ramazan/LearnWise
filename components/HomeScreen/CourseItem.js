@@ -4,12 +4,22 @@ import { Image as ExpoImage } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import Color from "../../utils/Color";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const CourseItem = ({ item }) => {
   const { t } = useTranslation();
+  const { theme, colors } = useTheme();
 
   return (
-    <View style={styles.courseContainer}>
+    <View
+      style={[
+        styles.courseContainer,
+        {
+          backgroundColor: colors.surface,
+          shadowColor: colors.shadowColor,
+        },
+      ]}
+    >
       <ExpoImage
         source={{ uri: item?.banner }}
         style={styles.courseImage}
@@ -21,26 +31,77 @@ const CourseItem = ({ item }) => {
         <Text style={styles.level}>{t(item.level)}</Text>
       </View>
       <View style={styles.content}>
-        <Text style={styles.courseName}>{item.name}</Text>
+        <Text
+          style={[
+            styles.courseName,
+            {
+              color: colors.text,
+            },
+          ]}
+        >
+          {item.name}
+        </Text>
         <View style={styles.detailContainer}>
           <View style={styles.infoItem}>
-            <Ionicons name="book" size={16} color={Color.ORANGE} />
-            <Text style={styles.infoText}>
+            <Ionicons
+              name="book"
+              size={16}
+              color={theme === "dark" ? Color.ORANGE : Color.ORANGE}
+            />
+            <Text
+              style={[
+                styles.infoText,
+                {
+                  color: theme === "dark" ? colors.textSecondary : "#666",
+                },
+              ]}
+            >
               {item.chapters.length || 0} {t("Chapters")}
             </Text>
           </View>
           <View style={styles.infoItem}>
-            <Ionicons name="time-outline" size={16} color={Color.ORANGE} />
-            <Text style={styles.infoText}>
+            <Ionicons
+              name="time-outline"
+              size={16}
+              color={theme === "dark" ? Color.ORANGE : Color.ORANGE}
+            />
+            <Text
+              style={[
+                styles.infoText,
+                {
+                  color: theme === "dark" ? colors.textSecondary : "#666",
+                },
+              ]}
+            >
               {item.time} {t("minutes")}
             </Text>
           </View>
         </View>
         <View style={styles.footer}>
-          <Text style={styles.freeText}>{t("Free")}</Text>
+          <Text
+            style={[
+              styles.freeText,
+              {
+                color: theme === "dark" ? Color.ORANGE : Color.PRIMARTY_COLOR,
+              },
+            ]}
+          >
+            {t("Free")}
+          </Text>
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={14} color="#FFD700" />
-            <Text style={styles.ratingText}>
+            <Ionicons
+              name="star"
+              size={14}
+              color={theme === "dark" ? Color.ORANGE : "#FFD700"}
+            />
+            <Text
+              style={[
+                styles.ratingText,
+                {
+                  color: theme === "dark" ? colors.textSecondary : "#666",
+                },
+              ]}
+            >
               {item.averageRating ? item.averageRating.toFixed(1) : t("New")}
               {item.totalRatings > 0 && ` (${item.totalRatings})`}
             </Text>

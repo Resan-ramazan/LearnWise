@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, Image, Animated, TouchableOpacity, Alert } from
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from "@expo/vector-icons";
 import { submitCourseRating } from '../services/courses';
+import { useTheme } from "../contexts/ThemeContext";
+import Color from "../utils/Color";
 
 const ScoreScreen = ({ route, navigation }) => {
+  const { theme, colors } = useTheme();
   const { points, courseId, userEmail } = route.params;
   console.log("Score Screen Params:", { points, courseId, userEmail });
   
@@ -51,29 +54,21 @@ const ScoreScreen = ({ route, navigation }) => {
     }
   };
 
-  const renderStars = () => {
-    return [1, 2, 3, 4, 5].map((star) => (
-      <TouchableOpacity 
-        key={star} 
-        onPress={() => handleRating(star)}
-        style={styles.starButton}
-      >
-        <Ionicons 
-          name={rating >= star ? "star" : "star-outline"} 
-          size={35} 
-          color={rating >= star ? "#FFD700" : "#BCC6CC"}
-        />
-      </TouchableOpacity>
-    ));
-  };
-
   return (
     <LinearGradient
-      colors={['#4c669f', '#3b5998', '#192f6a']}
+      colors={theme === 'dark' 
+        ? ['#1a1a1a', '#2d2d2d']
+        : ['#4c669f', '#3b5998', '#192f6a']}
       style={styles.container}
     >
       <Animated.View style={[
         styles.scoreContainer,
+        {
+          backgroundColor: theme === 'dark' 
+            ? colors.surface 
+            : 'rgba(255, 255, 255, 0.9)',
+          shadowColor: colors.shadowColor,
+        },
         {
           transform: [{ scale: scaleAnim }],
         }
@@ -82,18 +77,47 @@ const ScoreScreen = ({ route, navigation }) => {
           source={require("../assets/images/coins.png")} 
           style={styles.coin}
         />
-        <Text style={styles.points}>{points}</Text>
-        <Text style={styles.text}>Points Earned!</Text>
+        <Text style={[styles.points, {
+          color: theme === 'dark' ? Color.ORANGE : '#192f6a'
+        }]}>
+          {points}
+        </Text>
+        <Text style={[styles.text, {
+          color: theme === 'dark' ? '#e0e0e0' : '#4c669f'
+        }]}>
+          Points Earned!
+        </Text>
         
         <View style={styles.ratingContainer}>
-          <Text style={styles.ratingText}>Rate this course:</Text>
+          <Text style={[styles.ratingText, {
+            color: theme === 'dark' ? '#e0e0e0' : '#4c669f'
+          }]}>
+            Rate this course:
+          </Text>
           <View style={styles.starsContainer}>
-            {renderStars()}
+            {[1, 2, 3, 4, 5].map((star) => (
+              <TouchableOpacity 
+                key={star} 
+                onPress={() => handleRating(star)}
+                style={styles.starButton}
+              >
+                <Ionicons 
+                  name={rating >= star ? "star" : "star-outline"} 
+                  size={35} 
+                  color={rating >= star 
+                    ? theme === 'dark' ? Color.ORANGE : "#FFD700"
+                    : theme === 'dark' ? '#666' : "#BCC6CC"
+                  }
+                />
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
 
         <TouchableOpacity 
-          style={styles.button}
+          style={[styles.button, {
+            backgroundColor: theme === 'dark' ? Color.ORANGE : '#4c669f'
+          }]}
           onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.buttonText}>Back to Home</Text>
@@ -110,11 +134,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scoreContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 20,
     padding: 30,
     alignItems: 'center',
-    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
@@ -125,14 +147,12 @@ const styles = StyleSheet.create({
   },
   points: {
     fontSize: 48,
-    fontWeight: 'bold',
-    color: '#192f6a',
+    fontFamily: 'Poppins-Bold',
     marginTop: 10,
   },
   text: {
     fontSize: 24,
-    fontWeight: '600',
-    color: '#4c669f',
+    fontFamily: 'Poppins-SemiBold',
   },
   coin: {
     width: 120,
@@ -145,9 +165,8 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 18,
-    color: '#4c669f',
     marginBottom: 10,
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
   },
   starsContainer: {
     flexDirection: 'row',
@@ -157,7 +176,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   button: {
-    backgroundColor: '#4c669f',
     paddingHorizontal: 30,
     paddingVertical: 12,
     borderRadius: 25,
@@ -166,7 +184,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
   },
 });
 
