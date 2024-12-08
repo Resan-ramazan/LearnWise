@@ -97,7 +97,24 @@ const resources = {
       "Save & Continue": "Save & Continue",
       "Hide": "Hide",
       "Run": "Run",
-      "Output": "Output"
+      "Output": "Output",
+
+      // Quiz related
+      "Fun Quiz Time!": "Fun Quiz Time!",
+      "Let's test your knowledge!": "Let's test your knowledge!",
+      "Loading...": "Loading...",
+      "Questions": "Questions",
+      "mins": "mins",
+      "Quiz Complete!": "Quiz Complete!",
+      "Fantastic! You're a Star!": "Fantastic! You're a Star!",
+      "Great Job! Keep Going!": "Great Job! Keep Going!",
+      "Nice Try! Let's Practice More!": "Nice Try! Let's Practice More!",
+      "Try Another Quiz": "Try Another Quiz",
+      "Back to Home": "Back to Home",
+      "Correct": "Correct",
+      "Question": "Question",
+      "of": "of",
+      "seconds": "s",
     }
   },
   tr: {
@@ -195,7 +212,24 @@ const resources = {
       "Save & Continue": "Kaydet ve Devam Et",
       "Hide": "Gizle",
       "Run": "Çalıştır",
-      "Output": "Çıktı"
+      "Output": "Çıktı",
+
+      // Quiz related
+      "Fun Quiz Time!": "Quiz Zamanı!",
+      "Let's test your knowledge!": "Bilgini Test Edelim!",
+      "Loading...": "Yükleniyor...",
+      "Questions": "Soru",
+      "mins": "dk",
+      "Quiz Complete!": "Quiz Tamamlandı!",
+      "Fantastic! You're a Star!": "Muhteşem! Bir Yıldız Gibisin!",
+      "Great Job! Keep Going!": "Harika İş! Devam Et!",
+      "Nice Try! Let's Practice More!": "İyi Deneme! Biraz Daha Pratik Yapalım!",
+      "Try Another Quiz": "Başka Bir Quiz Dene",
+      "Back to Home": "Ana Sayfaya Dön",
+      "Correct": "Doğru",
+      "Question": "Soru",
+      "of": "/",
+      "seconds": "sn",
     }
   }
 };

@@ -6,12 +6,12 @@ import { ClerkProvider } from "@clerk/clerk-expo";
 import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./navigations/TabNavigation";
-import { CourseProvider } from './contexts/CourseContext';
-import { UserProvider } from './contexts/UserContext';
-import { LanguageProvider } from './contexts/LanguageContext';
-import './i18n';
-import { ToastProvider } from './contexts/ToastContext';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { CourseProvider } from "./contexts/CourseContext";
+import { UserProvider } from "./contexts/UserContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
+import "./i18n";
+import { ToastProvider } from "./contexts/ToastContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 

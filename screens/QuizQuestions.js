@@ -4,6 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Color from "../utils/Color";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from "../contexts/ThemeContext";
+import { useTranslation } from 'react-i18next';
 
 const QuizQuestions = ({ route, navigation }) => {
   const { quiz } = route.params;
@@ -13,6 +14,7 @@ const QuizQuestions = ({ route, navigation }) => {
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const timerRef = useRef(null);
   const { theme, colors } = useTheme();
+  const { t } = useTranslation();
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
 
@@ -100,7 +102,7 @@ const QuizQuestions = ({ route, navigation }) => {
 
           <View style={styles.timerContainer}>
             <Ionicons name="timer-outline" size={24} color="#fff" />
-            <Text style={styles.timerText}>{timeLeft}s</Text>
+            <Text style={styles.timerText}>{timeLeft}{t('seconds')}</Text>
           </View>
         </View>
         
@@ -108,7 +110,7 @@ const QuizQuestions = ({ route, navigation }) => {
           <View style={styles.progressInfo}>
             <Ionicons name="help-circle" size={24} color="#fff" />
             <Text style={styles.progressText}>
-              Question {currentQuestionIndex + 1} of {quiz.questions.length}
+              {t('Question')} {currentQuestionIndex + 1} {t('of')} {quiz.questions.length}
             </Text>
           </View>
           <View style={styles.progressBar}>
@@ -132,7 +134,7 @@ const QuizQuestions = ({ route, navigation }) => {
           <View style={[styles.questionBadge, {
             backgroundColor: theme === 'dark' ? colors.primary : Color.PRIMARTY_COLOR
           }]}>
-            <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
+            <Text style={styles.questionNumber}>{t('Question')} {currentQuestionIndex + 1}</Text>
           </View>
           <Text style={[styles.questionText, { color: colors.text }]}>
             {currentQuestion.question}

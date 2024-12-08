@@ -5,19 +5,21 @@ import Color from "../utils/Color";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LottieView from "lottie-react-native";
 import { useTheme } from "../contexts/ThemeContext";
+import { useTranslation } from 'react-i18next';
 
 const QuizResult = ({ route, navigation }) => {
   const { score, totalQuestions, quizName } = route.params;
   const percentage = (score / totalQuestions) * 100;
   const { theme, colors } = useTheme();
+  const { t } = useTranslation();
 
   const renderMessage = () => {
     if (percentage >= 80) {
-      return "Fantastic! You're a Star! 🌟";
+      return t("Fantastic! You're a Star!");
     } else if (percentage >= 60) {
-      return "Great Job! Keep Going! 🎉";
+      return t("Great Job! Keep Going!");
     } else {
-      return "Nice Try! Let's Practice More! 💪";
+      return t("Nice Try! Let's Practice More!");
     }
   };
 
@@ -29,7 +31,7 @@ const QuizResult = ({ route, navigation }) => {
           : [Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
-        <Text style={styles.title}>Quiz Complete!</Text>
+        <Text style={styles.title}>{t('Quiz Complete!')}</Text>
         <LottieView
           source={require("../assets/animations/celebrate.json")}
           autoPlay
@@ -54,7 +56,7 @@ const QuizResult = ({ route, navigation }) => {
           </View>
 
           <Text style={[styles.percentageText, { color: colors.text }]}>
-            {percentage.toFixed(0)}% Correct
+            %{percentage.toFixed(0)} {t('Correct')}
           </Text>
         </View>
 
@@ -66,7 +68,7 @@ const QuizResult = ({ route, navigation }) => {
             onPress={() => navigation.navigate("QuizHome")}
           >
             <Ionicons name="reload" size={24} color="#fff" />
-            <Text style={styles.buttonText}>Try Another Quiz</Text>
+            <Text style={styles.buttonText}>{t('Try Another Quiz')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -76,7 +78,7 @@ const QuizResult = ({ route, navigation }) => {
             onPress={() => navigation.navigate("QuizHome")}
           >
             <Ionicons name="home" size={24} color="#fff" />
-            <Text style={styles.buttonText}>Back to Home</Text>
+            <Text style={styles.buttonText}>{t('Back to Home')}</Text>
           </TouchableOpacity>
         </View>
       </View>

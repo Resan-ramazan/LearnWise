@@ -16,6 +16,7 @@ import Color from "../utils/Color";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../contexts/ThemeContext";
+import { useTranslation } from 'react-i18next';
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = width * 0.85;
 
@@ -24,6 +25,7 @@ const Quiz = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadQuizzes();
@@ -73,7 +75,7 @@ const Quiz = () => {
               }]}>
                 <Ionicons name="help-circle" size={20} color="#fff" />
                 <Text style={styles.infoText}>
-                  {item.questions?.length || 0} Questions
+                  {item.questions?.length || 0} {t('Questions')}
                 </Text>
               </View>
               <View style={[styles.infoItem, {
@@ -83,7 +85,7 @@ const Quiz = () => {
               }]}>
                 <Ionicons name="time" size={20} color="#fff" />
                 <Text style={styles.infoText}>
-                  {item.estimatedTime} mins
+                  {item.estimatedTime} {t('mins')}
                 </Text>
               </View>
             </View>
@@ -111,9 +113,9 @@ const Quiz = () => {
       >
         <View style={styles.titleContainer}>
           <Ionicons name="school" size={35} color="#fff" style={styles.titleIcon} />
-          <Text style={styles.title}>Fun Quiz Time!</Text>
+          <Text style={styles.title}>{t('Fun Quiz Time!')}</Text>
         </View>
-        <Text style={styles.subtitle}>Let's test your knowledge! 🚀</Text>
+        <Text style={styles.subtitle}>{t("Let's test your knowledge!")} 🚀</Text>
       </LinearGradient>
       
       <View style={[styles.listWrapper, { 
