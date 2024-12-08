@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import RenderHTML from "react-native-render-html";
 import Color from "../../utils/Color";
 import { Text } from "react-native";
@@ -13,14 +13,51 @@ const ContenItem = ({ description, output }) => {
 
   const descriptionSource = { html: description };
   const outputSource = { html: output };
+
+  const descriptionContent = useMemo(() => (
+    <RenderHTML
+      contentWidth={width}
+      source={descriptionSource}
+      tagsStyles={tagsStyles}
+      defaultTextProps={{ allowFontScaling: false }}
+      enableExperimentalBRCollapsing={true}
+      enableExperimentalGhostLinesPrevention={true}
+      systemFonts={['Poppins-Regular', 'monospace']}
+      renderersProps={{
+        img: {
+          enableExperimentalPercentWidth: true
+        },
+        a: {
+          anchor: null
+        }
+      }}
+    />
+  ), [width, description]);
+
+  const outputContent = useMemo(() => (
+    <RenderHTML
+      contentWidth={width}
+      source={outputSource}
+      tagsStyles={outputTagsStyles}
+      defaultTextProps={{ allowFontScaling: false }}
+      enableExperimentalBRCollapsing={true}
+      enableExperimentalGhostLinesPrevention={true}
+      systemFonts={['Poppins-Regular', 'monospace']}
+      renderersProps={{
+        img: {
+          enableExperimentalPercentWidth: true
+        },
+        a: {
+          anchor: null
+        }
+      }}
+    />
+  ), [width, output]);
+
   return (
     description && (
       <View style={styles.container}>
-        <RenderHTML
-          contentWidth={width}
-          source={descriptionSource}
-          tagsStyles={tagsStyles}
-        />
+        {descriptionContent}
         {output != null && (
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -37,11 +74,7 @@ const ContenItem = ({ description, output }) => {
         {isRun && (
           <View style={styles.outputContainer}>
             <Text style={styles.outputTitle}>{t("Output")}</Text>
-            <RenderHTML
-              contentWidth={width}
-              source={outputSource}
-              tagsStyles={outputTagsStyles}
-            />
+            {outputContent}
           </View>
         )}
       </View>

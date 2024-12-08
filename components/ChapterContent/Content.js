@@ -15,6 +15,7 @@ import { updateUserProgress } from "../../services/courses";
 import { ToastAndroid } from "react-native";
 import Color from "../../utils/Color";
 import { useTranslation } from 'react-i18next';
+import { useToast } from '../../contexts/ToastContext';
 
 const Content = ({
   chaptersLength,
@@ -27,6 +28,7 @@ const Content = ({
   const { t } = useTranslation();
   const flatListRef = React.useRef(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex || 0);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (flatListRef && content?.startIndex) {
@@ -42,36 +44,20 @@ const Content = ({
   const onSaveProgress = async (index) => {
     const currentChapter = chaptersLength[index];
 
-    console.log("Saving progress with:", {
-      courseId,
-      userEmail,
-      chapterId: currentChapter?.id,
-      index,
-    });
-
     if (!courseId || !userEmail || !currentChapter?.id) {
       console.error("Missing required values:", {
         courseId,
         userEmail,
         chapterId: currentChapter?.id,
       });
-      if (Platform.OS === "android") {
-        ToastAndroid.show("Error: Missing required data", ToastAndroid.SHORT);
-      } else {
-        alert("Error: Missing required data");
-      }
-
+      showToast('Error: Missing required data', 'error');
       return;
     }
 
     try {
       await updateUserProgress(courseId, userEmail, currentChapter.id, index);
-      if (Platform.OS === "android") {
-        ToastAndroid.show("Progress saved!", ToastAndroid.SHORT);
-      } else {
-        alert("Progress saved!");
-      }
-
+      showToast('Progress saved!', 'success');
+      
       setActiveIndex(index + 1);
       if (flatListRef.current) {
         flatListRef.current.scrollToIndex({
@@ -81,7 +67,7 @@ const Content = ({
       }
     } catch (error) {
       console.error("Error saving progress:", error);
-      ToastAndroid.show("Error saving progress", ToastAndroid.SHORT);
+      showToast('Error saving progress', 'error');
     }
   };
 

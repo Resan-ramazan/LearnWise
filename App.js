@@ -10,6 +10,7 @@ import { CourseProvider } from './contexts/CourseContext';
 import { UserProvider } from './contexts/UserContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import './i18n';
+import { ToastProvider } from './contexts/ToastContext';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -33,17 +34,19 @@ export default function App() {
       <LanguageProvider>
         <UserProvider>
           <CourseProvider>
-            <StatusBar style="dark" />
-            <View style={styles.container}>
-              <SignedIn>
-                <NavigationContainer>
-                  <TabNavigation />
-                </NavigationContainer>
-              </SignedIn>
-              <SignedOut>
-                <LoginScreen />
-              </SignedOut>
-            </View>
+            <ToastProvider>
+              <StatusBar style="dark" />
+              <View style={styles.container}>
+                <SignedIn>
+                  <NavigationContainer>
+                    <TabNavigation />
+                  </NavigationContainer>
+                </SignedIn>
+                <SignedOut>
+                  <LoginScreen />
+                </SignedOut>
+              </View>
+            </ToastProvider>
           </CourseProvider>
         </UserProvider>
       </LanguageProvider>
