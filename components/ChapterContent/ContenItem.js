@@ -13,7 +13,6 @@ const ContenItem = ({ description, output }) => {
 
   const descriptionSource = { html: description };
   const outputSource = { html: output };
-
   return (
     description && (
       <View style={styles.container}>
@@ -94,6 +93,14 @@ const outputTagsStyles = {
   },
   img: {
     borderRadius: 8,
+    marginVertical: 10,
+  },
+  ol: {
+    marginLeft: 20,
+    marginVertical: 10,
+  },
+  ul: {
+    marginLeft: 20,
     marginVertical: 10,
   },
 };
