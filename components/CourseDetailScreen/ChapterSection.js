@@ -12,10 +12,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Color from "../../utils/Color";
 import { useNavigation } from "@react-navigation/native";
 import { useCourse } from '../../contexts/CourseContext';
+import { useTheme } from "../../contexts/ThemeContext";
 
 const ChapterSection = () => {
   const navigation = useNavigation();
   const { userEnrolledCourses, currentCourse } = useCourse();
+  const { theme, colors } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -56,8 +58,12 @@ const ChapterSection = () => {
 
   return (
     currentCourse && currentCourse.chapters && (
-      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-        <Text style={styles.title}>Course Content</Text>
+      <Animated.View style={[styles.container, { 
+        opacity: fadeAnim,
+        backgroundColor: colors.surface,
+        shadowColor: colors.shadowColor
+      }]}>
+        <Text style={[styles.title, { color: colors.text }]}>Course Content</Text>
         <ScrollView style={styles.chapterList}>
           {currentCourse.chapters.map((item, index) => (
             <TouchableOpacity
@@ -65,16 +71,25 @@ const ChapterSection = () => {
               key={index}
               style={[
                 styles.chapterItem,
-                checkIsChapterCompleted(item) && styles.completeChapter,
+                { 
+                  backgroundColor: colors.surface,
+                  borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#E8E8E8'
+                },
+                checkIsChapterCompleted(item) && [styles.completeChapter, {
+                  backgroundColor: theme === 'dark' ? 'rgba(76,175,80,0.1)' : '#F8FFF9',
+                  borderColor: '#4CAF50'
+                }]
               ]}
             >
               <View style={styles.chapterContent}>
                 <View style={[
                   styles.numberContainer,
+                  { backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#F5F5F5' },
                   checkIsChapterCompleted(item) && styles.completedNumberContainer
                 ]}>
                   <Text style={[
                     styles.chapterNumber,
+                    { color: theme === 'dark' ? colors.textSecondary : '#666' },
                     checkIsChapterCompleted(item) && styles.completedText
                   ]}>
                     {index + 1}
@@ -83,6 +98,7 @@ const ChapterSection = () => {
                 <View style={styles.textContainer}>
                   <Text style={[
                     styles.chapterTitle,
+                    { color: colors.text },
                     checkIsChapterCompleted(item) && styles.completedText
                   ]}>
                     {item.heading}
@@ -90,18 +106,21 @@ const ChapterSection = () => {
                 </View>
               </View>
               {userEnrolledCourses.length == 0 ? (
-                <View style={styles.iconContainer}>
-                  <Ionicons name="lock-closed" size={22} color={Color.TEXT_GRAY} />
+                <View style={[styles.iconContainer, {
+                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#F5F5F5'
+                }]}>
+                  <Ionicons name="lock-closed" size={22} color={theme === 'dark' ? colors.textSecondary : Color.TEXT_GRAY} />
                 </View>
               ) : (
                 <View style={[
                   styles.iconContainer,
+                  { backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#F5F5F5' },
                   checkIsChapterCompleted(item) && styles.completedIcon
                 ]}>
                   <Ionicons
                     name={checkIsChapterCompleted(item) ? "checkmark-circle" : "chevron-forward-circle"}
                     size={24}
-                    color={checkIsChapterCompleted(item) ? "#4CAF50" : Color.PRIMARY}
+                    color={checkIsChapterCompleted(item) ? "#4CAF50" : Color.ORANGE}
                   />
                 </View>
               )}

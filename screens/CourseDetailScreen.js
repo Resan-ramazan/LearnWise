@@ -16,11 +16,13 @@ import { useUser as useClerkUser } from "@clerk/clerk-expo";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCourse } from "../contexts/CourseContext";
 import { useUser } from "../contexts/UserContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 const CourseDetailScreen = () => {
   const navigation = useNavigation();
   const params = useRoute().params;
   const { user } = useClerkUser();
+  const { theme, colors } = useTheme();
   const { userEnrolledCourses, updateEnrolledCourses, updateCurrentCourse } = useCourse();
   const { refreshUserData } = useUser();
 
@@ -70,15 +72,28 @@ const CourseDetailScreen = () => {
 
   return (
     params.course && (
-      <View style={styles.container} >
+      <View style={[styles.container, { 
+        backgroundColor: colors.background 
+      }]}>
         <TouchableOpacity 
-          style={styles.backButton} 
+          style={[styles.backButton, {
+            backgroundColor: theme === 'dark' 
+              ? 'rgba(255,255,255,0.1)' 
+              : 'rgba(0,0,0,0.3)'
+          }]} 
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back-circle" size={40} color="#fff" />
+          <Ionicons 
+            name="arrow-back-circle" 
+            size={40} 
+            color={theme === 'dark' ? colors.textLight : '#fff'} 
+          />
         </TouchableOpacity>
         
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
+        <ScrollView 
+          showsVerticalScrollIndicator={false} 
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           <DetailSection
             enrollCourse={() => UserEnrollCourse()}
             course={params.course}
@@ -97,14 +112,12 @@ export default CourseDetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   backButton: {
     position: 'absolute',
     top: 40,
     left: 20,
     zIndex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
     borderRadius: 20,
   },
 });

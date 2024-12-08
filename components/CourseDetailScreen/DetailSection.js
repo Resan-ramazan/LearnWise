@@ -12,15 +12,28 @@ import Info from "./Info";
 import Description from "./Description";
 import { useTranslation } from 'react-i18next';
 import { Image as ExpoImage } from "expo-image";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
   const { t } = useTranslation();
+  const { theme, colors } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <ExpoImage source={{ uri: course?.banner }} style={styles.bannerImage} contentFit="cover" transition={200}  cachePolicy="memory-disk" />
+    <View style={[styles.container, {
+      backgroundColor: colors.surface,
+      shadowColor: colors.shadowColor
+    }]}>
+      <ExpoImage 
+        source={{ uri: course?.banner }} 
+        style={styles.bannerImage} 
+        contentFit="cover" 
+        transition={200}  
+        cachePolicy="memory-disk" 
+      />
       <View style={styles.contentWrapper}>
-        <Text style={styles.courseTitle}>{course.name}</Text>
+        <Text style={[styles.courseTitle, { color: colors.text }]}>
+          {course.name}
+        </Text>
         <View>
           <View style={styles.rowStyle}>
             <Info
@@ -40,12 +53,17 @@ const DetailSection = ({ course, enrollCourse, userEnrolledCourses }) => {
           {userEnrolledCourses == 0 ? (
             <TouchableOpacity
               onPress={() => enrollCourse()}
-              style={styles.enrollButton}
+              style={[styles.enrollButton, {
+                backgroundColor: theme === 'dark' ? Color.ORANGE : Color.PRIMARTY_COLOR,
+                shadowColor: theme === 'dark' ? Color.ORANGE : Color.PRIMARTY_COLOR,
+              }]}
             >
               <Text style={styles.buttonText}>{t('Enroll For Free')}</Text>
             </TouchableOpacity>
           ) : (
-            <View style={styles.continueButton}>
+            <View style={[styles.continueButton, {
+              backgroundColor: Color.ORANGE
+            }]}>
               <Text style={styles.buttonText}>{t('Continue Learning')}</Text>
             </View>
           )}
