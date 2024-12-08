@@ -68,42 +68,7 @@ const Quiz = () => {
       <View style={styles.listWrapper}>
         <FlatList
           data={quizzes}
-          renderItem={({ item }) => (
-            <TouchableOpacity 
-              style={styles.quizItem}
-              onPress={() => handleQuizStart(item)}
-            >
-              <View style={styles.imageContainer}>
-                <ExpoImage
-                  source={{ uri: item.image }}
-                  style={styles.quizImage}
-                  contentFit="cover"
-                />
-                <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.8)']}
-                  style={styles.overlay}
-                >
-                  <View style={styles.quizContent}>
-                    <Text style={styles.quizName}>{item.name}</Text>
-                    <View style={styles.infoContainer}>
-                      <View style={styles.infoItem}>
-                        <Ionicons name="help-circle" size={20} color="#fff" />
-                        <Text style={styles.infoText}>
-                          {item.questions?.length || 0} Questions
-                        </Text>
-                      </View>
-                      <View style={styles.infoItem}>
-                        <Ionicons name="time" size={20} color="#fff" />
-                        <Text style={styles.infoText}>
-                          {item.estimatedTime} mins
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </LinearGradient>
-              </View>
-            </TouchableOpacity>
-          )}
+          renderItem={renderQuizItem}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContainer}
@@ -114,6 +79,43 @@ const Quiz = () => {
     </View>
   );
 };
+
+const renderQuizItem = ({ item }) => (
+  <TouchableOpacity 
+    style={styles.quizItem}
+    onPress={() => handleQuizStart(item)}
+  >
+    <View style={styles.imageContainer}>
+      <ExpoImage
+        source={{ uri: item.image }}
+        style={styles.quizImage}
+        contentFit="cover"
+      />
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.8)', 'rgba(0,0,0,0.9)']}
+        style={styles.overlay}
+      >
+        <View style={styles.quizContent}>
+          <Text style={styles.quizName}>{item.name}</Text>
+          <View style={styles.infoContainer}>
+            <View style={styles.infoItem}>
+              <Ionicons name="help-circle" size={20} color="#fff" />
+              <Text style={styles.infoText}>
+                {item.questions?.length || 0} Questions
+              </Text>
+            </View>
+            <View style={styles.infoItem}>
+              <Ionicons name="time" size={20} color="#fff" />
+              <Text style={styles.infoText}>
+                {item.estimatedTime} mins
+              </Text>
+            </View>
+          </View>
+        </View>
+      </LinearGradient>
+    </View>
+  </TouchableOpacity>
+);
 
 export default Quiz;
 
@@ -170,7 +172,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     backgroundColor: '#fff',
-    transform: [{ scale: 1 }],
   },
   imageContainer: {
     width: '100%',
@@ -187,25 +188,26 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: '60%',
+    height: '100%',
     padding: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    justifyContent: 'flex-end',
+    borderRadius: 20,
   },
   quizContent: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    gap: 10,
   },
   quizName: {
     fontSize: 24,
     color: '#fff',
     fontFamily: "Poppins-SemiBold",
-    marginBottom: 10,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15,
+    gap: 12,
   },
   infoItem: {
     flexDirection: 'row',
@@ -220,5 +222,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontFamily: "Poppins-Medium",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 5,
   },
 });

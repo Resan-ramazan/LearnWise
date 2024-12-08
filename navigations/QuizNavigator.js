@@ -4,6 +4,7 @@ import QuizQuestions from "../screens/QuizQuestions";
 import Color from "../utils/Color";
 import { Platform } from "react-native";
 import { TransitionPresets } from "@react-navigation/stack";
+import QuizResult from '../screens/QuizResult';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +61,11 @@ const QuizNavigator = () => {
           },
           animationEnabled: true,
         })}
+      />
+      <Stack.Screen
+        name="QuizResult"
+        component={QuizResult}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Animated } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Color from "../utils/Color";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,12 +8,48 @@ const QuizQuestions = ({ route, navigation }) => {
   const { quiz } = route.params;
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const timerRef = useRef(null);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
 
+  useEffect(() => {
+    startTimer();
+    return () => clearInterval(timerRef.current);
+  }, [currentQuestionIndex]);
+
+  const startTimer = () => {
+    setTimeLeft(30);
+    clearInterval(timerRef.current);
+    
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timerRef.current);
+          handleTimeUp();
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+  };
+
+  const handleTimeUp = () => {
+    if (currentQuestionIndex < quiz.questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      navigation.navigate('QuizResult', {
+        score,
+        totalQuestions: quiz.questions.length,
+        quizName: quiz.name
+      });
+    }
+  };
+
   const handleAnswer = (selectedAnswer) => {
-    // Fade out animasyonu
+    clearInterval(timerRef.current);
+
     Animated.sequence([
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -35,8 +71,11 @@ const QuizQuestions = ({ route, navigation }) => {
       if (currentQuestionIndex < quiz.questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
-        // Quiz bitti, sonuç ekranına yönlendir
-        console.log("Quiz bitti! Skor:", score);
+        navigation.navigate('QuizResult', {
+          score: score + (selectedAnswer === currentQuestion.correctAnswer ? 1 : 0),
+          totalQuestions: quiz.questions.length,
+          quizName: quiz.name
+        });
       }
     }, 200);
   };
@@ -47,12 +86,19 @@ const QuizQuestions = ({ route, navigation }) => {
         colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
         style={styles.header}
       >
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back-circle" size={40} color="#fff" />
-        </TouchableOpacity>
+        <View style={styles.headerTop}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back-circle" size={40} color="#fff" />
+          </TouchableOpacity>
+
+          <View style={styles.timerContainer}>
+            <Ionicons name="timer-outline" size={24} color="#fff" />
+            <Text style={styles.timerText}>{timeLeft}s</Text>
+          </View>
+        </View>
         
         <View style={styles.progressContainer}>
           <View style={styles.progressInfo}>
@@ -76,6 +122,9 @@ const QuizQuestions = ({ route, navigation }) => {
         style={[styles.contentContainer, { opacity: fadeAnim }]}
       >
         <View style={styles.questionContainer}>
+          <View style={styles.questionBadge}>
+            <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1}</Text>
+          </View>
           <Text style={styles.questionText}>{currentQuestion.question}</Text>
         </View>
 
@@ -90,9 +139,11 @@ const QuizQuestions = ({ route, navigation }) => {
                 colors={['#fff', '#f8f9fa']}
                 style={styles.optionGradient}
               >
-                <Text style={styles.optionLetter}>
-                  {String.fromCharCode(65 + index)}
-                </Text>
+                <View style={styles.optionLetterContainer}>
+                  <Text style={styles.optionLetter}>
+                    {String.fromCharCode(65 + index)}
+                  </Text>
+                </View>
                 <Text style={styles.optionText}>{option}</Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -117,11 +168,28 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  backButton: {
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
   },
+  timerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 8,
+  },
+  timerText: {
+    color: '#fff',
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+  },
   progressContainer: {
-    marginTop: 10,
+    marginTop: -5,
   },
   progressInfo: {
     flexDirection: 'row',
@@ -163,6 +231,19 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     marginBottom: 20,
   },
+  questionBadge: {
+    backgroundColor: Color.PRIMARTY_COLOR,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  questionNumber: {
+    color: '#fff',
+    fontSize: 14,
+    fontFamily: 'Poppins-Medium',
+  },
   questionText: {
     fontSize: 18,
     color: "#333",
@@ -182,6 +263,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
+    backgroundColor: '#fff',
   },
   optionGradient: {
     flexDirection: 'row',
@@ -190,17 +272,18 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     gap: 15,
   },
-  optionLetter: {
+  optionLetterContainer: {
     width: 35,
     height: 35,
     backgroundColor: Color.PRIMARTY_COLOR,
     borderRadius: 18,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  optionLetter: {
     color: '#fff',
     fontSize: 18,
     fontFamily: "Poppins-Bold",
-    lineHeight: 35,
   },
   optionText: {
     flex: 1,
