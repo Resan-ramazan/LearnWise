@@ -16,6 +16,7 @@ import { ToastAndroid } from "react-native";
 import Color from "../../utils/Color";
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../contexts/ToastContext';
+import { useTheme } from "../../contexts/ThemeContext";
 
 const Content = ({
   chaptersLength,
@@ -26,6 +27,7 @@ const Content = ({
   userEmail,
 }) => {
   const { t } = useTranslation();
+  const { theme, colors } = useTheme();
   const flatListRef = React.useRef(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex || 0);
   const { showToast } = useToast();
@@ -79,18 +81,35 @@ const Content = ({
 
   const renderContentItem = ({ item, index }) => {
     return (
-      <View style={styles.contentContainer}>
+      <View style={[styles.contentContainer, {
+        backgroundColor: colors.background
+      }]}>
         <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.heading}>{item.heading}</Text>
-          <ContenItem description={item.description} output={item.output} />
+          <Text style={[styles.heading, {
+            color: colors.text
+          }]}>
+            {item.heading}
+          </Text>
+          <ContenItem 
+            description={item.description} 
+            output={item.output}
+            theme={theme}
+            colors={colors}
+          />
 
           <TouchableOpacity
             style={[
               styles.buttonContainer,
-              index === chaptersLength.length - 1 && styles.finishButton,
+              {
+                backgroundColor: theme === 'dark' ? Color.ORANGE : Color.PRIMARTY_COLOR,
+                shadowColor: colors.shadowColor
+              },
+              index === chaptersLength.length - 1 && [styles.finishButton, {
+                backgroundColor: theme === 'dark' ? '#2e7d32' : Color.GREEN
+              }],
             ]}
             onPress={() => {
               if (index === chaptersLength.length - 1) {
@@ -112,10 +131,14 @@ const Content = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      backgroundColor: colors.background
+    }]}>
       <ProgressBar
         chaptersLength={chaptersLength.length}
         contentIndex={activeIndex}
+        theme={theme}
+        colors={colors}
       />
       <FlatList
         data={chaptersLength}
@@ -133,6 +156,7 @@ const Content = ({
         })}
         initialScrollIndex={initialIndex}
         initialNumToRender={chaptersLength.length}
+        style={{ backgroundColor: colors.background }}
       />
     </View>
   );
@@ -143,7 +167,6 @@ export default Content;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   contentContainer: {
     width: Dimensions.get("screen").width,

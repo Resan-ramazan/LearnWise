@@ -6,12 +6,14 @@ import { updateUserEnrolledCourse } from "../services/courses";
 import { useCourse } from "../contexts/CourseContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { useUser } from "../contexts/UserContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 const ChapterContentScreen = () => {
   const param = useRoute().params;
   const navigation = useNavigation();
   const { currentCourse, refreshCourseData } = useCourse();
   const { updateUserPoints, refreshUserData, userData } = useUser();
+  const { theme, colors } = useTheme();
 
   // Debug için paramları kontrol edelim
   useEffect(() => {
@@ -74,7 +76,10 @@ const ChapterContentScreen = () => {
 
   return (
     param.content && (
-      <View style={[styles.container, { paddingBottom: 0 }]}>
+      <View style={[styles.container, { 
+        backgroundColor: colors.background,
+        paddingBottom: 0 
+      }]}>
         <Content
           chaptersLength={param.chaptersLength}
           content={param.content}
@@ -82,6 +87,8 @@ const ChapterContentScreen = () => {
           initialIndex={param.startIndex}
           courseId={param.courseId}
           userEmail={param.userEmail}
+          theme={theme}
+          colors={colors}
         />
       </View>
     )
@@ -93,6 +100,5 @@ export default ChapterContentScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
 });
