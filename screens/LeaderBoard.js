@@ -19,6 +19,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Image as ExpoImage } from "expo-image";
 import { useTheme } from "../contexts/ThemeContext";
+import { LinearGradient } from "expo-linear-gradient";
 
 const LeaderBoard = () => {
   const { t } = useTranslation();
@@ -26,7 +27,7 @@ const LeaderBoard = () => {
   const { userData, getAllUsersByPoints } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [leaderboardData, setLeaderboardData] = useState([]);
-  const { colors } = useTheme();
+  const { colors, theme } = useTheme();
   const fetchLeaderboardData = async () => {
     try {
       const resp = await getAllUsersByPoints();
@@ -48,8 +49,11 @@ const LeaderBoard = () => {
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.itemContainer}>
-        <View style={styles.userContainer}>
-          <Text style={styles.rank}>{index + 1}</Text>
+        <View style={[styles.userContainer, {
+          backgroundColor: colors.surface,
+          shadowColor: colors.shadowColor,
+        }]}>
+          <Text style={[styles.rank, { color: colors.textSecondary }]}>{index + 1}</Text>
           <ExpoImage
             source={{ uri: item.profileImage }}
             style={styles.profileImage}
@@ -58,8 +62,8 @@ const LeaderBoard = () => {
             cachePolicy="memory-disk"
           />
           <View style={styles.userInfo}>
-            <Text style={styles.username}>{item.username}</Text>
-            <Text style={styles.points}>
+            <Text style={[styles.username, { color: colors.text }]}>{item.username}</Text>
+            <Text style={[styles.points, { color: colors.textSecondary }]}>
               {item.points} {t("Points")}
             </Text>
           </View>
@@ -76,17 +80,28 @@ const LeaderBoard = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
+      <LinearGradient
+        colors={theme === 'dark' 
+          ? [colors.primary, '#4a2e9b']
+          : [Color.PRIMARTY_COLOR, "#7c4dff"]}
+        style={[styles.header, {
+          shadowColor: colors.shadowColor,
+        }]}
+      >
         <View style={styles.titleContainer}>
           <Ionicons name="trophy" size={32} color="white" style={styles.icon} />
-          <Text style={styles.title}>{t("Leaderboard")}</Text>
+          <Text style={[styles.title, { color: 'white' }]}>
+            {t("Leaderboard")}
+          </Text>
         </View>
-      </View>
+      </LinearGradient>
       
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Color.PRIMARTY_COLOR} />
-          <Text style={styles.loadingText}>{t("Loading...")}</Text>
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+            {t("Loading...")}
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -95,7 +110,7 @@ const LeaderBoard = () => {
           contentContainerStyle={styles.listContainer}
           ListEmptyComponent={() => (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
                 {t("No rankings available")}
               </Text>
             </View>
@@ -122,47 +137,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    height: 160,
-    backgroundColor: Color.PRIMARTY_COLOR,
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginLeft: 10,
-    marginRight: 10,
+    height: 180,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    justifyContent: 'center',
   },
   titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   icon: {
-    marginRight: 12,
+    marginRight: 10,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    letterSpacing: 0.5,
+    fontFamily: 'Poppins-Bold',
   },
   itemContainer: {
     paddingHorizontal: 15,
     marginBottom: 10,
+
   },
   userContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
     padding: 15,
     borderRadius: 12,
-    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -174,6 +176,7 @@ const styles = StyleSheet.create({
   userInfo: {
     flex: 1,
     marginLeft: 10,
+    
   },
   rank: {
     fontFamily: "Poppins-Bold",
