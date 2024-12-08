@@ -4,7 +4,6 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 import React, { useState, useCallback } from "react";
 import Color from "../../utils/Color";
@@ -12,8 +11,6 @@ import { useUser } from "@clerk/clerk-expo";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as Progress from "react-native-progress";
 import { useCourse } from "../../contexts/CourseContext";
-import { Ionicons } from "@expo/vector-icons";
-import { Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { Image as ExpoImage } from "expo-image";
@@ -21,7 +18,6 @@ const CourseProgress = () => {
   const { t } = useTranslation();
   const { user } = useUser();
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(true);
   const { inProgressCourses, getInProgressCourses, handleCoursePress } =
     useCourse();
 
@@ -29,32 +25,18 @@ const CourseProgress = () => {
     useCallback(() => {
       const loadCourses = async () => {
         try {
-          setIsLoading(true);
           const email = user?.primaryEmailAddress?.emailAddress;
           if (email) {
             await getInProgressCourses(email);
           }
         } catch (error) {
           console.error("Error loading courses:", error);
-        } finally {
-          setIsLoading(false);
         }
       };
 
       loadCourses();
     }, [user])
   );
-
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.sectionTitle}>{t("Continue Learning")}</Text>
-        <View style={[styles.courseContainer, styles.loadingContainer]}>
-          <ActivityIndicator size="large" color={Color.ORANGE} />
-        </View>
-      </View>
-    );
-  }
 
   const onCoursePress = async (course) => {
     try {
@@ -192,11 +174,6 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingLeft: 5,
     paddingRight: 5,
-  },
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
   },
 });
 
