@@ -21,6 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import "../i18n";
+import { useTheme } from "../contexts/ThemeContext";
 
 const ProfileScreen = () => {
   const { userData } = useUser();
@@ -28,6 +29,7 @@ const ProfileScreen = () => {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
+  const { theme, toggleTheme, colors } = useTheme();
 
   const handleSignOut = () => {
     Alert.alert(
@@ -70,12 +72,7 @@ const ProfileScreen = () => {
       color: "#4CAF50",
       onPress: () => navigation.navigate("mycourse"),
     },
-    {
-      icon: "trophy",
-      label: t("Leaderboard"),
-      color: "#2196F3",
-      onPress: () => navigation.navigate("leaderboard"),
-    },
+
     {
       icon: "trophy-outline",
       label: t("Ranking"),
@@ -87,6 +84,21 @@ const ProfileScreen = () => {
       label: t("Change Language"),
       color: "#9C27B0",
       onPress: () => setShowLanguageModal(true),
+    },
+    {
+      icon: "moon-outline",
+      label: t("Dark Mode"),
+      color: "#2196F3",
+      onPress: toggleTheme,
+      rightElement: (
+        <View style={styles.themeToggle}>
+          <Ionicons
+            name={theme === "dark" ? "moon" : "moon-outline"}
+            size={22}
+            color={theme === "dark" ? "#2196F3" : "#999"}
+          />
+        </View>
+      ),
     },
     {
       icon: "log-out-outline",
@@ -103,40 +115,68 @@ const ProfileScreen = () => {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 100 }}
     >
       <LinearGradient
-        colors={[Color.PRIMARTY_COLOR, "#7c4dff"]}
+        colors={theme === 'dark' 
+          ? [colors.primary, '#4a2e9b'] // Koyu tema için daha koyu renkler
+          : [Color.PRIMARTY_COLOR, "#7c4dff"]} // Açık tema için mevcut renkler
         style={styles.header}
       >
         <Image
           source={{ uri: userData?.profileImage }}
-          style={styles.profileImage}
+          style={[styles.profileImage, {
+            borderColor: theme === 'dark' ? colors.border : 'white'
+          }]}
         />
-        <Text style={styles.name}>{userData?.username}</Text>
-        <View style={styles.pointsBox}>
+        <Text style={[styles.name, {
+          color: theme === 'dark' ? colors.textLight : 'white'
+        }]}>
+          {userData?.username}
+        </Text>
+        <View style={[styles.pointsBox, {
+          backgroundColor: theme === 'dark' 
+            ? 'rgba(0,0,0,0.2)' 
+            : 'rgba(255,255,255,0.2)'
+        }]}>
           <Image source={coin} style={styles.coinIcon} />
-          <Text style={styles.points}>
+          <Text style={[styles.points, {
+            color: theme === 'dark' ? colors.textLight : 'white'
+          }]}>
             {userData?.points} {t("Points")}
           </Text>
         </View>
       </LinearGradient>
 
-      <View style={styles.menuContainer}>
+      <View style={[styles.menuContainer, { 
+        backgroundColor: colors.surface,
+        shadowColor: colors.shadowColor,
+      }]}>
         {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
-            style={styles.menuItem}
+            style={[styles.menuItem, { borderBottomColor: colors.border }]}
             activeOpacity={0.7}
             onPress={item.onPress}
           >
             <View style={[styles.iconBox, { backgroundColor: item.color }]}>
               <Ionicons name={item.icon} size={22} color="white" />
             </View>
-            <Text style={styles.menuText}>{item.label}</Text>
-            <Ionicons name="chevron-forward" size={20} color="#999" />
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              {item.label}
+            </Text>
+            {item.rightElement && (
+              <View style={styles.themeToggle}>
+                {item.rightElement}
+              </View>
+            )}
+            <Ionicons 
+              name="chevron-forward" 
+              size={20} 
+              color={colors.textSecondary} 
+            />
           </TouchableOpacity>
         ))}
       </View>
@@ -149,9 +189,15 @@ const ProfileScreen = () => {
         onRequestClose={() => setShowLanguageModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{t("Select Language")}</Text>
+          <View style={[styles.modalContent, { 
+            backgroundColor: colors.modalBackground 
+          }]}>
+            <View style={[styles.modalHeader, { 
+              borderBottomColor: colors.border 
+            }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                {t("Select Language")}
+              </Text>
               <TouchableOpacity
                 onPress={() => setShowLanguageModal(false)}
                 style={styles.closeButton}
@@ -300,5 +346,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Poppins-Regular",
     color: "#333",
+  },
+  themeToggle: {
+    marginRight: 10,
   },
 });
