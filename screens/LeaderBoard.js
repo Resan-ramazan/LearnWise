@@ -18,13 +18,15 @@ import Color from "../utils/Color";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { Image as ExpoImage } from "expo-image";
+import { useTheme } from "../contexts/ThemeContext";
+
 const LeaderBoard = () => {
   const { t } = useTranslation();
   const { user: clerkUser } = useClerkUser();
   const { userData, getAllUsersByPoints } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [leaderboardData, setLeaderboardData] = useState([]);
-
+  const { colors } = useTheme();
   const fetchLeaderboardData = async () => {
     try {
       const resp = await getAllUsersByPoints();
@@ -73,7 +75,7 @@ const LeaderBoard = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Ionicons name="trophy" size={32} color="white" style={styles.icon} />
