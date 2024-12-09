@@ -8,7 +8,6 @@ export function LanguageProvider({ children }) {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    // Uygulama başladığında kaydedilmiş dili yükle
     loadSavedLanguage();
   }, []);
 

@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   listContainer: {
-    paddingTop: 20,
     paddingBottom: 100,
   },
   loadingContainer: {
@@ -138,18 +137,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    height: 200,
+    height: 180,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
     justifyContent: 'center',
-    paddingBottom: 20,
   },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 20,
   },
   icon: {
     marginRight: 10,
