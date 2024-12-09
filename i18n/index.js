@@ -231,6 +231,87 @@ const resources = {
       "of": "/",
       "seconds": "sn",
     }
+  },
+  pl: {
+    translation: {
+      // Auth & Profile
+      "Sign In": "Zaloguj się",
+      "Sign Up": "Zarejestruj się",
+      "Logout": "Wyloguj się",
+      "Points": "Punkty",
+      
+      // Navigation
+      "Home": "Strona główna",
+      "Search": "Szukaj",
+      "Profile": "Profil",
+      "Leaderboard": "Ranking",
+      
+      // Course related
+      "My Courses": "Moje kursy",
+      "Continue Learning": "Kontynuuj naukę",
+      "Popular Courses": "Popularne kursy",
+      "Start Course": "Rozpocznij kurs",
+      "Complete Course": "Zakończ kurs",
+      
+      // Common
+      "Premium": "Premium",
+      "Ranking": "Ranking",
+      "Change Language": "Zmień język",
+      "Select Language": "Wybierz język",
+      "Settings": "Ustawienia",
+      "Welcome": "Witaj",
+      "Search courses...": "Szukaj kursów...",
+      
+      // Course Categories
+      "All Categories": "Wszystkie kategorie",
+      "Programming": "Programowanie",
+      "Design": "Projektowanie",
+      "Business": "Biznes",
+      
+      // Buttons & Actions
+      "Get Started": "Rozpocznij",
+      "Continue": "Kontynuuj",
+      "Cancel": "Anuluj",
+      "Save": "Zapisz",
+      "Edit": "Edytuj",
+      
+      // HomeScreen specific
+      "Hello": "Cześć",
+      "Let's start learning": "Zacznijmy się uczyć",
+      "Learning Progress": "Postęp nauki",
+      "Course Categories": "Kategorie kursów",
+      "View All": "Zobacz wszystkie",
+      "Recommended Courses": "Polecane kursy",
+      "Free": "Darmowe",
+      "lessons": "lekcje",
+      "Complete": "Ukończ",
+      "Start Learning": "Rozpocznij naukę",
+      "minutes": "minuty",
+      "Basic Courses": "Kursy podstawowe",
+      "Advanced Courses": "Kursy zaawansowane",
+      "My Learning Journey": "Moja ścieżka nauki",
+      "In Progress": "W trakcie",
+      "Completed": "Ukończone",
+      "No courses in progress": "Brak kursów w trakcie",
+      "No completed courses": "Brak ukończonych kursów",
+
+      // Quiz related
+      "Fun Quiz Time!": "Czas na quiz!",
+      "Let's test your knowledge!": "Sprawdźmy twoją wiedzę!",
+      "Loading...": "Ładowanie...",
+      "Questions": "Pytania",
+      "mins": "min",
+      "Quiz Complete!": "Quiz ukończony!",
+      "Fantastic! You're a Star!": "Fantastycznie! Jesteś gwiazdą!",
+      "Great Job! Keep Going!": "Świetna robota! Tak trzymaj!",
+      "Nice Try! Let's Practice More!": "Niezła próba! Poćwiczmy więcej!",
+      "Try Another Quiz": "Spróbuj innego quizu",
+      "Back to Home": "Powrót do strony głównej",
+      "Correct": "Poprawnie",
+      "Question": "Pytanie",
+      "of": "z",
+      "seconds": "s",
+    }
   }
 };
 
