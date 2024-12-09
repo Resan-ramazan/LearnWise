@@ -35,7 +35,9 @@ const TabNavigation = () => {
         tabBarLabelStyle: [
           styles.tabLabel,
           {
-            color: colors.text
+            color: colors.text,
+            fontSize: 10,
+            marginBottom: 5
           }
         ],
       }}
@@ -136,8 +138,8 @@ const styles = StyleSheet.create({
     right: 16,
     elevation: 0,
     borderRadius: 20,
-    height: 65,
-    paddingBottom: 8,
+    height: 70,
+    paddingBottom: 10,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -149,12 +151,12 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontFamily: "Poppins-Medium",
-    fontSize: 12,
-    marginTop: -5,
+    fontSize: 10,
+    marginTop: -3,
   },
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10,
+    paddingTop: 8,
   },
 });
