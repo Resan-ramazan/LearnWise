@@ -1,11 +1,13 @@
 import { db } from "./firebaseConfig";
 import { doc, setDoc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
 
+// Function to create or update a user
 export const createOrUpdateUser = async (userData) => {
   try {
     const userRef = doc(db, "users", userData.email);
     const userDoc = await getDoc(userRef);
 
+    // Sanitize and standardize user data
     const sanitizedData = {
       email: userData.email,
       username: userData.username || "",
@@ -16,22 +18,23 @@ export const createOrUpdateUser = async (userData) => {
       lastLogin: new Date().toISOString(),
     };
 
+    // Create a new user if it doesn't exist
     if (!userDoc.exists()) {
       const newUser = {
         ...sanitizedData,
         createdAt: new Date().toISOString(),
       };
-
       await setDoc(userRef, newUser);
       return newUser;
     } else {
-      // Mevcut verileri koru ve yeni verileri birleştir
+      // Update existing user
       const existingData = userDoc.data();
       const updatedData = {
         ...existingData,
         ...sanitizedData,
       };
 
+      // Remove undefined values
       Object.keys(updatedData).forEach((key) => {
         if (updatedData[key] === undefined) {
           delete updatedData[key];
@@ -47,6 +50,7 @@ export const createOrUpdateUser = async (userData) => {
   }
 };
 
+// Function to get user data from Firestore
 export const getUserData = async (email) => {
   try {
     const userRef = doc(db, "users", email);
@@ -62,6 +66,7 @@ export const getUserData = async (email) => {
   }
 };
 
+// Function to get all users
 export const getAllUsers = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -76,6 +81,7 @@ export const getAllUsers = async () => {
   }
 };
 
+// Function to get user's course progress
 export const getUserCourseProgress = async (userEmail) => {
   if (!userEmail) {
     console.error("User email is required");

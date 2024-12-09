@@ -71,7 +71,7 @@ export const CourseProvider = ({ children }) => {
   );
 };
 
-export const useCourse = () => {
+export const useCourse = () => { 
   const context = useContext(CourseContext);
   if (!context) {
     throw new Error('useCourse must be used within a CourseProvider');

@@ -1,13 +1,4 @@
-import {
-  ActivityIndicator,
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import {ActivityIndicator,Dimensions,Image,StyleSheet,Text,TouchableOpacity,View,} from "react-native";
 import React, { useState, useCallback } from "react";
 import Color from "../utils/Color";
 import * as WebBrowser from "expo-web-browser";
@@ -24,7 +15,7 @@ const { width, height } = Dimensions.get("window");
 const LoginScreen = () => {
   // Custom hook to warm up browser for faster OAuth
   useWarmUpBrowser();
-  
+
   // State management for loading and error handling
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

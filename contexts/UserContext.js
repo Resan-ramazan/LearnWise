@@ -4,12 +4,15 @@ import { getUserData, createOrUpdateUser, getAllUsers } from "../services/users"
 // Import'u test edelim
 console.log("getAllUsers function:", getAllUsers);
 
+// Create Context for User Management
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  // State for user data and loading status
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize user after authentication with Clerk
   const initializeUser = async (clerkUser) => {
     try {
       setLoading(true);
@@ -19,11 +22,11 @@ export const UserProvider = ({ children }) => {
         throw new Error("User email is required");
       }
 
-      // Önce mevcut kullanıcı verilerini getir
+      // Check if user exists in database
       let existingUser = await getUserData(email);
 
+      // Create new user if doesn't exist
       if (!existingUser) {
-        // Kullanıcı yoksa yeni oluştur
         const userInfo = {
           email: email,
           username: clerkUser.username || clerkUser.firstName || "",
@@ -43,6 +46,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Function to update user points
   const updateUserPoints = async (points) => {
     if (!userData?.email) return;
 
@@ -59,6 +63,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Function to refresh user data from database
   const refreshUserData = async () => {
     if (!userData?.email) return;
 
@@ -72,6 +77,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Function to get all users sorted by points (for leaderboard)
   const getAllUsersByPoints = async () => {
     try {
       const users = await getAllUsers();
@@ -82,6 +88,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Function to update user's profile image
   const updateUserProfileImage = async (imageUrl) => {
     if (!userData?.email) return;
 
@@ -98,6 +105,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Provide user context to child components
   return (
     <UserContext.Provider
       value={{
@@ -115,6 +123,7 @@ export const UserProvider = ({ children }) => {
   );
 };
 
+// Custom hook for using user context
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
