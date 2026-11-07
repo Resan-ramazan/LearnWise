@@ -207,7 +207,7 @@ npx expo start          # then scan the QR code with Expo Go
 
 ## 📊 Results
 
-- **Commercial adoption:** LearnWise was **sold to an education-technology company in Turkey**, which integrated it into its digital learning portfolio and made it available to programming students across the country. The acquirer specifically valued the secure authentication, the gamification layer and the cross-platform codebase.
+- **Commercial adoption:** LearnWise was **sold to an education-technology company in Turkey**, which has continued developing it. The app is in use today.
 
 ---
 
