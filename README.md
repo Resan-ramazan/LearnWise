@@ -15,7 +15,7 @@ Structured courses · Runnable code examples · Timed quizzes · Points & leader
 ![i18next](https://img.shields.io/badge/i18n-EN_|_TR_|_PL-26A69A?logo=i18next&logoColor=white)
 ![Platforms](https://img.shields.io/badge/Platforms-iOS_|_Android-lightgrey)
 
-🎓 **Bachelor's thesis project** &nbsp;·&nbsp; 💼 **Acquired by an EdTech company in Turkey** &nbsp;·&nbsp; 👥 **Tested with 100+ users**
+🎓 **Bachelor's thesis project** &nbsp;·&nbsp; 💼 **Acquired by an EdTech company in Turkey**
 
 </div>
 
